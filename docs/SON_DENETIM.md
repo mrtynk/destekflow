@@ -11,7 +11,7 @@ Denetim tarihi: 15 Ekim 2026. “Tamamlandı” yalnız dosya varlığına deği
 | Rails 8+ | `Gemfile.lock` | Rails 8.1.4 runtime/test kaydı | Tamamlandı | Yok. |
 | Kendi ürün adı ve logosu | layout, CSS | Canlı UI “DestekFlow” ve “D” işareti; runtime dosyalarında “Zendesk” yok | Tamamlandı | Yok. |
 | Orijinal marka/logo uygulamada görünmeyecek | `app/`, `public/` | Runtime dizinlerinde marka taraması eşleşme vermedi; ad yalnız belgede ilham kaynağı | Tamamlandı | Yok. |
-| Fortune 500 genel değerleme aralığı, kaynaklı | README Faz 1 | Tüm 500 için ortak değerleme yok; Fortune'un 2026 gelir sırasındaki ilk 10 için yayımladığı market value alt kümesi 61,1099B–3,7259T USD | Kısmi | Tam liste/veri lisansı veya hocanın “değerleme” tanımı gerekir. |
+| Fortune 500 genel değerleme aralığı, kaynaklı | README Faz 1, `docs/FORTUNE500_ANALIZ.md`, analiz betiği | 500 satır okundu; 472 sayısal Market Value: QVC Group 18,9M–Nvidia 4,23792T USD; 28 boş değer tahmin edilmedi | Kısmi | Hocanın “değerleme” tanımı ve 28 boş şirketin nasıl ele alınacağı açıklanmalı. |
 | Fortune 500 çalışan aralığı | README Faz 1 | Fortune kaynaklı BitGo 603, Walmart 2,1M | Tamamlandı | “2026 listesinde raporlanan aralık” diye sun. |
 | Yaklaşık SaaS ürün sayısı | README Faz 1 | Zylo örnekleminde 10.000+ çalışanlı işletmeler ortalama 660 uygulama | Tamamlandı | Fortune 500'e özel olmadığını söyle. |
 | Yıllık SaaS harcaması | README Faz 1 | Zylo örnekleminde 10.000+ çalışanlı işletmeler ortalama $284M/yıl | Tamamlandı | Fortune 500'e özel olmadığını söyle. |
@@ -27,7 +27,7 @@ Denetim tarihi: 15 Ekim 2026. “Tamamlandı” yalnız dosya varlığına deği
 | Çalışan CI rozeti | README | Gerçek `mrtynk/destekflow/actions/workflows/ci.yml` adresi | Tamamlandı | Yok. |
 | `AGENT.md` | `AGENT.md`, Git geçmişi | İlk sürüm `ce6cb13`, güncel sürüm ayrı commit'lerde korunuyor | Tamamlandı | Yok. |
 | README “Yapamadıklarım” | README ve `docs/YAPAMADIKLARIM.md` | Cron, uyku, G2–G4, değerleme ve auth açık | Tamamlandı | Yok. |
-| G1–G5 belgeleri (slayt) | `docs/G1.md`–`G5.md` | G1 gerçek ölçüm; G5 gerçek hata kaydı; G2–G4 tanımsız | Kısmi | G2–G4 için hocadan tanım istenmeli. |
+| G1–G5 belgeleri (slayt) | `docs/G1.md`–`G5.md` | G1 gerçek ölçüm; G5 gerçek hata kaydı; G2–G4 doğrulanabilir isterlere dayalı öneri içerir ve resmî tanım olmadığı açıkça yazılıdır | Kısmi | G2–G4 için hocadan resmî tanım/teyit istenmeli. |
 | Gerçek kullanıcı yorumu, linkli | README, KAYNAKLAR | Capterra Zendesk Explore: Hadi B., 23 Nisan 2026 | Tamamlandı | Eski Ryan P. iddiasını kullanma. |
 | Kullanıcı acısının çalışan çözümü | PriorityAssistant, liste paneli, test | Aktif talepleri SLA riskine göre sıralayıp Türkçe neden gösteriyor | Tamamlandı | Bunu “Zendesk'te SLA yok” diye sunma. |
 | 5 dakikalık canlı sunum | `docs/SUNUM.md` | Zaman planı, kod yerleri, sahte örnekler #1–#3 | Tamamlandı | Sunum öncesi servisi uyandır ve yeni sahte talep kullan. |
@@ -57,12 +57,12 @@ Gerçek karşılaştırma `ce6cb13:AGENT.md` ile güncel `AGENT.md` arasında `g
 ## 0 / 85 / 100+ değerlendirmesi
 
 - **0 koşulları:** Şu an tetiklenen bir koşul gözlenmedi: canlı URL ve akış var, çalışmayan özellik iddiası temizlendi, CI/test kanıtı gerçek, runtime'da orijinal marka yok. Ücretsiz uyku sırasında 503 sunum riski olduğundan URL önceden uyandırılmalı.
-- **85 koşulları:** Teknik teslimler tamam; ancak “tüm Fortune 500 değerleme aralığı” yerine dürüst ilk 10 şirketlik piyasa değeri alt kümesi var ve slaytın istediği G2–G4 tanımsız. Bu nedenle dışarıdan kesin **85 garantisi** verilmez; hocanın bu iki yorumu belirleyicidir.
+- **85 koşulları:** Teknik teslimler tamam; 500 satırın 472 sayısal Market Value değeri analiz edildi. Ancak 28 boş değer ve G2–G4'ün resmî tanımının bulunmaması nedeniyle dışarıdan kesin **85 garantisi** verilmez.
 - **100+ koşulları:** Çalışan SLA Asistanı gerçek Capterra acısıyla ilişkilidir. Yine de 100+ ancak hocanın bunu “orijinalde olmayan adaptasyon” kabul etmesi ve 85 tabanını kabul etmesiyle mümkündür.
 
 ## Sunumda söylenmemesi gerekenler
 
-- “Bütün Fortune 500'ün değerleme aralığı 61,1099 milyar–3,7259 trilyon dolar.” Yanlış; bu yalnız gelir sırasındaki ilk 10 şirketin piyasa değeri alt kümesidir.
+- “Bütün Fortune 500'ün değerleme aralığı 18,9 milyon–4,23792 trilyon dolar.” Eksik ifade; bu 500 satır içindeki 472 sayısal Market Value kaydının aralığıdır, 28 boş kayıt yoktur.
 - “Zendesk yaklaşık 300.000 satırdır.” Ölçülmedi; ders ölçek varsayımıdır.
 - “Projeyi $30'a yaptım.” Yanlış; $30 yalnız varsayımsal 3M çıktı tokenının GPT-5 çıktı fiyatıdır.
 - “Zendesk'te SLA/önceliklendirme yok.” Yanlış; Zendesk SLA ve Explore raporlama sunar.

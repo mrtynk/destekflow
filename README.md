@@ -54,12 +54,12 @@ Fortune 500, şirketleri değerlemeye göre değil gelire göre sıralar. 2026 l
 
 | İstenen ölçü | Kaynaklı sonuç | Sınır |
 |---|---:|---|
-| Piyasa değeri aralığı — ilk 10 şirketlik kaynaklı alt küme | 61,1099 milyar – 3,7259 trilyon dolar | 2026 Fortune 500'ün gelir sırasındaki ilk 10 şirketinin Fortune tablosunda aynı ölçüm bağlamında verilen **market value** alanları karşılaştırıldı. Alt kümede en düşük Cencora (61.109,9 milyon $), en yüksek Apple'dır (3.725.926,5 milyon $). Bu, bütün Fortune 500'ün min–max'ı veya enterprise value değildir. [Fortune 500 2026 tam tablo](https://fortune.com/ranking/fortune500/) |
+| Piyasa değeri aralığı — sayısal verisi bulunan 472 şirket | 18,9 milyon – 4,23792 trilyon dolar | 500 şirketin tamamı okundu; `Market Value ($M)` alanı sayısal olan 472 şirket analiz edildi, boş 28 şirket tahmin edilmeden kapsam dışında bırakıldı. Minimum QVC Group (sıra 433, 18,9 milyon $), maksimum Nvidia'dır (sıra 16, 4.237.920 milyon $). Birim milyon USD, veri kesiti 31 Mart 2026. [Fortune 500 2026](https://fortune.com/ranking/fortune500/), [QVC Group](https://fortune.com/company/qurate-retail/), [Nvidia](https://fortune.com/company/nvidia/), [yöntem ve yeniden üretim](docs/FORTUNE500_ANALIZ.md) |
 | Çalışan sayısı aralığı | 603 – 2.100.000 | 2026 listesinde BitGo 603 çalışanla örneklenen en küçük işveren; Walmart şirket profilinde 2,1 milyon çalışan bildiriyor. [Fortune istihdam analizi](https://www.fortune.com/2026/06/19/fortune-500-employment-profits-revenue-hiring-jobs-ai/), [Walmart profili](https://fortune.com/company/walmart/) |
 | Yaklaşık SaaS uygulaması | 660 ortalama, 641 medyan | Fortune 500'e özel ölçüm değil; 10.001+ çalışanlı büyük işletme örneklemi. [Zylo verisini aktaran 2025 rapor sunumu](https://25602359.fs1.hubspotusercontent-eu1.net/hubfs/25602359/Ibexa%20Summit%202025/Keynote-Summit-2025-web.pdf) |
 | Yıllık SaaS harcaması | 284 milyon dolar ortalama | Fortune 500'e özel değil; 10.000+ çalışanlı işletmeler. Veri 40 milyon lisans ve 40 milyar dolar yönetilen harcamadan türetilmiştir. [Zylo 2025 duyurusu](https://www.prweb.com/releases/2025-saas-management-index-reveals-first-increase-in-average-saas-spend-in-three-years-amid-rising-vendor-costs-and-rapid-ai-adoption-302351642.html) |
 
-Piyasa değeri, şirket değerlemesi/enterprise value ve gelir aynı ölçü değildir. Fortune'un tam, karşılaştırılabilir 500 satırlık veri dışa aktarımı ücretli olduğundan kamuya açık sayfada doğrulanabilen ilk 10 şirket alt kümesi kullanıldı; bu aralık tüm Fortune 500'e genellenemez. BitGo'nun Fortune 500 üyeliği ayrıca Fortune şirket profilinde 2026 sırası ve çalışan sayısıyla doğrulanmıştır; Fortune Global 500 ile karıştırılmamıştır. [Fortune BitGo Holdings profili](https://fortune.com/company/bitgo-holdings/), [ücretli Fortune Analytics veri kapsamı](https://fortune.com/analytics/fortune-500). SaaS adet ve harcama ölçütleri de Fortune 500 kesinliğiyle sunulmamıştır; açık örneklem sınırına sahip 10.000+ çalışanlı büyük işletme kıyaslamasıdır.
+Piyasa değeri, şirket değerlemesi/enterprise value ve gelir aynı ölçü değildir. Fortune 500 sırası gelire göredir; buradaki min–max yalnız Fortune'un sayısal `Market Value` yayımladığı 472 şirketin özsermaye piyasa değeri aralığıdır. Boş 28 şirket nedeniyle “500 şirketin tamamının değerleme aralığı” diye sunulmaz. BitGo'nun Fortune 500 üyeliği ayrıca Fortune şirket profilinde doğrulanmıştır; Fortune Global 500 ile karıştırılmamıştır. [Fortune BitGo Holdings profili](https://fortune.com/company/bitgo-holdings/). SaaS adet ve harcama ölçütleri de Fortune 500 kesinliğiyle sunulmamıştır; açık örneklem sınırına sahip 10.000+ çalışanlı büyük işletme kıyaslamasıdır.
 
 ## SaaS seçimi ve Fortune 500 kanıtı
 
@@ -121,6 +121,7 @@ Canlı dağıtım 15 Ekim 2026 tarihinde Rails 8.1.4 ve Ruby 3.4.7 ile başarıy
 - [Kod haritası](docs/KOD_HARITASI.md)
 - [Test kanıtları](docs/TEST_KANITLARI.md)
 - [Son teslim denetimi](docs/SON_DENETIM.md)
+- [Fortune 500 Market Value analizi](docs/FORTUNE500_ANALIZ.md)
 - [Kaynaklar](docs/KAYNAKLAR.md)
 
 ## Yapamadıklarım
@@ -128,6 +129,6 @@ Canlı dağıtım 15 Ekim 2026 tarihinde Rails 8.1.4 ve Ruby 3.4.7 ile başarıy
 - Ücretsiz Render planında cron hizmeti bulunmadığından 48 saatlik otomatik kapanış canlıda zamanlanmamıştır; job ve davranışı testlerde doğrulanmıştır.
 - Ücretsiz Render web servisi hareketsizlikte uyur ve ilk isteği geciktirebilir. Ücretsiz PostgreSQL veritabanı Render'ın süre ve saklama sınırlarına tabidir.
 - Canlı yönetim ekranında kimlik doğrulama ve rol yetkilendirmesi yoktur. Uygulama yalnız ders demosudur; gerçek müşteri verisiyle veya herkese açık üretim hizmeti olarak kullanılmamalıdır.
-- Fortune 500'ün tamamı için karşılaştırılabilir en düşük ve en yüksek şirket değerlemesi bulunamadı. Faz 1 tablosundaki aralık Fortune'un ilk 10 şirket için yayımladığı **piyasa değeri** alt kümesidir; tüm listeyi temsil etmez.
-- Ders materyali G2, G3 ve G4 belgelerinin tanımını vermiyor. Dosyalar belirsizliği kaydediyor; içerik uydurulmadı.
+- Fortune 500'ün 500 satırı incelendi; 28 satırda Market Value boş olduğu için min–max 472 sayısal şirketi kapsar. Özel/boş şirketlere tahmini değer atanmadı; sonuç tüm 500 şirketin eksiksiz değerleme aralığı değildir.
+- Ders materyali G2, G3 ve G4 belgelerinin resmî tanımını vermiyor. Dosyalar bunu açıkça belirterek ödevin doğrulanabilir isterlerine dayalı öneri içerikleri sunuyor; bunlar hocanın resmî tanımı diye gösterilmiyor.
 - Windows Ruby kurulumunda kullanılmayan libvips eklentileri için uyarılar var; test sonucunu etkilemiyor.
