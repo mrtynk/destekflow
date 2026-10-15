@@ -14,7 +14,7 @@ Yeni talep ekranında müşteri adı, e-posta, başlık, açıklama, kategori ve
 
 ## 3:30–4:30 — Kullanılabilir pas ve açıklar
 
-Capterra'daki 10.001+ çalışanlı kurum kullanıcısının acısı: özel metrikleri çıkarmak zaman alıyor ve panolar kalabalık hissediliyor. Bizim çözümümüz: Akıllı SLA Öncelik Asistanı ayrı rapor kurulumu istemeden sıradaki aktif talebi, kalan süreyi ve yüksek/normal öncelik gerekçesini Türkçe gösteriyor. Zendesk'in SLA özelliği olduğunu saklama; farkın küçük ekip için yapılandırmasız ve açıklamalı sıra olduğunu söyle. Canlı URL ile yeşil CI doğrulanmıştır; ücretsiz Render cron eksikliğini `docs/YAPAMADIKLARIM.md` üzerinden açıkça göster.
+Capterra'daki Hadi B. (Product Coordinator) özel metrik ve hesaplanan öznitelikleri öğrenmenin zor olduğunu söylüyor. Zendesk Explore bu işi hazır panolar, sorgular ve özel metriklerle çözüyor; bizim çözümümüz onun yerine tam analitik ürün değildir. Akıllı SLA Öncelik Asistanı küçük ekibin “önce hangi aktif talebe bakmalıyım?” kararında ayrı metrik/formül/pano kurulumu istemeden sırayı, kalan süreyi ve Türkçe gerekçeyi gösteriyor. Zendesk'in SLA ve raporlama özelliklerini saklama. Ücretsiz Render cron eksikliğini ve kimlik doğrulama olmadığını açıkça göster.
 
 ## 4:30–5:00 — Kod yeri sorusu
 

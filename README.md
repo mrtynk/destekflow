@@ -27,10 +27,18 @@ Durum akışı: `new → open/pending`, `open → pending/solved`, `pending → 
 
 ## Özgün fayda: Akıllı SLA Öncelik Asistanı
 
-Capterra'da Facilities Services sektöründe 10.001+ çalışanlı bir kurumun Customer Support Manager'ı Ryan P., 5 Temmuz 2026 tarihli doğrulanmış yorumunda özel metrikleri çıkarmayı öğrenmenin zaman aldığını ve panoların bazen kalabalık hissettirdiğini belirtiyor. DestekFlow bu somut acının dar bir bölümünü çözer: açık talepleri ayrı rapor veya özel metrik kurulumu gerektirmeden SLA riski ve önceliğe göre sıralar; her sıra için Türkçe bir neden gösterir.
+Capterra'daki doğrulanmış kullanıcı Hadi B. (Product Coordinator, E-Learning), 23 Nisan 2026 tarihli Zendesk Explore incelemesinde özel metrik ve hesaplanan öznitelik üretmenin belirgin bir öğrenme eğrisi olduğunu; terimlerin ve veri kümesi yapısının yeni kullanıcılar için her zaman açık olmadığını yazıyor. DestekFlow bu acının dar, operasyonel bölümünü çözer: aktif talepleri ayrıca metrik, formül veya pano kurmadan SLA riski ve önceliğe göre sıralar ve her sıra için Türkçe gerekçe gösterir.
 
-- Kullanıcı yorumu: [Capterra Zendesk değerlendirmeleri](https://www.capterra.com/p/164283/Zendesk/reviews/)
-- Karşılaştırma sınırı: Zendesk zaten SLA kolonları, görünümler ve raporlama sunar. DestekFlow'un fark iddiası "Zendesk'te SLA yok" değildir; küçük ekip için yapılandırmasız, tek ekranda ve açıklamalı öncelik sırasıdır. [Zendesk SLA belgeleri](https://support.zendesk.com/hc/en-us/articles/5604663490458-Using-SLA-policies)
+- Gerçek kullanıcı yorumu: [Capterra — Zendesk Explore incelemeleri](https://www.capterra.com/p/132248/BIME/reviews/)
+- Zendesk'in mevcut çözümü: Explore; hazır panolar, SLA performansı, özel sorgu/hesaplanan metrik ve paylaşılabilir panolar sunar. [Zendesk metrik belgeleri](https://support.zendesk.com/hc/en-us/articles/4408846733722-Using-metrics-and-attributes-in-reports)
+- DestekFlow'un kaldırdığı sürtünme: küçük bir destek ekibinin “önce hangi talebe bakmalıyım?” sorusu için Explore veri kümesini, formül dilini ve pano yapılandırmasını öğrenme gereğini kaldırır.
+- Özgün katkı, tek cümle: **Hadi B.'nin özel metrik öğrenme eğrisi sorununu, etkin talepleri kurulum istemeden SLA riskine göre sıralayan ve nedeni Türkçe açıklayan bir iş kuyruğuna dönüştürüyoruz.**
+
+| Önce | Sonra |
+|---|---|
+| Explore veri kümesini, hesaplanan metriği ve panoyu yapılandır; sonra SLA görünümünü yorumla. | Talep listesine gir; sıradaki aktif talebi, kalan süreyi ve gerekçeyi doğrudan gör. |
+
+Karşılaştırma sınırı: Zendesk'te SLA veya raporlama yokmuş gibi bir iddia yoktur. Fark, geniş analitik yetenek yerine bu tek karar için yapılandırmasız ve açıklamalı kuyruktur. [Zendesk SLA belgeleri](https://support.zendesk.com/hc/en-us/articles/5604663490458-Using-SLA-policies)
 
 ## Faz 1: Fortune 500 araştırması
 
@@ -38,12 +46,12 @@ Fortune 500, şirketleri değerlemeye göre değil gelire göre sıralar. 2026 l
 
 | İstenen ölçü | Kaynaklı sonuç | Sınır |
 |---|---:|---|
-| Değerleme aralığı | Güvenilir bir tam aralık verilemiyor | Listedeki özel şirketlerde piyasa değeri yoktur; şirket değeri, piyasa değeri ve gelir aynı ölçü değildir. Fortune'un yayımladığı doğrulanabilir toplu piyasa değeri 55 trilyon dolardır. Nvidia için 4,2 trilyon dolar en yüksek piyasa değeri olarak raporlanmıştır; tüm 500 şirket için karşılaştırılabilir minimum bulunamadı. [Fortune analizi](https://fortune.com/2026/06/03/fortune-500-2026-takeaways-nvidia-amazon-walmart/) |
+| Piyasa değeri aralığı — iki şirketlik kaynaklı alt küme | 737,01 milyon – 5,34 trilyon dolar | Kapsam yalnız 2026 Fortune 500 üyeliği açıkça doğrulanan ve 14 Ekim 2026 kapanışı için aynı veri sağlayıcıda piyasa değeri bulunan **BitGo ile Nvidia**'dır; bütün Fortune 500 veya bütün halka açık üyeler değildir. BitGo: 737,01 milyon dolar; Nvidia: 5,34 trilyon dolar. [Fortune 500 listesi](https://fortune.com/ranking/fortune500/), [Fortune BitGo kaydı](https://fortune.com/ranking/crypto/2026/bitgo/), [BitGo piyasa değeri](https://stockanalysis.com/stocks/btgo/market-cap/), [Nvidia piyasa değeri](https://stockanalysis.com/stocks/nvda/market-cap/) |
 | Çalışan sayısı aralığı | 603 – 2.100.000 | 2026 listesinde BitGo 603 çalışanla örneklenen en küçük işveren; Walmart şirket profilinde 2,1 milyon çalışan bildiriyor. [Fortune istihdam analizi](https://www.fortune.com/2026/06/19/fortune-500-employment-profits-revenue-hiring-jobs-ai/), [Walmart profili](https://fortune.com/company/walmart/) |
 | Yaklaşık SaaS uygulaması | 660 ortalama, 641 medyan | Fortune 500'e özel ölçüm değil; 10.001+ çalışanlı büyük işletme örneklemi. [Zylo verisini aktaran 2025 rapor sunumu](https://25602359.fs1.hubspotusercontent-eu1.net/hubfs/25602359/Ibexa%20Summit%202025/Keynote-Summit-2025-web.pdf) |
 | Yıllık SaaS harcaması | 284 milyon dolar ortalama | Fortune 500'e özel değil; 10.000+ çalışanlı işletmeler. Veri 40 milyon lisans ve 40 milyar dolar yönetilen harcamadan türetilmiştir. [Zylo 2025 duyurusu](https://www.prweb.com/releases/2025-saas-management-index-reveals-first-increase-in-average-saas-spend-in-three-years-amid-rising-vendor-costs-and-rapid-ai-adoption-302351642.html) |
 
-Bu iki SaaS ölçütü Fortune 500 kesinliğiyle sunulmamıştır; en yakın, açık örneklem sınırına sahip büyük işletme kıyaslamasıdır.
+Piyasa değeri, şirket değerlemesi/enterprise value ve gelir aynı ölçü değildir. Yukarıdaki iki şirketlik piyasa değeri aralığı tüm Fortune 500 için genellenemez. SaaS adet ve harcama ölçütleri de Fortune 500 kesinliğiyle sunulmamıştır; açık örneklem sınırına sahip 10.000+ çalışanlı büyük işletme kıyaslamasıdır.
 
 ## SaaS seçimi ve Fortune 500 kanıtı
 
@@ -53,13 +61,18 @@ Zendesk'in SEC'e sunduğu 2018 Q1 hissedar mektubu Stanley Black & Decker'ı aç
 
 ## Faz 2: maliyet ve ölçek tahmini
 
-Zendesk'in kaynak kodu kapalıdır; 300.000 satır gerçek ölçüm değildir. Ders materyali orta ölçekli kurumsal SaaS için 300–500 bin satır büyüklük sırasını kaba varsayım olarak verir. DestekFlow tüm ürünü değil, ödeme gerekçesi olan çekirdek akışı uygular.
+Zendesk'in kaynak kodu kapalıdır; aşağıdaki 300.000 satır gerçek Zendesk ölçümü değildir. Ders PDF'si/transkripti kurumsal SaaS hedefi için 300–500 bin satır büyüklük sırasını verir; ödev de yaklaşık 300 bin satırlık ürün seçilmesini ister. DestekFlow tüm ürünü değil, ödeme gerekçesi olan çekirdek akışı uygular.
 
-- Varsayım: 300.000 satır × satır başına yaklaşık 10 çıktı tokenı = yaklaşık 3 milyon çıktı tokenı. Bu yalnızca kaba büyüklük hesabıdır.
-- Maliyet formülü: çıktı tokenı × kullanılan modelin güncel fiyatı + abonelik + düzeltme turları + insan doğrulama zamanı.
-- Gerçek token tüketimi bu ortamda güvenilir bir proje sayacıyla ölçülmedi; sayı uydurulmamıştır.
-- Gerçek geliştirme başlangıcı: 15 Ekim 2026. İlk çalışan çekirdek ve yerel test paketi aynı gün üretildi.
-- Gerçek nakit harcaması: bu oturumda ölçülebilir ayrı API faturası yok; GitHub deposu ile Render web/PostgreSQL kaynakları ücretsiz planlarda oluşturuldu.
+| Ölçü | Sonuç | Dayanak / sınır |
+|---|---:|---|
+| Seçilen SaaS'ın tahmini kod satırı | 300.000 | Dersin hedef büyüklüğü; kapalı Zendesk kaynağının ölçümü değildir. |
+| Coding agent ile tahmini süre | 2–3 gün | Ödev metnindeki ders hesabı; gerçekleşmiş süre değildir. |
+| Örnek fiyatlandırma modeli | GPT-5 API: girdi $1,25/M, önbellekli girdi $0,125/M, çıktı $10/M token | [Resmî OpenAI GPT-5 fiyatı](https://developers.openai.com/api/docs/models/gpt-5); bu projedeki Codex abonelik faturasını temsil etmez. |
+| Tahmini token maliyeti | En az $30 çıktı; toplam hesaplanamaz | 300.000 satır × varsayımsal 10 çıktı tokenı = 3M çıktı tokenı; 3 × $10 = $30. Girdi, reasoning, araç çağrıları ve düzeltme turları ölçülmediği için toplam verilmez. |
+| Abonelik maliyeti | Ölçülemedi | Kullanılan Codex/ChatGPT planının proje başına maliyet dökümü erişilebilir değil. |
+| Gerçek geliştirme süresi | Aynı takvim günü; aktif saat ölçülmedi | Git geçmişi ilk commit'i ve çalışan çekirdeği 15 Ekim 2026'da gösterir; bu, kesintisiz emek süresi değildir. |
+| Gerçekte ölçülen ayrı nakit maliyet | $0 | GitHub public depo ve Render web/PostgreSQL ücretsiz plan; mevcut Codex aboneliğinin payı bu sayıya dahil değildir. |
+| Ölçülemeyenler | Gerçek token sayısı, reasoning tokenı, düzeltme turu başı tüketim, abonelik payı, insan doğrulama saati | Bu veriler için proje bazlı fatura/zaman kaydı yok; rakam uydurulmadı. |
 
 ## Kurulum
 
@@ -98,6 +111,7 @@ Canlı dağıtım 15 Ekim 2026 tarihinde Rails 8.1.4 ve Ruby 3.4.7 ile başarıy
 - [Sunum metni](docs/SUNUM.md)
 - [Kod haritası](docs/KOD_HARITASI.md)
 - [Test kanıtları](docs/TEST_KANITLARI.md)
+- [Son teslim denetimi](docs/SON_DENETIM.md)
 - [Kaynaklar](docs/KAYNAKLAR.md)
 
 ## Yapamadıklarım
@@ -105,6 +119,6 @@ Canlı dağıtım 15 Ekim 2026 tarihinde Rails 8.1.4 ve Ruby 3.4.7 ile başarıy
 - Ücretsiz Render planında cron hizmeti bulunmadığından 48 saatlik otomatik kapanış canlıda zamanlanmamıştır; job ve davranışı testlerde doğrulanmıştır.
 - Ücretsiz Render web servisi hareketsizlikte uyur ve ilk isteği geciktirebilir. Ücretsiz PostgreSQL veritabanı Render'ın süre ve saklama sınırlarına tabidir.
 - Canlı yönetim ekranında kimlik doğrulama ve rol yetkilendirmesi yoktur. Uygulama yalnız ders demosudur; gerçek müşteri verisiyle veya herkese açık üretim hizmeti olarak kullanılmamalıdır.
-- Fortune 500'ün tamamı için karşılaştırılabilir en düşük ve en yüksek şirket değerlemesi bulunamadı; özel şirketler nedeniyle piyasa değeri eksik.
+- Fortune 500'ün tamamı için karşılaştırılabilir en düşük ve en yüksek şirket değerlemesi bulunamadı. Faz 1 tablosundaki aralık yalnız iki halka açık şirketin aynı tarihli piyasa değeridir; tüm listeyi temsil etmez.
 - Ders materyali G2, G3 ve G4 belgelerinin tanımını vermiyor. Dosyalar belirsizliği kaydediyor; içerik uydurulmadı.
 - Windows Ruby kurulumunda kullanılmayan libvips eklentileri için uyarılar var; test sonucunu etkilemiyor.
