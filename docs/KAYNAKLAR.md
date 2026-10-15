@@ -10,6 +10,7 @@
 - [Zylo 2025 SaaS Management Index duyurusu](https://www.prweb.com/releases/2025-saas-management-index-reveals-first-increase-in-average-saas-spend-in-three-years-amid-rising-vendor-costs-and-rapid-ai-adoption-302351642.html)
 - [Capterra Zendesk değerlendirmeleri](https://www.capterra.com/p/164283/Zendesk/reviews/)
 - [Zendesk SLA belgeleri](https://support.zendesk.com/hc/en-us/articles/5604663490458-Using-SLA-policies)
+- [Zendesk 2018 Q1 hissedar mektubu — SEC Exhibit 99.2](https://www.sec.gov/Archives/edgar/data/1463172/000162828018005523/a2018q1shareholderletter.htm) — sayfa 6, Stanley Black & Decker'ın Fortune 500 statüsü ve Support, Guide, Chat, Talk anlaşması.
 - [Zendesk Box müşteri hikâyesi](https://www.zendesk.com/customer/box/)
 
 Erişim tarihi: 15 Ekim 2026. README her kaynağın hangi iddiayı desteklediğini ve örneklem sınırlarını açıklar.

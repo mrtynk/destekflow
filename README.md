@@ -47,7 +47,9 @@ Bu iki SaaS ölçütü Fortune 500 kesinliğiyle sunulmamıştır; en yakın, a�
 
 ## SaaS seçimi ve Fortune 500 kanıtı
 
-Box'ın Zendesk müşteri hikâyesi, Box'ın Temmuz 2011'den beri Zendesk müşterisi olduğunu söyler. Aynı kaynak Box'ın Fortune 500 şirketlerinin %59'undan fazlasına hizmet verdiğini belirtir; Box 2024 Fortune 500 listesinde yer almasa da ödevin "en az bir Fortune 500 firmasının Zendesk'e para ödediği" şartını tek başına kanıtlamaz. Bu nedenle Fortune 500 müşteri kanıtı henüz açık eksiktir ve teslimden önce doğrudan vaka/tedarik kaynağıyla kapatılmalıdır. [Zendesk Box müşteri hikâyesi](https://www.zendesk.com/customer/box/)
+Zendesk'in SEC'e sunduğu 2018 Q1 hissedar mektubu Stanley Black & Decker'ı açıkça bir Fortune 500 şirketi olarak tanımlar. Aynı bölüm, şirketin Zendesk Support, Guide, Chat ve Talk ürünlerini içeren çok ürünlü bir dağıtım için anlaşmayı onayladığını ve ekiplerin üç hafta içinde kullanıma geçtiğini bildirir. Bu, bir Fortune 500 şirketinin Zendesk ürünleri için ticari anlaşma yaptığına ilişkin birincil kaynak kanıtıdır. [SEC dosyası, sayfa 6](https://www.sec.gov/Archives/edgar/data/1463172/000162828018005523/a2018q1shareholderletter.htm)
+
+Önce incelenen Box müşteri hikâyesi, Box'ın Zendesk müşterisi olduğunu ve Fortune 500 şirketlerine hizmet verdiğini gösteriyordu; ancak Box'ın kendisinin Fortune 500 olduğunu göstermediği için tek başına bu koşulu kanıtlamıyordu. Stanley Black & Decker SEC kanıtı bu boşluğu kapatır. [Zendesk Box müşteri hikâyesi](https://www.zendesk.com/customer/box/)
 
 ## Faz 2: maliyet ve ölçek tahmini
 
@@ -87,7 +89,7 @@ bin/rails zeitwerk:check
 
 `render.yaml`, Frankfurt bölgesinde ücretsiz Ruby web servisi ve PostgreSQL 17 veritabanını tanımlar. Migration ve idempotent seed ücretsiz planla uyumlu biçimde build sırasında çalışır. `DATABASE_URL` Blueprint veritabanından bağlanır; `SECRET_KEY_BASE` Render tarafından gizli ve rastgele üretilir.
 
-Canlı dağıtım 15 Ekim 2026 tarihinde Rails 8.1.4 ve Ruby 3.4.7 ile başarıyla açıldı. `/up` sağlık kontrolü HTTP 200 döndürdü. Canlı ortamda #2 numaralı yüksek öncelikli talep oluşturuldu, Mehmet Kaya'ya atandı, yanıtlandı, çözüldü ve dört işlem geçmişi kaydı doğrulandı. Akıllı SLA Öncelik Asistanı açık yüksek öncelikli talebi ilk sırada, kalan ilk yanıt süresi ve gerekçesiyle gösterdi.
+Canlı dağıtım 15 Ekim 2026 tarihinde Rails 8.1.4 ve Ruby 3.4.7 ile başarıyla açıldı. `/up` sağlık kontrolü HTTP 200 döndürdü. Canlı ortamda #2 numaralı yüksek öncelikli talep oluşturuldu, Mehmet Kaya'ya atandı, yanıtlandı, çözüldü ve beş işlem geçmişi kaydı doğrulandı. Akıllı SLA Öncelik Asistanı açık yüksek öncelikli talebi ilk sırada, kalan ilk yanıt süresi ve gerekçesiyle gösterdi.
 
 ## Belgeler
 
@@ -98,11 +100,10 @@ Canlı dağıtım 15 Ekim 2026 tarihinde Rails 8.1.4 ve Ruby 3.4.7 ile başarıy
 - [Test kanıtları](docs/TEST_KANITLARI.md)
 - [Kaynaklar](docs/KAYNAKLAR.md)
 
-## Bilinen sınırlar
+## Yapamadıklarım
 
 - Ücretsiz Render planında cron hizmeti bulunmadığından 48 saatlik otomatik kapanış canlıda zamanlanmamıştır; job ve davranışı testlerde doğrulanmıştır.
 - Ücretsiz Render web servisi hareketsizlikte uyur ve ilk isteği geciktirebilir. Ücretsiz PostgreSQL veritabanı Render'ın süre ve saklama sınırlarına tabidir.
-- Fortune 500 şirketinin ücretli Zendesk müşterisi olduğunu doğrudan kanıtlayan kaynak henüz bulunmadı. Box kaynağı bu şart için yeterli sayılmadı.
 - Fortune 500'ün tamamı için karşılaştırılabilir en düşük ve en yüksek şirket değerlemesi bulunamadı; özel şirketler nedeniyle piyasa değeri eksik.
 - Ders materyali G2, G3 ve G4 belgelerinin tanımını vermiyor. Dosyalar belirsizliği kaydediyor; içerik uydurulmadı.
 - Windows Ruby kurulumunda kullanılmayan libvips eklentileri için uyarılar var; test sonucunu etkilemiyor.

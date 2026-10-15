@@ -14,8 +14,15 @@ Yeni talep ekranında müşteri adı, e-posta, başlık, açıklama, kategori ve
 
 ## 3:30–4:30 — Kullanılabilir pas ve açıklar
 
-Capterra'daki kurumsal kullanıcı, özel metriklerin zor çıkarıldığını ve panonun kalabalık olduğunu söylüyor. Asistan ayrı rapor kurulumu istemeden hangi talebin önce ele alınacağını Türkçe gerekçeyle gösteriyor. Zendesk'in SLA özelliği olduğunu saklama; farkın küçük ekip için yapılandırmasız açıklama olduğunu söyle. GitHub/Render henüz doğrulanmadıysa bunu açıkça Yapamadıklarım listesinden göster.
+Capterra'daki 10.001+ çalışanlı kurum kullanıcısının acısı: özel metrikleri çıkarmak zaman alıyor ve panolar kalabalık hissediliyor. Bizim çözümümüz: Akıllı SLA Öncelik Asistanı ayrı rapor kurulumu istemeden sıradaki aktif talebi, kalan süreyi ve yüksek/normal öncelik gerekçesini Türkçe gösteriyor. Zendesk'in SLA özelliği olduğunu saklama; farkın küçük ekip için yapılandırmasız ve açıklamalı sıra olduğunu söyle. Canlı URL ile yeşil CI doğrulanmıştır; ücretsiz Render cron eksikliğini `docs/YAPAMADIKLARIM.md` üzerinden açıkça göster.
 
 ## 4:30–5:00 — Kod yeri sorusu
 
 "SLA hafta sonunu saymasın" değişikliği için önce `Sla::DeadlineCalculator.call` değiştirilir, sonra `test/models/ticket_test.rb` içindeki yüksek ve normal öncelik zaman testlerine cuma/hafta sonu örnekleri eklenir. Durum kuralı değişirse `Ticket::TRANSITIONS` ve geçiş testleri güncellenir.
+
+## Sunuma hazır örnek veri
+
+- #1 `Fatura ekranına erişemiyorum`: açık, yüksek öncelikli, Ayşe Yılmaz'a atanmış; SLA Asistanı gerekçesini göstermek için korunur.
+- #2 `Canlı ortam SLA doğrulaması`: çözülmüş tam akış örneği.
+- #3 `503 sonrası canlı doğrulama`: çözülmüş; oluşturma, Mehmet Kaya'ya atama, yanıt ve durum geçmişinin ikinci canlı kanıtı.
+- Yeni bir sunum talebi gerekirse `Sunum canlı demo` başlığı ve `sunum-demo@example.com` sahte e-postası kullanılır; gerçek kişisel veri girilmez.
