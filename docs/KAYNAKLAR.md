@@ -17,6 +17,9 @@
 - [Fortune BitGo Holdings profili](https://fortune.com/company/bitgo-holdings/) — BitGo'nun Fortune 500 üyeliği, 2026 sırası, 603 çalışanı ve 31 Mart 2026 piyasa değeri.
 - [Fortune Analytics](https://fortune.com/analytics/fortune-500) — Fortune'un ayrıca sunduğu ücretli veri ürünü; bu çalışmada gerekli 500 sıralama satırı herkese açık sayfanın gömülü verisinden alındı.
 - [Zendesk SLA belgeleri](https://support.zendesk.com/hc/en-us/articles/5604663490458-Using-SLA-policies)
+- [G2 Zendesk değerlendirmeleri](https://www.g2.com/products/zendesk-for-customer-service/reviews?qs=pros-and-cons) — Eleanor T.; farklı e-posta/cihazla yinelenen talep ve geri alınamayan yanlış birleştirme şikâyeti.
+- [Zendesk talep birleştirme belgesi](https://support.zendesk.com/hc/en-us/articles/4408882445594-Merging-tickets) — birleştirme kalıcıdır; kaynak kapanır, alanlar hedefe taşınmaz.
+- [Zendesk ilgili talep önerileri](https://support.zendesk.com/hc/en-us/articles/6885971957914-Merging-related-tickets-based-on-suggestions) — Zendesk'in zaten öneri sunduğunu doğrular.
 - [Zendesk 2018 Q1 hissedar mektubu — SEC Exhibit 99.2](https://www.sec.gov/Archives/edgar/data/1463172/000162828018005523/a2018q1shareholderletter.htm) — sayfa 6, Stanley Black & Decker'ın Fortune 500 statüsü ve Support, Guide, Chat, Talk anlaşması.
 - [Zendesk Box müşteri hikâyesi](https://www.zendesk.com/customer/box/)
 

@@ -16,6 +16,8 @@ Yeni talep ekranında müşteri adı, e-posta, başlık, açıklama, kategori ve
 
 Capterra'daki Hadi B. (Product Coordinator) özel metrik ve hesaplanan öznitelikleri öğrenmenin zor olduğunu söylüyor. Zendesk Explore bu işi hazır panolar, sorgular ve özel metriklerle çözüyor; bizim çözümümüz onun yerine tam analitik ürün değildir. Akıllı SLA Öncelik Asistanı küçük ekibin “önce hangi aktif talebe bakmalıyım?” kararında ayrı metrik/formül/pano kurulumu istemeden sırayı, kalan süreyi ve Türkçe gerekçeyi gösteriyor. Zendesk'in SLA ve raporlama özelliklerini saklama. Ücretsiz Render cron eksikliğini ve kimlik doğrulama olmadığını açıkça göster.
 
+Ardından iki sahte demo talebinden birini aç. Farklı e-postalı diğer kaydın puanını ve eşleşen terimlerini göster; bunun kimlik eşleştirmesi olmadığını söyle. “İlişkilendir” ile iki ayrı kaydın korunduğunu ve geçmiş olayını göster; “İlişkiyi geri al” ile kararı tersine çevir. Zendesk'in zaten ilgili talep önerdiğini saklama: farkımız, fiziksel birleştirme yerine açıklanabilir ve geri alınabilir bağlantıdır.
+
 ## 4:30–5:00 — Kod yeri sorusu
 
 "SLA hafta sonunu saymasın" değişikliği için önce `Sla::DeadlineCalculator.call` değiştirilir, sonra `test/models/ticket_test.rb` içindeki yüksek ve normal öncelik zaman testlerine cuma/hafta sonu örnekleri eklenir. Durum kuralı değişirse `Ticket::TRANSITIONS` ve geçiş testleri güncellenir.
@@ -26,3 +28,4 @@ Capterra'daki Hadi B. (Product Coordinator) özel metrik ve hesaplanan özniteli
 - #2 `Canlı ortam SLA doğrulaması`: çözülmüş tam akış örneği.
 - #3 `503 sonrası canlı doğrulama`: çözülmüş; oluşturma, Mehmet Kaya'ya atama, yanıt ve durum geçmişinin ikinci canlı kanıtı.
 - Yeni bir sunum talebi gerekirse `Sunum canlı demo` başlığı ve `sunum-demo@example.com` sahte e-postası kullanılır; gerçek kişisel veri girilmez.
+- `Ekim faturası ekranı boş görünüyor` ve `Ekim faturası ekranı açılmıyor`: farklı `.example` e-postalı, idempotent seed ile oluşturulan benzer talep demosu. Önce ilişkilendir, iki kaydı ve denetim izini göster, sonra geri al.

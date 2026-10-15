@@ -30,6 +30,7 @@ Denetim tarihi: 15 Ekim 2026. “Tamamlandı” yalnız dosya varlığına deği
 | G1–G5 belgeleri (slayt) | `docs/G1.md`–`G5.md` | G1 gerçek ölçüm; G5 gerçek hata kaydı; G2–G4 doğrulanabilir isterlere dayalı öneri içerir ve resmî tanım olmadığı açıkça yazılıdır | Kısmi | G2–G4 için hocadan resmî tanım/teyit istenmeli. |
 | Gerçek kullanıcı yorumu, linkli | README, KAYNAKLAR | Capterra Zendesk Explore: Hadi B., 23 Nisan 2026 | Tamamlandı | Eski Ryan P. iddiasını kullanma. |
 | Kullanıcı acısının çalışan çözümü | PriorityAssistant, liste paneli, test | Aktif talepleri SLA riskine göre sıralayıp Türkçe neden gösteriyor | Tamamlandı | Bunu “Zendesk'te SLA yok” diye sunma. |
+| İkinci özgün adaptasyon | Similarity/Link/Unlink, talep detayı | G2 geri alınamayan birleştirme acısı; 18/77 yerel paket; puan/terim, kullanıcı onayı, geri alma ve olay kaydı | Kısmi | Son deploy, CI ve canlı ilişkilendir/geri al doğrulamasını tamamla. |
 | 5 dakikalık canlı sunum | `docs/SUNUM.md` | Zaman planı, kod yerleri, sahte örnekler #1–#3 | Tamamlandı | Sunum öncesi servisi uyandır ve yeni sahte talep kullan. |
 | “Var” denip çalışmayan özellik olmayacak | README/Yapamadıklarım | Cron ve auth yokluğu açık; butonlar gerçek route/form hedeflerine bağlı | Tamamlandı | Otomatik kapanış canlıda çalışıyor deme. |
 | Gizli bilgi Git'e girmeyecek | `.gitignore`, tracked-file/pattern taraması | `.env`, key, pem/p12 tracked değil; kodda sabit sır yok | Tamamlandı | Push öncesi taramayı tekrarla. |
@@ -58,7 +59,7 @@ Gerçek karşılaştırma `ce6cb13:AGENT.md` ile güncel `AGENT.md` arasında `g
 
 - **0 koşulları:** Şu an tetiklenen bir koşul gözlenmedi: canlı URL ve akış var, çalışmayan özellik iddiası temizlendi, CI/test kanıtı gerçek, runtime'da orijinal marka yok. Ücretsiz uyku sırasında 503 sunum riski olduğundan URL önceden uyandırılmalı.
 - **85 koşulları:** Teknik teslimler tamam; 500 satırın 472 sayısal Market Value değeri analiz edildi. Ancak 28 boş değer ve G2–G4'ün resmî tanımının bulunmaması nedeniyle dışarıdan kesin **85 garantisi** verilmez.
-- **100+ koşulları:** Çalışan SLA Asistanı gerçek Capterra acısıyla ilişkilidir. Yine de 100+ ancak hocanın bunu “orijinalde olmayan adaptasyon” kabul etmesi ve 85 tabanını kabul etmesiyle mümkündür.
+- **100+ koşulları:** SLA Asistanına ek olarak G2'deki geri alınamayan yanlış birleştirme acısına dayalı, açıklanabilir ve geri alınabilir ilişkilendirme uygulanmıştır. Yine de 100+ ancak hocanın adaptasyonları kabul etmesi ve 85 tabanını kabul etmesiyle mümkündür.
 
 ## Sunumda söylenmemesi gerekenler
 
@@ -70,3 +71,4 @@ Gerçek karşılaştırma `ce6cb13:AGENT.md` ile güncel `AGENT.md` arasında `g
 - “48 saatlik kapanış canlıda otomatik çalışıyor.” Job var, canlı cron yok.
 - “Canlı uygulama üretim güvenli.” Auth/RBAC yok; yalnız sahte verili ders demosudur.
 - “G2–G4 tamamlandı.” Görev tanımları sağlanan materyallerde bulunamadı.
+- “Zendesk benzer talepleri öneremiyor.” Yanlış; Zendesk ilgili talep önerileri sunar. Savunulan fark geri alınabilir, kayıtları koruyan bağlantıdır.

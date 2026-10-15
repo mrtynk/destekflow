@@ -5,6 +5,31 @@
   <section class="card" style="margin-top:20px"><h2>Yanıtlar</h2><% @ticket.replies.includes(:agent).each do |reply| %><div class="reply"><strong><%= reply.agent.name %></strong><small class="meta"> · <%= l reply.created_at, format: :short %></small><p><%= reply.body %></p></div><% end %>
     <% if @ticket.assignee && @ticket.status != "closed" %><%= form_with url: reply_ticket_path(@ticket), class: "field" do %><%= label_tag :body, "Temsilci yanıtı" %><%= text_area_tag :body, nil, required: true %><%= submit_tag "Yanıtı gönder", class: "button" %><% end %><% end %>
   </section>
+  <section class="card" style="margin-top:20px">
+    <h2>Geri Alınabilir Benzer Talep Asistanı</h2>
+    <p class="lead">Benzer metni açıklar; aynı müşteri olduğunu varsaymaz ve otomatik birleştirme yapmaz.</p>
+    <% if @ticket.ticket_links.exists? %>
+      <h3>İlişkili talepler</h3>
+      <% @ticket.ticket_links.includes(:first_ticket, :second_ticket).each do |link| %>
+        <% related = link.other_ticket(@ticket) %>
+        <div class="assistant-item">
+          <strong><%= link_to "##{related.id} · #{related.subject}", related %></strong>
+          <p><%= related.requester_email %> · Kayıtlar, durumlar ve SLA süreleri ayrı tutulur.</p>
+          <%= button_to "İlişkiyi geri al", unlink_related_ticket_path(@ticket, link_id: link.id), method: :delete, class: "secondary" %>
+        </div>
+      <% end %>
+    <% end %>
+    <h3>Öneriler</h3>
+    <% @similar_tickets.each do |result| %>
+      <div class="assistant-item">
+        <strong><%= link_to "##{result.ticket.id} · #{result.ticket.subject}", result.ticket %></strong>
+        <p><strong>%<%= result.score %> benzerlik</strong> · Eşleşen ifadeler: <%= result.matched_terms.join(", ") %></p>
+        <p class="meta"><%= result.ticket.requester_email %> · E-posta eşitliği puana katılmaz.</p>
+        <%= button_to "Talepleri ilişkilendir", link_related_ticket_path(@ticket, related_ticket_id: result.ticket.id), class: "button" %>
+      </div>
+    <% end %>
+    <p class="meta"><%= "Eşik üzerinde ilişkilendirilmemiş öneri yok." if @similar_tickets.empty? %></p>
+  </section>
   <section class="card" style="margin-top:20px"><h2>İşlem geçmişi</h2><ul class="timeline"><% @ticket.ticket_events.order(created_at: :desc).each do |event| %><li><strong><%= event.actor_name %></strong> · <%= event.details %><br><small><%= l event.created_at, format: :short %></small></li><% end %></ul></section>
 </div><aside class="card actions"><h2>Yönetim</h2><div><strong>İlk yanıt SLA</strong><div class="meta"><%= l @ticket.sla_due_at, format: :long %><%= " · İHLAL" if @ticket.first_response_overdue? %></div></div>
   <% if @ticket.status != "closed" %><%= form_with url: assign_ticket_path(@ticket) do %><%= label_tag :agent_id, "Temsilci" %><%= select_tag :agent_id, options_from_collection_for_select(@agents, :id, :name, @ticket.assignee_id), required: true %><%= submit_tag "Ata", class: "button", style: "margin-top:8px;width:100%" %><% end %><% end %>

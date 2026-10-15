@@ -4,6 +4,8 @@ Rails.application.routes.draw do
       post :assign
       post :reply
       post :transition
+      post :link_related
+      delete :unlink_related
     end
   end
   root "tickets#index"

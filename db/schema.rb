@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_15_090000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_15_190000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -42,6 +42,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_15_090000) do
     t.index ["ticket_id"], name: "index_ticket_events_on_ticket_id"
   end
 
+  create_table "ticket_links", force: :cascade do |t|
+    t.bigint "first_ticket_id", null: false
+    t.bigint "second_ticket_id", null: false
+    t.string "linked_by", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["first_ticket_id", "second_ticket_id"], name: "index_ticket_links_on_first_ticket_id_and_second_ticket_id", unique: true
+    t.index ["first_ticket_id"], name: "index_ticket_links_on_first_ticket_id"
+    t.index ["second_ticket_id"], name: "index_ticket_links_on_second_ticket_id"
+    t.check_constraint "first_ticket_id < second_ticket_id", name: "ticket_links_canonical_order"
+  end
+
   create_table "tickets", force: :cascade do |t|
     t.string "subject", null: false
     t.text "description", null: false
@@ -64,5 +76,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_15_090000) do
   add_foreign_key "replies", "agents"
   add_foreign_key "replies", "tickets"
   add_foreign_key "ticket_events", "tickets"
+  add_foreign_key "ticket_links", "tickets", column: "first_ticket_id"
+  add_foreign_key "ticket_links", "tickets", column: "second_ticket_id"
   add_foreign_key "tickets", "agents", column: "assignee_id"
 end

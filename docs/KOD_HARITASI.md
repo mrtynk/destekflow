@@ -22,5 +22,10 @@
 | Sunum örnek verisi | `db/seeds.rb:10` | iki temsilci ve açık yüksek öncelikli #1 senaryosu |
 | Uçtan uca servis testi | `test/services/ticket_workflow_test.rb:4` | atama, yanıt, çözüm ve olay sırası |
 | Yasak geçiş testi | `test/models/ticket_test.rb:44` | `new → closed` hatası ve durumun korunması |
+| Benzerlik puanı ve ortak terimler | `app/services/tickets/similarity.rb:7` | eşik, Türkçe normalizasyon ve Jaccard hesabı |
+| Geri alınabilir ilişki modeli | `app/models/ticket_link.rb:1` | kanonik sıra ve yinelenmeyen çift |
+| İlişkilendir / geri al servisleri | `app/services/tickets/link.rb:1`, `unlink.rb:1` | kayıtları değiştirmeyen bağlantı ve iki taraflı olaylar |
+| Benzer talep arayüzü | `app/views/tickets/show.html.erb` | puan, eşleşen terim, ilişkilendir ve geri al kontrolleri |
+| İkinci özgün özellik testleri | `test/services/ticket_similarity_test.rb`, `ticket_link_test.rb` | farklı e-posta, ilgisiz talep, tutarlılık, geri alma, SLA/durum korunumu |
 
 Satırlar 15 Ekim 2026 son teslim çalışma ağacına göre `rg -n` ile doğrulanmıştır. Kod değişirse sunumdan önce yeniden üretilmelidir.

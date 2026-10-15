@@ -4,17 +4,19 @@
 
 - Tarih: 15 Ekim 2026
 - Komut: `bundle exec rails test`
-- Sonuç: `9 runs, 29 assertions, 0 failures, 0 errors, 0 skips`
-- Son yeniden koşu: 15 Ekim 2026; hedefli `ticket_test.rb` sonucu `5 runs, 7 assertions, 0 failures`; tam paket sonucu yine `9 runs, 29 assertions, 0 failures`.
+- Sonuç: `18 runs, 77 assertions, 0 failures, 0 errors, 0 skips`
+- Son yeniden koşu: 15 Ekim 2026; yeni migration test veritabanına uygulandıktan sonra tam paket başarıyla tamamlandı.
 - Autoload denetimi: `bundle exec rails zeitwerk:check` sonucu `All is good!`
 
-Kapsanan davranışlar: talep oluşturma, liste/form render, atama, yanıt, çözme, işlem geçmişi, yasak geçiş, yüksek öncelik 4 saat, normal öncelik 24 saat, SLA ihlali, 48 saat kapanış ve SLA Öncelik Asistanı.
+Kapsanan davranışlar: önceki ana akış ve zaman/durum kurallarına ek olarak benzer başlık/açıklama, farklı e-posta, ilgisiz kayıt, deterministik Türkçe puan, ilişkilendirme, yinelenen çiftin reddi, geri alma, iki taraflı işlem geçmişi ve SLA/durum korunumu.
 
 ## GitHub Actions
 
 - Depo: [mrtynk/destekflow](https://github.com/mrtynk/destekflow)
 - Başarılı koşu: [CI #38714995821](https://github.com/mrtynk/destekflow/actions/runs/38714995821)
 - Sonuç: lint, Brakeman, bundler-audit, importmap audit, Rails test ve system-test job'larının tamamı başarılı.
+
+Yeni özelliğin commit'ine ait CI koşusu push sonrasında ayrıca doğrulanacaktır; yukarıdaki eski koşu yeni kodun kanıtı olarak sunulmaz.
 
 ## Render canlı doğrulaması
 
@@ -54,6 +56,8 @@ Kapsanan davranışlar: talep oluşturma, liste/form render, atama, yanıt, çö
 | README Yapamadıklarım | Karşılandı | Cron, ücretsiz uyku, değerleme, G2–G4 ve auth sınırları açık |
 
 100+ adayı olan SLA Asistanı, Capterra'daki Hadi B.'nin Zendesk Explore özel metrikleri ve hesaplanan öznitelikleri için belirttiği öğrenme eğrisiyle ilişkilidir. Çözüm, tam analitik ürün iddiası taşımadan, “önce hangi aktif talep?” kararı için ayrı metrik/formül/pano kurulumu istemez; SLA riskiyle sıralar ve Türkçe gerekçe verir.
+
+İkinci aday, Eleanor T.'nin farklı e-posta/cihazla yinelenen talepler ve geri alınamayan yanlış birleştirme şikâyetinden türetilen Geri Alınabilir Benzer Talep Asistanı'dır. Zendesk'in zaten öneri sunduğu kabul edilir; fark, puan/ortak terim açıklamasıyla iki kaydı koruyan ve geri alınabilen bağlantıdır.
 
 ## Dürüst sınırlar
 

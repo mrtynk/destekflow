@@ -48,6 +48,19 @@ Capterra'daki doğrulanmış kullanıcı Hadi B. (Product Coordinator, E-Learnin
 
 Karşılaştırma sınırı: Zendesk'te SLA veya raporlama yokmuş gibi bir iddia yoktur. Fark, geniş analitik yetenek yerine bu tek karar için yapılandırmasız ve açıklamalı kuyruktur. [Zendesk SLA belgeleri](https://support.zendesk.com/hc/en-us/articles/5604663490458-Using-SLA-policies)
 
+## İkinci özgün fayda: Geri Alınabilir Benzer Talep Asistanı
+
+G2'de Eleanor T. (Marketing Manager, Enterprise), aynı müşterinin telefon ve dizüstü bilgisayardan farklı e-postalarla yazması sonucu yinelenen talepler oluştuğunu; hatalı birleştirmenin geri alınamaması nedeniyle özel alan verisi kaybettiğini bildiriyor. Zendesk'in kendisi hem ilgili talep önerileri hem de talep birleştirme sunar; fakat resmî belgelerine göre birleştirme geri alınamaz, kaynak talep kapanır ve alanlar hedef talebe taşınmaz. [G2 yorumu](https://www.g2.com/products/zendesk-for-customer-service/reviews?qs=pros-and-cons), [Zendesk birleştirme belgesi](https://support.zendesk.com/hc/en-us/articles/4408882445594-Merging-tickets), [Zendesk öneri belgesi](https://support.zendesk.com/hc/en-us/articles/6885971957914-Merging-related-tickets-based-on-suggestions)
+
+DestekFlow başlık ve açıklamaları Türkçe karakterleri normalleştiren deterministik Jaccard benzerliğiyle karşılaştırır. E-posta adresini puana katmadan farklı adresli talepleri de değerlendirebilir; bu, kişilerin aynı olduğu varsayımı değildir. Arayüz puanı ve ortak terimleri gösterir. Yönetici onayıyla kurulan bağlantı iki kaydı, SLA'yı, durumu ve yanıt geçmişini değiştirmez; geri alınabilir ve iki işlem de zaman çizelgesine yazılır.
+
+| Zendesk'in doğrulanmış yaklaşımı | DestekFlow'un dar farkı |
+|---|---|
+| İlgili talep önerir ve seçilen kayıtları kalıcı olarak birleştirir. | Benzerliği açıklayıp kayıtları silmeden/kapamadan geri alınabilir bağlantı kurar. |
+| Birleştirme geri alınamaz; kaynak alanlar hedefe taşınmaz. | Her iki talep ayrı kalır; yanlış ilişki tek işlemle kaldırılır. |
+
+Sınırlar: Bu küçük veri kümeli sözcük-kümesi yaklaşımı anlam veya kimlik doğrulamaz; eş anlamlılarda yanlış negatif, ortak genel terimlerde yanlış pozitif üretebilir. Otomatik birleştirme yapmaz. Demo ekranında kimlik doğrulama/RBAC bulunmadığından gerçek kişisel veriyle kullanıma uygun değildir.
+
 ## Faz 1: Fortune 500 araştırması
 
 Fortune 500, şirketleri değerlemeye göre değil gelire göre sıralar. 2026 listesi 21 trilyon dolar toplam gelir, 2,1 trilyon dolar toplam kâr, 55 trilyon dolar toplam piyasa değeri ve 30,5 milyon çalışan bildiriyor. [Fortune 500 2026](https://fortune.com/ranking/fortune500/), [Fortune toplu analiz](https://www.fortune.com/2026/06/19/fortune-500-employment-profits-revenue-hiring-jobs-ai/)
@@ -105,7 +118,7 @@ bin/rails test
 bin/rails zeitwerk:check
 ```
 
-15 Ekim 2026 yerel sonucu: **9 test, 29 assertion, 0 failure, 0 error**. GitHub Actions'ta lint, Ruby güvenlik taramaları, JavaScript dependency audit, test ve system-test job'larının tamamı geçti: [başarılı CI koşusu](https://github.com/mrtynk/destekflow/actions/runs/38714995821). Ayrıntılar [docs/TEST_KANITLARI.md](docs/TEST_KANITLARI.md) dosyasındadır.
+15 Ekim 2026 yeni özellik sonrası yerel sonucu: **18 test, 77 assertion, 0 failure, 0 error**. Benzerlik, farklı e-posta, ilgisiz kayıt, deterministik puan, ilişkilendirme/geri alma, yinelenen ilişki, işlem geçmişi ve SLA/durum korunumu kapsanır. Son GitHub Actions bağlantısı push sonrası bu bölümde güncellenir. Ayrıntılar [docs/TEST_KANITLARI.md](docs/TEST_KANITLARI.md) dosyasındadır.
 
 ## Deploy
 

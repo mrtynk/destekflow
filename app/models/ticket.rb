@@ -13,6 +13,8 @@ class Ticket < ApplicationRecord
   belongs_to :assignee, class_name: "Agent", optional: true
   has_many :replies, dependent: :destroy
   has_many :ticket_events, dependent: :destroy
+  has_many :outgoing_ticket_links, class_name: "TicketLink", foreign_key: :first_ticket_id, inverse_of: :first_ticket, dependent: :destroy
+  has_many :incoming_ticket_links, class_name: "TicketLink", foreign_key: :second_ticket_id, inverse_of: :second_ticket, dependent: :destroy
 
   validates :subject, :description, :requester_name, :requester_email, presence: true
   validates :priority, inclusion: { in: PRIORITIES }
@@ -36,5 +38,13 @@ class Ticket < ApplicationRecord
 
   def closable?(at: Time.current)
     status == "solved" && resolved_at.present? && resolved_at <= at - 48.hours
+  end
+
+  def ticket_links
+    TicketLink.where(first_ticket: self).or(TicketLink.where(second_ticket: self))
+  end
+
+  def related_tickets
+    ticket_links.includes(:first_ticket, :second_ticket).map { |link| link.other_ticket(self) }
   end
 end

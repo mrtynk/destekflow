@@ -1,5 +1,5 @@
 class TicketsController < ApplicationController
-  before_action :set_ticket, only: %i[show assign reply transition]
+  before_action :set_ticket, only: %i[show assign reply transition link_related unlink_related]
 
   def index
     @tickets = Ticket.includes(:assignee).order(created_at: :desc)
@@ -10,6 +10,9 @@ class TicketsController < ApplicationController
 
   def show
     @agents = Agent.order(:name)
+    linked_ids = @ticket.related_tickets.map(&:id)
+    candidates = Ticket.where.not(id: [ @ticket.id, *linked_ids ])
+    @similar_tickets = Tickets::Similarity.call(@ticket, candidates:)
   end
 
   def new
@@ -42,6 +45,20 @@ class TicketsController < ApplicationController
     redirect_to @ticket, notice: "Talep durumu güncellendi."
   rescue Tickets::Transition::InvalidTransition => error
     redirect_to @ticket, alert: error.message
+  end
+
+  def link_related
+    related_ticket = Ticket.find(params.require(:related_ticket_id))
+    Tickets::Link.call(ticket: @ticket, related_ticket:)
+    redirect_to @ticket, notice: "Talepler silinmeden ilişkilendirildi."
+  rescue ActiveRecord::RecordInvalid => error
+    redirect_to @ticket, alert: error.record.errors.full_messages.to_sentence.presence || "Bu ilişki zaten var veya geçersiz."
+  end
+
+  def unlink_related
+    link = @ticket.ticket_links.find(params.require(:link_id))
+    Tickets::Unlink.call(ticket: @ticket, link:)
+    redirect_to @ticket, notice: "Talep ilişkisi geri alındı; iki kayıt da korundu."
   end
 
   private

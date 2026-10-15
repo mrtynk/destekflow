@@ -16,3 +16,22 @@ if Ticket.none?
   ticket = Tickets::Create.call({ subject: "Fatura ekranına erişemiyorum", description: "Son faturamı indirmek istediğimde boş sayfa görüyorum.", requester_name: "Deniz Arslan", requester_email: "deniz@example.com", category: "billing", priority: "high" })
   Tickets::Assign.call(ticket:, agent: agents.first)
 end
+
+[
+  {
+    subject: "Ekim faturası ekranı boş görünüyor",
+    description: "Ekim faturasını indirirken beyaz ekran görüyorum.",
+    requester_name: "Benzer Talep Demo Bir",
+    requester_email: "benzer-bir@example.com"
+  },
+  {
+    subject: "Ekim faturası ekranı açılmıyor",
+    description: "Ekim faturasını indirirken beyaz ekran görüyorum.",
+    requester_name: "Benzer Talep Demo İki",
+    requester_email: "benzer-iki@example.com"
+  }
+].each do |attributes|
+  next if Ticket.exists?(subject: attributes[:subject], requester_email: attributes[:requester_email])
+
+  Tickets::Create.call(attributes.merge(category: "billing", priority: "normal"))
+end
