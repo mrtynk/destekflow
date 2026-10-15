@@ -21,8 +21,8 @@ services:
         fromDatabase:
           name: destekflow-db
           property: connectionString
-      - key: RAILS_MASTER_KEY
-        sync: false
+      - key: SECRET_KEY_BASE
+        generateValue: true
       - key: RAILS_ENV
         value: production
       - key: RAILS_LOG_TO_STDOUT
