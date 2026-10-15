@@ -1,10 +1,13 @@
 # DestekFlow
 
+[![CI](https://github.com/mrtynk/destekflow/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/mrtynk/destekflow/actions/workflows/ci.yml)
+
+- Canlı uygulama: [destekflow.onrender.com](https://destekflow.onrender.com)
+- GitHub deposu: [mrtynk/destekflow](https://github.com/mrtynk/destekflow)
+
 DestekFlow, kurumsal destek taleplerini oluşturma, temsilciye atama, yanıtlama ve kontrollü biçimde çözme akışını yöneten Türkçe bir Ruby on Rails uygulamasıdır. Zendesk'in destek talebi akışından ilham alır; ürün adı ve görsel kimliği özgündür.
 
-> Canlı URL ve GitHub Actions rozeti, depo GitHub'a gönderilip Render yayını doğrulandıktan sonra buraya gerçek adresleriyle eklenecektir.
-
-## Aort dilimi
+## Ana akış
 
 1. Müşteri başlık, açıklama, kategori ve öncelikle talep açar.
 2. Yönetici talebi destek temsilcisine atar; talep `new` durumundan `open` durumuna geçer.
@@ -20,7 +23,7 @@ Durum akışı: `new → open/pending`, `open → pending/solved`, `pending → 
 - Normal öncelikli taleplerde ilk yanıt SLA'sı 24 saattir.
 - Çözülmüş talep 48 saat sonra otomatik kapanmaya uygun olur.
 
-Render cron servisi kapanmaya uygun talepleri saatlik kontrol edecek şekilde tanımlanmıştır. Bu cron görevi canlıda çalıştırılıp gözlenene kadar yalnızca "deploy yapılandırması hazır" kabul edilir.
+`CloseResolvedTicketsJob` kapanmaya uygun talepleri kapatır. Render cron servisleri ücretli olduğundan ücretsiz canlı ortamda zamanlanmış cron oluşturulmamıştır; job test paketiyle doğrulanmıştır ve ücretli ortama geçildiğinde zamanlanabilir.
 
 ## Özgün fayda: Akıllı SLA Öncelik Asistanı
 
@@ -54,7 +57,7 @@ Zendesk'in kaynak kodu kapalıdır; 300.000 satır gerçek ölçüm değildir. D
 - Maliyet formülü: çıktı tokenı × kullanılan modelin güncel fiyatı + abonelik + düzeltme turları + insan doğrulama zamanı.
 - Gerçek token tüketimi bu ortamda güvenilir bir proje sayacıyla ölçülmedi; sayı uydurulmamıştır.
 - Gerçek geliştirme başlangıcı: 15 Ekim 2026. İlk çalışan çekirdek ve yerel test paketi aynı gün üretildi.
-- Gerçek nakit harcaması: bu oturumda ölçülebilir ayrı API faturası yok; GitHub/Render maliyeti henüz oluşmadı.
+- Gerçek nakit harcaması: bu oturumda ölçülebilir ayrı API faturası yok; GitHub deposu ile Render web/PostgreSQL kaynakları ücretsiz planlarda oluşturuldu.
 
 ## Kurulum
 
@@ -78,11 +81,13 @@ bin/rails test
 bin/rails zeitwerk:check
 ```
 
-15 Ekim 2026 yerel sonucu: **9 test, 29 assertion, 0 failure, 0 error**. Ayrıntı ve sınırlar [docs/TEST_KANITLARI.md](docs/TEST_KANITLARI.md) dosyasındadır. GitHub Actions sonucu henüz oluşmadığından yeşil CI iddiası ve rozet eklenmemiştir.
+15 Ekim 2026 yerel sonucu: **9 test, 29 assertion, 0 failure, 0 error**. GitHub Actions'ta lint, Ruby güvenlik taramaları, JavaScript dependency audit, test ve system-test job'larının tamamı geçti: [başarılı CI koşusu](https://github.com/mrtynk/destekflow/actions/runs/38714995821). Ayrıntılar [docs/TEST_KANITLARI.md](docs/TEST_KANITLARI.md) dosyasındadır.
 
 ## Deploy
 
-`render.yaml` web servisi, PostgreSQL, migration/seed ve saatlik otomatik kapanış cron görevini tanımlar. Render'da `RAILS_MASTER_KEY` gizli değişken olarak girilmeli; `DATABASE_URL` blueprint veritabanından bağlanmalıdır.
+`render.yaml`, Frankfurt bölgesinde ücretsiz Ruby web servisi ve PostgreSQL 17 veritabanını tanımlar. Migration ve idempotent seed ücretsiz planla uyumlu biçimde build sırasında çalışır. `DATABASE_URL` Blueprint veritabanından bağlanır; `SECRET_KEY_BASE` Render tarafından gizli ve rastgele üretilir.
+
+Canlı dağıtım 15 Ekim 2026 tarihinde Rails 8.1.4 ve Ruby 3.4.7 ile başarıyla açıldı. `/up` sağlık kontrolü HTTP 200 döndürdü. Canlı ortamda #2 numaralı yüksek öncelikli talep oluşturuldu, Mehmet Kaya'ya atandı, yanıtlandı, çözüldü ve dört işlem geçmişi kaydı doğrulandı. Akıllı SLA Öncelik Asistanı açık yüksek öncelikli talebi ilk sırada, kalan ilk yanıt süresi ve gerekçesiyle gösterdi.
 
 ## Belgeler
 
@@ -93,10 +98,10 @@ bin/rails zeitwerk:check
 - [Test kanıtları](docs/TEST_KANITLARI.md)
 - [Kaynaklar](docs/KAYNAKLAR.md)
 
-## Yapamadıklarım
+## Bilinen sınırlar
 
-- GitHub deposu henüz uzak sunucuya gönderilmedi; Actions yeşil sonucu ve gerçek rozet yok.
-- Render yayını yapılmadı; doğrulanmış canlı URL ve canlı cron gözlemi yok.
+- Ücretsiz Render planında cron hizmeti bulunmadığından 48 saatlik otomatik kapanış canlıda zamanlanmamıştır; job ve davranışı testlerde doğrulanmıştır.
+- Ücretsiz Render web servisi hareketsizlikte uyur ve ilk isteği geciktirebilir. Ücretsiz PostgreSQL veritabanı Render'ın süre ve saklama sınırlarına tabidir.
 - Fortune 500 şirketinin ücretli Zendesk müşterisi olduğunu doğrudan kanıtlayan kaynak henüz bulunmadı. Box kaynağı bu şart için yeterli sayılmadı.
 - Fortune 500'ün tamamı için karşılaştırılabilir en düşük ve en yüksek şirket değerlemesi bulunamadı; özel şirketler nedeniyle piyasa değeri eksik.
 - Ders materyali G2, G3 ve G4 belgelerinin tanımını vermiyor. Dosyalar belirsizliği kaydediyor; içerik uydurulmadı.
