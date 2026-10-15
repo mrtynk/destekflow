@@ -1,4 +1,5 @@
 /.bundle
+/.tools
 /.env*
 !/\.env.example
 /config/master.key
