@@ -1,0 +1,22 @@
+<% content_for :title, "Talepler | DestekFlow" %>
+<div class="page-head"><div><h1>Destek talepleri</h1><p class="lead">Ekibin iş yükünü ve SLA risklerini tek ekrandan yönetin.</p></div><%= link_to "Yeni talep oluştur", new_ticket_path, class: "button" %></div>
+<div class="grid">
+  <section>
+    <%= form_with url: tickets_path, method: :get, class: "filters" do %>
+      <%= select_tag :status, options_for_select([["Tüm durumlar",""]] + Ticket::STATUSES.map { |s| [I18n.t("tickets.statuses.#{s}"),s] }, params[:status]), onchange: "this.form.requestSubmit()" %>
+      <%= select_tag :priority, options_for_select([["Tüm öncelikler",""]] + Ticket::PRIORITIES.map { |p| [I18n.t("tickets.priorities.#{p}"),p] }, params[:priority]), onchange: "this.form.requestSubmit()" %>
+    <% end %>
+    <div class="ticket-list">
+      <% @tickets.each do |ticket| %>
+        <%= link_to ticket, class: "ticket-row" do %>
+          <div><strong>#<%= ticket.id %> · <%= ticket.subject %></strong><div class="meta"><%= ticket.requester_name %> · <%= ticket.assignee&.name || "Atanmamış" %></div><div class="badges"><span class="badge <%= ticket.priority %>"><%= t("tickets.priorities.#{ticket.priority}") %></span><span class="badge <%= ticket.status %>"><%= t("tickets.statuses.#{ticket.status}") %></span></div></div>
+          <div class="meta">SLA<br><strong><%= l ticket.sla_due_at, format: :short %></strong></div>
+        <% end %>
+      <% end %>
+      <p class="lead"><%= "Henüz talep yok." if @tickets.empty? %></p>
+    </div>
+  </section>
+  <aside class="card"><h2>Akıllı SLA Öncelik Asistanı</h2><p class="lead">Sıradaki işi kalan süre ve riskle açıklar.</p>
+    <% @priorities.first(5).each_with_index do |result,index| %><div class="assistant-item"><strong><%= index + 1 %>. <%= link_to result.ticket.subject, result.ticket %></strong><p><%= result.reason %></p></div><% end %>
+  </aside>
+</div>

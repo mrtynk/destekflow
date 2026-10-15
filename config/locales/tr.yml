@@ -1,0 +1,9 @@
+tr:
+  time:
+    formats:
+      short: "%d.%m.%Y %H:%M"
+      long: "%d.%m.%Y %H:%M"
+  tickets:
+    statuses: { new: "Yeni", open: "Açık", pending: "Beklemede", solved: "Çözüldü", closed: "Kapalı" }
+    priorities: { normal: "Normal", high: "Yüksek" }
+    categories: { technical: "Teknik", billing: "Faturalama", account: "Hesap", other: "Diğer" }

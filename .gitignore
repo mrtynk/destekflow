@@ -1,0 +1,14 @@
+/.bundle
+/.env*
+!/\.env.example
+/config/master.key
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+!/tmp/pids/.keep
+/storage/*
+!/storage/.keep
+/public/assets
+/ruby_out.txt
+/ruby_err.txt
