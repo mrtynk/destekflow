@@ -11,13 +11,13 @@ Denetim tarihi: 15 Ekim 2026. “Tamamlandı” yalnız dosya varlığına deği
 | Rails 8+ | `Gemfile.lock` | Rails 8.1.4 runtime/test kaydı | Tamamlandı | Yok. |
 | Kendi ürün adı ve logosu | layout, CSS | Canlı UI “DestekFlow” ve “D” işareti; runtime dosyalarında “Zendesk” yok | Tamamlandı | Yok. |
 | Orijinal marka/logo uygulamada görünmeyecek | `app/`, `public/` | Runtime dizinlerinde marka taraması eşleşme vermedi; ad yalnız belgede ilham kaynağı | Tamamlandı | Yok. |
-| Fortune 500 genel değerleme aralığı, kaynaklı | README Faz 1 | Tüm 500 için ortak değerleme yok; iki halka açık şirketlik aynı tarihli piyasa değeri alt kümesi 737,01M–5,34T USD | Kısmi | Tam liste/veri lisansı veya hocanın “değerleme” tanımı gerekir. |
+| Fortune 500 genel değerleme aralığı, kaynaklı | README Faz 1 | Tüm 500 için ortak değerleme yok; Fortune'un 2026 gelir sırasındaki ilk 10 için yayımladığı market value alt kümesi 61,1099B–3,7259T USD | Kısmi | Tam liste/veri lisansı veya hocanın “değerleme” tanımı gerekir. |
 | Fortune 500 çalışan aralığı | README Faz 1 | Fortune kaynaklı BitGo 603, Walmart 2,1M | Tamamlandı | “2026 listesinde raporlanan aralık” diye sun. |
 | Yaklaşık SaaS ürün sayısı | README Faz 1 | Zylo örnekleminde 10.000+ çalışanlı işletmeler ortalama 660 uygulama | Tamamlandı | Fortune 500'e özel olmadığını söyle. |
 | Yıllık SaaS harcaması | README Faz 1 | Zylo örnekleminde 10.000+ çalışanlı işletmeler ortalama $284M/yıl | Tamamlandı | Fortune 500'e özel olmadığını söyle. |
 | En az bir Fortune 500 firmasının seçilen SaaS'a para ödediği kanıtı | README SaaS seçimi | Zendesk SEC Exhibit 99.2: Stanley Black & Decker Fortune 500 ve dört Zendesk ürünü için anlaşma | Tamamlandı | “Box tek başına kanıt değildi” sınırını koru. |
 | Yaklaşık 300K satırlık kurumsal SaaS seçimi | README Faz 2 | Ders hedefi 300–500K; Zendesk kapalı kaynak olduğundan gerçek LoC ölçülmedi | Kısmi | Gerçek Zendesk LoC iddiasında bulunma. |
-| Faz 2 token/abonelik/gün tahmini | README Faz 2 | Açık tablo; 2–3 gün ders tahmini, GPT-5 resmî fiyatı, 3M çıktı varsayımı ve en az $30 çıktı maliyeti | Tamamlandı | $30'u toplam/gerçek harcama diye söyleme. |
+| Faz 2 LoC/token/abonelik/gün tahmini | README Faz 2 | 1.260 fiziksel DestekFlow satırı ölçümü; 2–3 gün ders tahmini; GPT-5 resmî fiyatı; 3M çıktı varsayımı ve en az $30 çıktı maliyeti; abonelik alternatifi ölçülmedi | Tamamlandı | $30'u toplam/gerçek harcama diye söyleme; abonelik USD rakamı uydurma. |
 | Kendi tahmini ve gerçekte harcanan | README Faz 2 | Aynı gün commit kanıtı; aktif saat, token ve abonelik payı ölçülmedi; ayrı GitHub/Render maliyeti $0 | Kısmi | Gerçek zaman/token kaydı olmadığı açıkça söylenmeli. |
 | Aort dilimi uçtan uca | create/assign/reply/transition/history servisleri | Yerel workflow testi ve canlı #2/#3 kayıtları: oluştur–ata–yanıtla–çöz–geçmiş | Tamamlandı | Sunumda yeni sahte veriyle tekrar göster. |
 | En az bir zaman kuralı | SLA ve kapanış servisleri | 4 saat, 24 saat, ihlal ve 48 saat kapanma kuralları | Tamamlandı | Canlı cron olmadığını saklama. |
@@ -57,12 +57,12 @@ Gerçek karşılaştırma `ce6cb13:AGENT.md` ile güncel `AGENT.md` arasında `g
 ## 0 / 85 / 100+ değerlendirmesi
 
 - **0 koşulları:** Şu an tetiklenen bir koşul gözlenmedi: canlı URL ve akış var, çalışmayan özellik iddiası temizlendi, CI/test kanıtı gerçek, runtime'da orijinal marka yok. Ücretsiz uyku sırasında 503 sunum riski olduğundan URL önceden uyandırılmalı.
-- **85 koşulları:** Teknik teslimler tamam; ancak “tüm Fortune 500 değerleme aralığı” yerine dürüst iki şirketlik piyasa değeri alt kümesi var ve slaytın istediği G2–G4 tanımsız. Bu nedenle dışarıdan kesin **85 garantisi** verilmez; hocanın bu iki yorumu belirleyicidir.
+- **85 koşulları:** Teknik teslimler tamam; ancak “tüm Fortune 500 değerleme aralığı” yerine dürüst ilk 10 şirketlik piyasa değeri alt kümesi var ve slaytın istediği G2–G4 tanımsız. Bu nedenle dışarıdan kesin **85 garantisi** verilmez; hocanın bu iki yorumu belirleyicidir.
 - **100+ koşulları:** Çalışan SLA Asistanı gerçek Capterra acısıyla ilişkilidir. Yine de 100+ ancak hocanın bunu “orijinalde olmayan adaptasyon” kabul etmesi ve 85 tabanını kabul etmesiyle mümkündür.
 
 ## Sunumda söylenmemesi gerekenler
 
-- “Bütün Fortune 500'ün değerleme aralığı 737 milyon–5,34 trilyon dolar.” Yanlış; bu yalnız iki şirketlik piyasa değeri alt kümesidir.
+- “Bütün Fortune 500'ün değerleme aralığı 61,1099 milyar–3,7259 trilyon dolar.” Yanlış; bu yalnız gelir sırasındaki ilk 10 şirketin piyasa değeri alt kümesidir.
 - “Zendesk yaklaşık 300.000 satırdır.” Ölçülmedi; ders ölçek varsayımıdır.
 - “Projeyi $30'a yaptım.” Yanlış; $30 yalnız varsayımsal 3M çıktı tokenının GPT-5 çıktı fiyatıdır.
 - “Zendesk'te SLA/önceliklendirme yok.” Yanlış; Zendesk SLA ve Explore raporlama sunar.

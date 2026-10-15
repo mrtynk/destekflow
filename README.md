@@ -38,6 +38,14 @@ Capterra'daki doğrulanmış kullanıcı Hadi B. (Product Coordinator, E-Learnin
 |---|---|
 | Explore veri kümesini, hesaplanan metriği ve panoyu yapılandır; sonra SLA görünümünü yorumla. | Talep listesine gir; sıradaki aktif talebi, kalan süreyi ve gerekçeyi doğrudan gör. |
 
+| Savunma sorusu | Kanıtlanabilir yanıt |
+|---|---|
+| Kullanıcı hangi problemi yaşıyor? | Hadi B., Explore'da özel metrik ve hesaplanan öznitelik üretmenin öğrenme eğrisini; terim ve veri kümesi yapısının yeni kullanıcı için belirsizliğini bildiriyor. |
+| Zendesk bunu nasıl çözmeye çalışıyor? | Explore hazır panolar, sorgular, özel metrikler ve SLA performans raporları sunuyor; yani Zendesk'te analitik/SLA yokluğu iddia edilmiyor. |
+| DestekFlow'un somut farkı nedir? | Geniş bir analitik araç yerine tek operasyonel kararı — “şimdi hangi aktif talep?” — kurulum gerektirmeyen, açıklamalı bir kuyruk olarak verir. |
+| Kullanıcı hangi adımı daha az yapıyor? | Veri kümesi seçme, formül yazma ve bu karar için ayrı pano kurma adımlarını atlar. |
+| 30 saniyelik canlı gösterim | `/tickets` açılır; normal ve yüksek öncelikli iki aktif kayıt gösterilir; asistanın yüksek riskliyi üste aldığı, kalan süreyi ve Türkçe gerekçeyi sunduğu işaret edilir. |
+
 Karşılaştırma sınırı: Zendesk'te SLA veya raporlama yokmuş gibi bir iddia yoktur. Fark, geniş analitik yetenek yerine bu tek karar için yapılandırmasız ve açıklamalı kuyruktur. [Zendesk SLA belgeleri](https://support.zendesk.com/hc/en-us/articles/5604663490458-Using-SLA-policies)
 
 ## Faz 1: Fortune 500 araştırması
@@ -46,12 +54,12 @@ Fortune 500, şirketleri değerlemeye göre değil gelire göre sıralar. 2026 l
 
 | İstenen ölçü | Kaynaklı sonuç | Sınır |
 |---|---:|---|
-| Piyasa değeri aralığı — iki şirketlik kaynaklı alt küme | 737,01 milyon – 5,34 trilyon dolar | Kapsam yalnız 2026 Fortune 500 üyeliği açıkça doğrulanan ve 14 Ekim 2026 kapanışı için aynı veri sağlayıcıda piyasa değeri bulunan **BitGo ile Nvidia**'dır; bütün Fortune 500 veya bütün halka açık üyeler değildir. BitGo: 737,01 milyon dolar; Nvidia: 5,34 trilyon dolar. [Fortune 500 listesi](https://fortune.com/ranking/fortune500/), [Fortune BitGo kaydı](https://fortune.com/ranking/crypto/2026/bitgo/), [BitGo piyasa değeri](https://stockanalysis.com/stocks/btgo/market-cap/), [Nvidia piyasa değeri](https://stockanalysis.com/stocks/nvda/market-cap/) |
+| Piyasa değeri aralığı — ilk 10 şirketlik kaynaklı alt küme | 61,1099 milyar – 3,7259 trilyon dolar | 2026 Fortune 500'ün gelir sırasındaki ilk 10 şirketinin Fortune tablosunda aynı ölçüm bağlamında verilen **market value** alanları karşılaştırıldı. Alt kümede en düşük Cencora (61.109,9 milyon $), en yüksek Apple'dır (3.725.926,5 milyon $). Bu, bütün Fortune 500'ün min–max'ı veya enterprise value değildir. [Fortune 500 2026 tam tablo](https://fortune.com/ranking/fortune500/) |
 | Çalışan sayısı aralığı | 603 – 2.100.000 | 2026 listesinde BitGo 603 çalışanla örneklenen en küçük işveren; Walmart şirket profilinde 2,1 milyon çalışan bildiriyor. [Fortune istihdam analizi](https://www.fortune.com/2026/06/19/fortune-500-employment-profits-revenue-hiring-jobs-ai/), [Walmart profili](https://fortune.com/company/walmart/) |
 | Yaklaşık SaaS uygulaması | 660 ortalama, 641 medyan | Fortune 500'e özel ölçüm değil; 10.001+ çalışanlı büyük işletme örneklemi. [Zylo verisini aktaran 2025 rapor sunumu](https://25602359.fs1.hubspotusercontent-eu1.net/hubfs/25602359/Ibexa%20Summit%202025/Keynote-Summit-2025-web.pdf) |
 | Yıllık SaaS harcaması | 284 milyon dolar ortalama | Fortune 500'e özel değil; 10.000+ çalışanlı işletmeler. Veri 40 milyon lisans ve 40 milyar dolar yönetilen harcamadan türetilmiştir. [Zylo 2025 duyurusu](https://www.prweb.com/releases/2025-saas-management-index-reveals-first-increase-in-average-saas-spend-in-three-years-amid-rising-vendor-costs-and-rapid-ai-adoption-302351642.html) |
 
-Piyasa değeri, şirket değerlemesi/enterprise value ve gelir aynı ölçü değildir. Yukarıdaki iki şirketlik piyasa değeri aralığı tüm Fortune 500 için genellenemez. SaaS adet ve harcama ölçütleri de Fortune 500 kesinliğiyle sunulmamıştır; açık örneklem sınırına sahip 10.000+ çalışanlı büyük işletme kıyaslamasıdır.
+Piyasa değeri, şirket değerlemesi/enterprise value ve gelir aynı ölçü değildir. Fortune'un tam, karşılaştırılabilir 500 satırlık veri dışa aktarımı ücretli olduğundan kamuya açık sayfada doğrulanabilen ilk 10 şirket alt kümesi kullanıldı; bu aralık tüm Fortune 500'e genellenemez. BitGo'nun Fortune 500 üyeliği ayrıca Fortune şirket profilinde 2026 sırası ve çalışan sayısıyla doğrulanmıştır; Fortune Global 500 ile karıştırılmamıştır. [Fortune BitGo Holdings profili](https://fortune.com/company/bitgo-holdings/), [ücretli Fortune Analytics veri kapsamı](https://fortune.com/analytics/fortune-500). SaaS adet ve harcama ölçütleri de Fortune 500 kesinliğiyle sunulmamıştır; açık örneklem sınırına sahip 10.000+ çalışanlı büyük işletme kıyaslamasıdır.
 
 ## SaaS seçimi ve Fortune 500 kanıtı
 
@@ -66,10 +74,11 @@ Zendesk'in kaynak kodu kapalıdır; aşağıdaki 300.000 satır gerçek Zendesk 
 | Ölçü | Sonuç | Dayanak / sınır |
 |---|---:|---|
 | Seçilen SaaS'ın tahmini kod satırı | 300.000 | Dersin hedef büyüklüğü; kapalı Zendesk kaynağının ölçümü değildir. |
+| DestekFlow gerçek kod büyüklüğü | 1.260 fiziksel satır; 1.089 boş olmayan satır, 56 dosya | `app`, `config`, `db`, `lib`, `test`, `bin` altındaki Git'e izlenen `.rb/.erb/.css/.js/.yml/.yaml` dosyaları 15 Ekim 2026'da PowerShell ile sayıldı. Markdown ve bağımlılık kilit dosyaları kapsam dışıdır; test ve yapılandırma kapsamdadır. |
 | Coding agent ile tahmini süre | 2–3 gün | Ödev metnindeki ders hesabı; gerçekleşmiş süre değildir. |
 | Örnek fiyatlandırma modeli | GPT-5 API: girdi $1,25/M, önbellekli girdi $0,125/M, çıktı $10/M token | [Resmî OpenAI GPT-5 fiyatı](https://developers.openai.com/api/docs/models/gpt-5); bu projedeki Codex abonelik faturasını temsil etmez. |
 | Tahmini token maliyeti | En az $30 çıktı; toplam hesaplanamaz | 300.000 satır × varsayımsal 10 çıktı tokenı = 3M çıktı tokenı; 3 × $10 = $30. Girdi, reasoning, araç çağrıları ve düzeltme turları ölçülmediği için toplam verilmez. |
-| Abonelik maliyeti | Ölçülemedi | Kullanılan Codex/ChatGPT planının proje başına maliyet dökümü erişilebilir değil. |
+| Abonelik bazlı alternatif maliyet | Ölçülmedi | Alternatif senaryo bir aylık plan ücreti × 1 ay olurdu; kullanılan Codex/ChatGPT planı ve proje payı kaydedilmediği için USD rakamı uydurulmadı. |
 | Gerçek geliştirme süresi | Aynı takvim günü; aktif saat ölçülmedi | Git geçmişi ilk commit'i ve çalışan çekirdeği 15 Ekim 2026'da gösterir; bu, kesintisiz emek süresi değildir. |
 | Gerçekte ölçülen ayrı nakit maliyet | $0 | GitHub public depo ve Render web/PostgreSQL ücretsiz plan; mevcut Codex aboneliğinin payı bu sayıya dahil değildir. |
 | Ölçülemeyenler | Gerçek token sayısı, reasoning tokenı, düzeltme turu başı tüketim, abonelik payı, insan doğrulama saati | Bu veriler için proje bazlı fatura/zaman kaydı yok; rakam uydurulmadı. |
@@ -119,6 +128,6 @@ Canlı dağıtım 15 Ekim 2026 tarihinde Rails 8.1.4 ve Ruby 3.4.7 ile başarıy
 - Ücretsiz Render planında cron hizmeti bulunmadığından 48 saatlik otomatik kapanış canlıda zamanlanmamıştır; job ve davranışı testlerde doğrulanmıştır.
 - Ücretsiz Render web servisi hareketsizlikte uyur ve ilk isteği geciktirebilir. Ücretsiz PostgreSQL veritabanı Render'ın süre ve saklama sınırlarına tabidir.
 - Canlı yönetim ekranında kimlik doğrulama ve rol yetkilendirmesi yoktur. Uygulama yalnız ders demosudur; gerçek müşteri verisiyle veya herkese açık üretim hizmeti olarak kullanılmamalıdır.
-- Fortune 500'ün tamamı için karşılaştırılabilir en düşük ve en yüksek şirket değerlemesi bulunamadı. Faz 1 tablosundaki aralık yalnız iki halka açık şirketin aynı tarihli piyasa değeridir; tüm listeyi temsil etmez.
+- Fortune 500'ün tamamı için karşılaştırılabilir en düşük ve en yüksek şirket değerlemesi bulunamadı. Faz 1 tablosundaki aralık Fortune'un ilk 10 şirket için yayımladığı **piyasa değeri** alt kümesidir; tüm listeyi temsil etmez.
 - Ders materyali G2, G3 ve G4 belgelerinin tanımını vermiyor. Dosyalar belirsizliği kaydediyor; içerik uydurulmadı.
 - Windows Ruby kurulumunda kullanılmayan libvips eklentileri için uyarılar var; test sonucunu etkilemiyor.

@@ -11,7 +11,9 @@
 - [Capterra Zendesk Explore değerlendirmeleri](https://www.capterra.com/p/132248/BIME/reviews/) — Hadi B., Product Coordinator, E-Learning; 23 Nisan 2026 tarihli doğrulanmış incelemede özel metrik/hesaplanan öznitelik öğrenme eğrisi.
 - [Zendesk metrik ve öznitelik belgeleri](https://support.zendesk.com/hc/en-us/articles/4408846733722-Using-metrics-and-attributes-in-reports)
 - [OpenAI GPT-5 API fiyatlandırması](https://developers.openai.com/api/docs/models/gpt-5)
-- [BitGo piyasa değeri](https://stockanalysis.com/stocks/btgo/market-cap/) ve [Nvidia piyasa değeri](https://stockanalysis.com/stocks/nvda/market-cap/) — 14 Ekim 2026 kapanışı; yalnız iki şirketlik karşılaştırılabilir halka açık Fortune 500 alt kümesi.
+- [Fortune 500 2026 tam tablo](https://fortune.com/ranking/fortune500/) — gelir sırasındaki ilk 10 şirket için aynı tabloda yayımlanan market value değerleri; 61,1099 milyar–3,7259 trilyon dolar alt küme aralığı.
+- [Fortune BitGo Holdings profili](https://fortune.com/company/bitgo-holdings/) — BitGo'nun Fortune 500 üyeliği, 2026 sırası, 603 çalışanı ve 31 Mart 2026 piyasa değeri.
+- [Fortune Analytics](https://fortune.com/analytics/fortune-500) — 500 satırlık karşılaştırılabilir veri dışa aktarımının ücretli kapsamı; neden tüm liste min–max'ı hesaplanamadığının veri sınırı.
 - [Zendesk SLA belgeleri](https://support.zendesk.com/hc/en-us/articles/5604663490458-Using-SLA-policies)
 - [Zendesk 2018 Q1 hissedar mektubu — SEC Exhibit 99.2](https://www.sec.gov/Archives/edgar/data/1463172/000162828018005523/a2018q1shareholderletter.htm) — sayfa 6, Stanley Black & Decker'ın Fortune 500 statüsü ve Support, Guide, Chat, Talk anlaşması.
 - [Zendesk Box müşteri hikâyesi](https://www.zendesk.com/customer/box/)
