@@ -1,0 +1,103 @@
+# DestekFlow
+
+DestekFlow, kurumsal destek taleplerini oluşturma, temsilciye atama, yanıtlama ve kontrollü biçimde çözme akışını yöneten Türkçe bir Ruby on Rails uygulamasıdır. Zendesk'in destek talebi akışından ilham alır; ürün adı ve görsel kimliği özgündür.
+
+> Canlı URL ve GitHub Actions rozeti, depo GitHub'a gönderilip Render yayını doğrulandıktan sonra buraya gerçek adresleriyle eklenecektir.
+
+## Aort dilimi
+
+1. Müşteri başlık, açıklama, kategori ve öncelikle talep açar.
+2. Yönetici talebi destek temsilcisine atar; talep `new` durumundan `open` durumuna geçer.
+3. Temsilci yanıt verir; ilk yanıt zamanı kaydedilir.
+4. Talep yalnızca izinli geçişlerle `pending`, `solved` veya `closed` durumuna taşınır.
+5. Her önemli işlem zaman çizelgesine yazılır.
+
+Durum akışı: `new → open/pending`, `open → pending/solved`, `pending → open/solved`, `solved → open/closed`. Kapalı talep yeniden açılamaz.
+
+## Zaman kuralları
+
+- Yüksek öncelikli taleplerde ilk yanıt SLA'sı 4 saattir.
+- Normal öncelikli taleplerde ilk yanıt SLA'sı 24 saattir.
+- Çözülmüş talep 48 saat sonra otomatik kapanmaya uygun olur.
+
+Render cron servisi kapanmaya uygun talepleri saatlik kontrol edecek şekilde tanımlanmıştır. Bu cron görevi canlıda çalıştırılıp gözlenene kadar yalnızca "deploy yapılandırması hazır" kabul edilir.
+
+## Özgün fayda: Akıllı SLA Öncelik Asistanı
+
+Capterra'da 10.001+ çalışanlı bir kurumun destek yöneticisi, özel metrikleri çıkarmanın zaman aldığını ve panoların kalabalık hissettirdiğini yazıyor. Başka kullanıcılar da yeni kullanıcılar için gezinmenin karmaşık olduğunu belirtiyor. DestekFlow, açık talepleri ayrı rapor kurulumu gerektirmeden SLA riski ve önceliğe göre sıralar; her sıra için Türkçe bir neden gösterir.
+
+- Kullanıcı yorumu: [Capterra Zendesk değerlendirmeleri](https://www.capterra.com/p/164283/Zendesk/reviews/)
+- Karşılaştırma sınırı: Zendesk zaten SLA kolonları, görünümler ve raporlama sunar. DestekFlow'un fark iddiası "Zendesk'te SLA yok" değildir; küçük ekip için yapılandırmasız, tek ekranda ve açıklamalı öncelik sırasıdır. [Zendesk SLA belgeleri](https://support.zendesk.com/hc/en-us/articles/5604663490458-Using-SLA-policies)
+
+## Faz 1: Fortune 500 araştırması
+
+Fortune 500, şirketleri değerlemeye göre değil gelire göre sıralar. 2026 listesi 21 trilyon dolar toplam gelir, 2,1 trilyon dolar toplam kâr, 55 trilyon dolar toplam piyasa değeri ve 30,5 milyon çalışan bildiriyor. [Fortune 500 2026](https://fortune.com/ranking/fortune500/), [Fortune toplu analiz](https://www.fortune.com/2026/06/19/fortune-500-employment-profits-revenue-hiring-jobs-ai/)
+
+| İstenen ölçü | Kaynaklı sonuç | Sınır |
+|---|---:|---|
+| Değerleme aralığı | Güvenilir bir tam aralık verilemiyor | Listedeki özel şirketlerde piyasa değeri yoktur; şirket değeri, piyasa değeri ve gelir aynı ölçü değildir. Fortune'un yayımladığı doğrulanabilir toplu piyasa değeri 55 trilyon dolardır. Nvidia için 4,2 trilyon dolar en yüksek piyasa değeri olarak raporlanmıştır; tüm 500 şirket için karşılaştırılabilir minimum bulunamadı. [Fortune analizi](https://fortune.com/2026/06/03/fortune-500-2026-takeaways-nvidia-amazon-walmart/) |
+| Çalışan sayısı aralığı | 603 – 2.100.000 | 2026 listesinde BitGo 603 çalışanla örneklenen en küçük işveren; Walmart şirket profilinde 2,1 milyon çalışan bildiriyor. [Fortune istihdam analizi](https://www.fortune.com/2026/06/19/fortune-500-employment-profits-revenue-hiring-jobs-ai/), [Walmart profili](https://fortune.com/company/walmart/) |
+| Yaklaşık SaaS uygulaması | 660 ortalama, 641 medyan | Fortune 500'e özel ölçüm değil; 10.001+ çalışanlı büyük işletme örneklemi. [Zylo verisini aktaran 2025 rapor sunumu](https://25602359.fs1.hubspotusercontent-eu1.net/hubfs/25602359/Ibexa%20Summit%202025/Keynote-Summit-2025-web.pdf) |
+| Yıllık SaaS harcaması | 284 milyon dolar ortalama | Fortune 500'e özel değil; 10.000+ çalışanlı işletmeler. Veri 40 milyon lisans ve 40 milyar dolar yönetilen harcamadan türetilmiştir. [Zylo 2025 duyurusu](https://www.prweb.com/releases/2025-saas-management-index-reveals-first-increase-in-average-saas-spend-in-three-years-amid-rising-vendor-costs-and-rapid-ai-adoption-302351642.html) |
+
+Bu iki SaaS ölçütü Fortune 500 kesinliğiyle sunulmamıştır; en yakın, açık örneklem sınırına sahip büyük işletme kıyaslamasıdır.
+
+## SaaS seçimi ve Fortune 500 kanıtı
+
+Box'ın Zendesk müşteri hikâyesi, Box'ın Temmuz 2011'den beri Zendesk müşterisi olduğunu söyler. Aynı kaynak Box'ın Fortune 500 şirketlerinin %59'undan fazlasına hizmet verdiğini belirtir; Box 2024 Fortune 500 listesinde yer almasa da ödevin "en az bir Fortune 500 firmasının Zendesk'e para ödediği" şartını tek başına kanıtlamaz. Bu nedenle Fortune 500 müşteri kanıtı henüz açık eksiktir ve teslimden önce doğrudan vaka/tedarik kaynağıyla kapatılmalıdır. [Zendesk Box müşteri hikâyesi](https://www.zendesk.com/customer/box/)
+
+## Faz 2: maliyet ve ölçek tahmini
+
+Zendesk'in kaynak kodu kapalıdır; 300.000 satır gerçek ölçüm değildir. Ders materyali orta ölçekli kurumsal SaaS için 300–500 bin satır büyüklük sırasını kaba varsayım olarak verir. DestekFlow tüm ürünü değil, ödeme gerekçesi olan çekirdek akışı uygular.
+
+- Varsayım: 300.000 satır × satır başına yaklaşık 10 çıktı tokenı = yaklaşık 3 milyon çıktı tokenı. Bu yalnızca kaba büyüklük hesabıdır.
+- Maliyet formülü: çıktı tokenı × kullanılan modelin güncel fiyatı + abonelik + düzeltme turları + insan doğrulama zamanı.
+- Gerçek token tüketimi bu ortamda güvenilir bir proje sayacıyla ölçülmedi; sayı uydurulmamıştır.
+- Gerçek geliştirme başlangıcı: 15 Ekim 2026. İlk çalışan çekirdek ve yerel test paketi aynı gün üretildi.
+- Gerçek nakit harcaması: bu oturumda ölçülebilir ayrı API faturası yok; GitHub/Render maliyeti henüz oluşmadı.
+
+## Kurulum
+
+Gereksinimler: Ruby 3.4.7+, Rails 8.1+, PostgreSQL 17+.
+
+```powershell
+bundle install
+$env:DB_HOST="127.0.0.1"
+$env:DB_USER="postgres"
+bin/rails db:prepare
+bin/rails db:seed
+bin/rails server
+```
+
+Ardından `http://localhost:3000` adresini açın.
+
+## Test
+
+```powershell
+bin/rails test
+bin/rails zeitwerk:check
+```
+
+15 Ekim 2026 yerel sonucu: **9 test, 29 assertion, 0 failure, 0 error**. Ayrıntı ve sınırlar [docs/TEST_KANITLARI.md](docs/TEST_KANITLARI.md) dosyasındadır. GitHub Actions sonucu henüz oluşmadığından yeşil CI iddiası ve rozet eklenmemiştir.
+
+## Deploy
+
+`render.yaml` web servisi, PostgreSQL, migration/seed ve saatlik otomatik kapanış cron görevini tanımlar. Render'da `RAILS_MASTER_KEY` gizli değişken olarak girilmeli; `DATABASE_URL` blueprint veritabanından bağlanmalıdır.
+
+## Belgeler
+
+- [Plan](PLAN.md)
+- [Ajan rehberi](AGENT.md)
+- [Sunum metni](docs/SUNUM.md)
+- [Kod haritası](docs/KOD_HARITASI.md)
+- [Test kanıtları](docs/TEST_KANITLARI.md)
+- [Kaynaklar](docs/KAYNAKLAR.md)
+
+## Yapamadıklarım
+
+- GitHub deposu henüz uzak sunucuya gönderilmedi; Actions yeşil sonucu ve gerçek rozet yok.
+- Render yayını yapılmadı; doğrulanmış canlı URL ve canlı cron gözlemi yok.
+- Fortune 500 şirketinin ücretli Zendesk müşterisi olduğunu doğrudan kanıtlayan kaynak henüz bulunmadı. Box kaynağı bu şart için yeterli sayılmadı.
+- Fortune 500'ün tamamı için karşılaştırılabilir en düşük ve en yüksek şirket değerlemesi bulunamadı; özel şirketler nedeniyle piyasa değeri eksik.
+- Ders materyali G2, G3 ve G4 belgelerinin tanımını vermiyor. Dosyalar belirsizliği kaydediyor; içerik uydurulmadı.
+- Windows Ruby kurulumunda kullanılmayan libvips eklentileri için uyarılar var; test sonucunu etkilemiyor.

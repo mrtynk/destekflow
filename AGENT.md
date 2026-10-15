@@ -29,15 +29,13 @@ DestekFlow, destek talebinin oluşturulması, temsilciye atanması, yanıtlanmas
 
 ## İş Kurallarının Yeri
 
-İlk sürümde hedeflenen yerleşim:
+Gerçek yerleşim:
 
-- Durumlar ve izinli geçişler: `app/models/ticket.rb` ve gerekirse `app/services/tickets/transition.rb`
+- Durumlar ve izinli geçişler: `app/models/ticket.rb` ve `app/services/tickets/transition.rb`
 - SLA süreleri: `app/services/sla/deadline_calculator.rb`
 - SLA risk sıralaması: `app/services/sla/priority_assistant.rb`
 - Çözülmüş taleplerin kapanması: `app/jobs/close_resolved_tickets_job.rb`
-- İşlem geçmişi: açık servis çağrılarıyla oluşturulan `TicketEvent` kayıtları
-
-Dosyalar oluştukça bu liste gerçek adlarla güncellenecektir.
+- İşlem geçmişi: `Tickets::Create`, `Tickets::Assign`, `Tickets::Reply` ve `Tickets::Transition` servislerinin oluşturduğu `TicketEvent` kayıtları
 
 ## Test Kuralları
 
@@ -67,8 +65,10 @@ Dosyalar oluştukça bu liste gerçek adlarla güncellenecektir.
 
 ## Konvansiyondan Sapmalar
 
-Henüz sapma yoktur. Her sapma dosya, gerekçe ve etkisiyle buraya eklenecektir.
+- Yerel Windows PostgreSQL kurulumu eksik veritabanını otomatik oluşturma sırasında yanıltıcı bağlantı hatası verdi; geliştirme ve test veritabanları `createdb` ile açıkça oluşturuldu.
+- Demo kapsamı için kimlik doğrulama eklenmedi. Bu durum canlı yayından önce güvenlik kararı gerektirir ve `docs/YAPAMADIKLARIM.md` içinde açıktır.
+- Production tek `DATABASE_URL` kullanır; Rails'in varsayılan ayrı cache/queue/cable veritabanları küçük Render kurulumu için kaldırıldı.
 
 ## Sürüm Notu
 
-Bu dosya ilk sürümdür. Son sürümde gerçek dosya adları, kesinleşen kurallar, test komutları ve ilk sürümden değişiklik özeti eklenecektir. İlk sürüm Git geçmişinde ayrı commit olarak korunur.
+İlk sürüm Git geçmişinde `ce6cb13` commit'iyle korunur. Bu sürümde hedef dosya adları gerçek dosyalara çevrildi; işlem geçmişi servisleri, yerel veritabanı sapması, production bağlantı kararı ve kimlik doğrulama eksiği eklendi. Doğrulanan komutlar `bundle exec rails test` ve `bundle exec rails zeitwerk:check`tir.
