@@ -27,7 +27,7 @@ Durum akışı: `new → open/pending`, `open → pending/solved`, `pending → 
 
 ## Özgün fayda: Akıllı SLA Öncelik Asistanı
 
-Capterra'da 10.001+ çalışanlı bir kurumun destek yöneticisi, özel metrikleri çıkarmanın zaman aldığını ve panoların kalabalık hissettirdiğini yazıyor. Başka kullanıcılar da yeni kullanıcılar için gezinmenin karmaşık olduğunu belirtiyor. DestekFlow, açık talepleri ayrı rapor kurulumu gerektirmeden SLA riski ve önceliğe göre sıralar; her sıra için Türkçe bir neden gösterir.
+Capterra'da Facilities Services sektöründe 10.001+ çalışanlı bir kurumun Customer Support Manager'ı Ryan P., 5 Temmuz 2026 tarihli doğrulanmış yorumunda özel metrikleri çıkarmayı öğrenmenin zaman aldığını ve panoların bazen kalabalık hissettirdiğini belirtiyor. DestekFlow bu somut acının dar bir bölümünü çözer: açık talepleri ayrı rapor veya özel metrik kurulumu gerektirmeden SLA riski ve önceliğe göre sıralar; her sıra için Türkçe bir neden gösterir.
 
 - Kullanıcı yorumu: [Capterra Zendesk değerlendirmeleri](https://www.capterra.com/p/164283/Zendesk/reviews/)
 - Karşılaştırma sınırı: Zendesk zaten SLA kolonları, görünümler ve raporlama sunar. DestekFlow'un fark iddiası "Zendesk'te SLA yok" değildir; küçük ekip için yapılandırmasız, tek ekranda ve açıklamalı öncelik sırasıdır. [Zendesk SLA belgeleri](https://support.zendesk.com/hc/en-us/articles/5604663490458-Using-SLA-policies)
@@ -104,6 +104,7 @@ Canlı dağıtım 15 Ekim 2026 tarihinde Rails 8.1.4 ve Ruby 3.4.7 ile başarıy
 
 - Ücretsiz Render planında cron hizmeti bulunmadığından 48 saatlik otomatik kapanış canlıda zamanlanmamıştır; job ve davranışı testlerde doğrulanmıştır.
 - Ücretsiz Render web servisi hareketsizlikte uyur ve ilk isteği geciktirebilir. Ücretsiz PostgreSQL veritabanı Render'ın süre ve saklama sınırlarına tabidir.
+- Canlı yönetim ekranında kimlik doğrulama ve rol yetkilendirmesi yoktur. Uygulama yalnız ders demosudur; gerçek müşteri verisiyle veya herkese açık üretim hizmeti olarak kullanılmamalıdır.
 - Fortune 500'ün tamamı için karşılaştırılabilir en düşük ve en yüksek şirket değerlemesi bulunamadı; özel şirketler nedeniyle piyasa değeri eksik.
 - Ders materyali G2, G3 ve G4 belgelerinin tanımını vermiyor. Dosyalar belirsizliği kaydediyor; içerik uydurulmadı.
 - Windows Ruby kurulumunda kullanılmayan libvips eklentileri için uyarılar var; test sonucunu etkilemiyor.
