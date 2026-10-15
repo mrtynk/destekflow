@@ -13,10 +13,10 @@ Kapsanan davranışlar: önceki ana akış ve zaman/durum kurallarına ek olarak
 ## GitHub Actions
 
 - Depo: [mrtynk/destekflow](https://github.com/mrtynk/destekflow)
-- Başarılı koşu: [CI #38714995821](https://github.com/mrtynk/destekflow/actions/runs/38714995821)
+- Yeni özellik commit'i için başarılı koşu: [CI #38773363080](https://github.com/mrtynk/destekflow/actions/runs/38773363080)
 - Sonuç: lint, Brakeman, bundler-audit, importmap audit, Rails test ve system-test job'larının tamamı başarılı.
 
-Yeni özelliğin commit'ine ait CI koşusu push sonrasında ayrıca doğrulanacaktır; yukarıdaki eski koşu yeni kodun kanıtı olarak sunulmaz.
+Yeni özellik commit'i `e373bb7` için `test`, `system-test`, `lint`, `scan_ruby` ve `scan_js` job'ları başarıyla tamamlandı.
 
 ## Render canlı doğrulaması
 
@@ -43,6 +43,15 @@ Yeni özelliğin commit'ine ait CI koşusu push sonrasında ayrıca doğrulanaca
 - Tarih: 15 Ekim 2026
 - Ücretsiz instance uyandırıldıktan sonra gerçek HTTP sonuçları: `/up` 200 (18,696 sn), `/` 200 (21,508 sn), `/tickets` 200 (20,820 sn).
 - Masaüstü tarayıcı erişilebilirlik ağacında talep listesi, yeni talep bağlantısı, durum/öncelik filtreleri ve Akıllı SLA Öncelik Asistanı birlikte görüntülendi.
+
+### Geri alınabilir benzer talep canlı testi
+
+- Tarih: 16 Ekim 2026; Render kaynak commit'i `e373bb7`, deploy durumu `Live`, `/up` HTTP 200 (0,309 sn).
+- PostgreSQL migration logu: `CreateTicketLinks` başarıyla tamamlandı; build ve iç sağlık kontrolü geçti.
+- #4 ve #5 farklı `.example` e-postalı sahte kayıtlar %73 benzerlik ve sekiz ortak terimle önerildi; e-posta puana katılmadı.
+- İlişkilendirme iki detay ekranında da göründü. Her kayıt `Yeni/Normal` kaldı, ayrı 24 saatlik SLA zamanı ve kendi geçmişi korundu.
+- İlişki geri alındı; iki kayıt kaldı, öneri yeniden belirdi ve `ilişkilendirildi` ile `ilişki geri alındı` olayları geçmişte görüntülendi.
+- Yeni deploy altında eski #2 kaydının Mehmet Kaya ataması, yanıtı, çözüldü durumu ve beş olaylı ana akışı da korundu.
 
 ## 85 puan kontrolü
 

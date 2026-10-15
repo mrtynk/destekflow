@@ -118,13 +118,15 @@ bin/rails test
 bin/rails zeitwerk:check
 ```
 
-15 Ekim 2026 yeni özellik sonrası yerel sonucu: **18 test, 77 assertion, 0 failure, 0 error**. Benzerlik, farklı e-posta, ilgisiz kayıt, deterministik puan, ilişkilendirme/geri alma, yinelenen ilişki, işlem geçmişi ve SLA/durum korunumu kapsanır. Son GitHub Actions bağlantısı push sonrası bu bölümde güncellenir. Ayrıntılar [docs/TEST_KANITLARI.md](docs/TEST_KANITLARI.md) dosyasındadır.
+15 Ekim 2026 yeni özellik sonrası yerel sonucu: **18 test, 77 assertion, 0 failure, 0 error**. Benzerlik, farklı e-posta, ilgisiz kayıt, deterministik puan, ilişkilendirme/geri alma, yinelenen ilişki, işlem geçmişi ve SLA/durum korunumu kapsanır. Özellik commit'inin [GitHub Actions koşusu 38773363080](https://github.com/mrtynk/destekflow/actions/runs/38773363080) içindeki test, system-test, lint ve güvenlik job'larının tamamı geçti. Ayrıntılar [docs/TEST_KANITLARI.md](docs/TEST_KANITLARI.md) dosyasındadır.
 
 ## Deploy
 
 `render.yaml`, Frankfurt bölgesinde ücretsiz Ruby web servisi ve PostgreSQL 17 veritabanını tanımlar. Migration ve idempotent seed ücretsiz planla uyumlu biçimde build sırasında çalışır. `DATABASE_URL` Blueprint veritabanından bağlanır; `SECRET_KEY_BASE` Render tarafından gizli ve rastgele üretilir.
 
 Canlı dağıtım 15 Ekim 2026 tarihinde Rails 8.1.4 ve Ruby 3.4.7 ile başarıyla açıldı. `/up` sağlık kontrolü HTTP 200 döndürdü. Canlı ortamda #2 numaralı yüksek öncelikli talep oluşturuldu, Mehmet Kaya'ya atandı, yanıtlandı, çözüldü ve beş işlem geçmişi kaydı doğrulandı. Akıllı SLA Öncelik Asistanı açık yüksek öncelikli talebi ilk sırada, kalan ilk yanıt süresi ve gerekçesiyle gösterdi.
+
+16 Ekim 2026'da `e373bb7` Render'a manuel deploy edildi; PostgreSQL `CreateTicketLinks` migrationı ve idempotent sahte seed başarılı oldu. `/up` HTTP 200 döndürdü. Canlı #4/#5 farklı `.example` e-postalı taleplerde %73 puan ve sekiz ortak terim görüldü; ilişki kuruldu, iki detayda da ayrı kayıt/durum/SLA korundu, ilişki geri alındı ve her iki olay geçmişte doğrulandı. Eski #2 oluştur–ata–yanıtla–çöz akışı ve beş olay da yeni deploy altında aynen görüntülendi.
 
 ## Belgeler
 
