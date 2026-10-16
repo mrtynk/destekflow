@@ -27,7 +27,7 @@ Denetim tarihi: 15 Ekim 2026. “Tamamlandı” yalnız dosya varlığına deği
 | Çalışan CI rozeti | README | Gerçek `mrtynk/destekflow/actions/workflows/ci.yml` adresi | Tamamlandı | Yok. |
 | `AGENT.md` | `AGENT.md`, Git geçmişi | İlk sürüm `ce6cb13`, güncel sürüm ayrı commit'lerde korunuyor | Tamamlandı | Yok. |
 | README “Yapamadıklarım” | README ve `docs/YAPAMADIKLARIM.md` | Cron, uyku, G2–G4, değerleme ve auth açık | Tamamlandı | Yok. |
-| G1–G5 belgeleri (slayt) | `docs/G1.md`–`G5.md` | G1 gerçek ölçüm; G5 gerçek hata kaydı; G2–G4 doğrulanabilir isterlere dayalı öneri içerir ve resmî tanım olmadığı açıkça yazılıdır | Kısmi | G2–G4 için hocadan resmî tanım/teyit istenmeli. |
+| G1–G5 belgeleri (slayt) | `docs/G1.md`–`G5.md`, `GOREV_KODLARI_DENETIM.md`, `AJAN_OLCUM_RAPORU.md` | PDF s.12 G1 token görevi, s.31 G5/ölçüm tablosu ve s.35–37 teslim ifadeleri doğrulandı; G5 iki gerçek Git düzeltmesine indirildi; G2–G4 tamamlayıcı belge olarak işaretli | Kısmi | G2–G4 ve s.36'daki ikinci G1 kullanımı için hocadan resmî tanım/teyit istenmeli. |
 | Gerçek kullanıcı yorumu, linkli | README, KAYNAKLAR | Capterra Zendesk Explore: Hadi B., 23 Nisan 2026 | Tamamlandı | Eski Ryan P. iddiasını kullanma. |
 | Kullanıcı acısının çalışan çözümü | PriorityAssistant, liste paneli, test | Aktif talepleri SLA riskine göre sıralayıp Türkçe neden gösteriyor | Tamamlandı | Bunu “Zendesk'te SLA yok” diye sunma. |
 | İkinci özgün adaptasyon | Similarity/Link/Unlink, talep detayı | G2 geri alınamayan birleştirme acısı; 18/77 yerel paket; CI 38773363080; canlı #4/#5 puan/terim, ilişkilendir/geri al ve olay kaydı | Tamamlandı | Algoritma ve auth sınırlarını sunumda açık tut. |
@@ -40,11 +40,11 @@ Denetim tarihi: 15 Ekim 2026. “Tamamlandı” yalnız dosya varlığına deği
 
 ## G1–G5 sonucu ve hocaya sorular
 
-- G1: `o200k_base` / GPT-4o referansıyla Python 17, Ruby + ActiveSupport 4 token; ayrıntı `docs/G1.md`.
-- G2: Ödevde “G2” yalnız yorum sitesi örneği; ayrı görev tanımı yok. **Soru:** G2'nin girdisi, çıktısı ve kanıtı nedir?
+- G1: PDF s.12 açıkça token farkını ölçmeyi ister; `o200k_base` / GPT-4o referansıyla Python 17, Ruby + ActiveSupport 4 token. PDF s.36'daki “G1 tablosu” kullanımı ayrıca açıklama gerektirir.
+- G2: Ödevde “G2” yorum sitesinin adıdır; ayrı görev tanımı yok. **Soru:** G2'nin girdisi, çıktısı ve kanıtı nedir?
 - G3: Sağlanan materyallerde tanım yok. **Soru:** Hangi ders içi görev/ölçüm G3'tür?
 - G4: Sağlanan materyallerde tanım yok. **Soru:** Başarı ölçütü ve sunum kanıtı nedir?
-- G5: PostgreSQL teşhisi, Box kanıt boşluğu, SLA özgünlük abartısı ve yanlış Capterra kişi atfı kayıtlıdır.
+- G5: Git geçmişinde gerçekten yazılıp düzeltilen iki yanlış iddia sayılır: Ryan P. atfı ve dört olay iddiası. PostgreSQL teşhisi, Box kanıt boşluğu ve SLA karşılaştırma sınırı ayrı doğrulama düzeltmeleri olarak korunur.
 
 ## AGENT.md ilk–son sürüm farkı
 

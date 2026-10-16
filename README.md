@@ -135,6 +135,8 @@ Canlı dağıtım 15 Ekim 2026 tarihinde Rails 8.1.4 ve Ruby 3.4.7 ile başarıy
 - [Sunum metni](docs/SUNUM.md)
 - [Kod haritası](docs/KOD_HARITASI.md)
 - [Test kanıtları](docs/TEST_KANITLARI.md)
+- [Ajan ölçüm raporu](docs/AJAN_OLCUM_RAPORU.md)
+- [G1-G5 görev kodları denetimi](docs/GOREV_KODLARI_DENETIM.md)
 - [Son teslim denetimi](docs/SON_DENETIM.md)
 - [Fortune 500 Market Value analizi](docs/FORTUNE500_ANALIZ.md)
 - [Kaynaklar](docs/KAYNAKLAR.md)
