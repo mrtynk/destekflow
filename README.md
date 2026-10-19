@@ -132,7 +132,6 @@ Canlı dağıtım 15 Ekim 2026 tarihinde Rails 8.1.4 ve Ruby 3.4.7 ile başarıy
 
 - [Plan](PLAN.md)
 - [Ajan rehberi](AGENT.md)
-- [Sunum metni](docs/SUNUM.md)
 - [Kod haritası](docs/KOD_HARITASI.md)
 - [Test kanıtları](docs/TEST_KANITLARI.md)
 - [Ajan ölçüm raporu](docs/AJAN_OLCUM_RAPORU.md)

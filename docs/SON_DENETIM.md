@@ -31,7 +31,6 @@ Denetim tarihi: 15 Ekim 2026. “Tamamlandı” yalnız dosya varlığına deği
 | Gerçek kullanıcı yorumu, linkli | README, KAYNAKLAR | Capterra Zendesk Explore: Hadi B., 23 Nisan 2026 | Tamamlandı | Eski Ryan P. iddiasını kullanma. |
 | Kullanıcı acısının çalışan çözümü | PriorityAssistant, liste paneli, test | Aktif talepleri SLA riskine göre sıralayıp Türkçe neden gösteriyor | Tamamlandı | Bunu “Zendesk'te SLA yok” diye sunma. |
 | İkinci özgün adaptasyon | Similarity/Link/Unlink, talep detayı | G2 geri alınamayan birleştirme acısı; 18/77 yerel paket; CI 38773363080; canlı #4/#5 puan/terim, ilişkilendir/geri al ve olay kaydı | Tamamlandı | Algoritma ve auth sınırlarını sunumda açık tut. |
-| 5 dakikalık canlı sunum | `docs/SUNUM.md` | Zaman planı, kod yerleri, sahte örnekler #1–#3 | Tamamlandı | Sunum öncesi servisi uyandır ve yeni sahte talep kullan. |
 | “Var” denip çalışmayan özellik olmayacak | README/Yapamadıklarım | Cron ve auth yokluğu açık; butonlar gerçek route/form hedeflerine bağlı | Tamamlandı | Otomatik kapanış canlıda çalışıyor deme. |
 | Gizli bilgi Git'e girmeyecek | `.gitignore`, tracked-file/pattern taraması | `.env`, key, pem/p12 tracked değil; kodda sabit sır yok | Tamamlandı | Push öncesi taramayı tekrarla. |
 | Gerçek kart bilgisi toplama yasağı | Uygulama kapsamı | Ödeme akışı yok | Tamamlandı | Yok. |
