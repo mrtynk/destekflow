@@ -48,6 +48,17 @@ class AgentIntakeTest < ActiveSupport::TestCase
     assert_empty result.ticket.replies
   end
 
+  test "model güvenli dese bile bilgi tabanı kanıtı yoksa yanıt yayınlamaz" do
+    result = AgentWorkflow::Intake.call(params("agent-no-evidence-001", category: "technical"), client: FakeClient.new({
+      priority: "normal", human_required: false, reason: "Kanıtsız model önerisi",
+      suggested_reply: "Bu yanıt yayınlanmamalı.", knowledge_ids: []
+    }))
+
+    assert_equal "human_handoff", result.agent_run.decision
+    refute result.agent_run.reply_published?
+    assert_empty result.ticket.replies
+  end
+
   test "aynı dış referansı ikinci kez kayıt oluşturmaz" do
     input = params("agent-idempotent-001", category: "technical")
     client = FakeClient.new({ priority: "normal", human_required: true, reason: "İnsan gerekli", suggested_reply: "", knowledge_ids: [] })

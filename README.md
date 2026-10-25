@@ -96,6 +96,8 @@ Gemini triyajı talebin önceliğini, insan gerekip gerekmediğini ve yalnız ye
 
 Bu katman insan-insan aktarımını düşük riskli ve bilgi tabanıyla cevaplanabilen taleplerde azaltır; kritik kararları insandan kaldırmaz. Regex maskeleme tam anonimleştirme değildir, gerçek müşteri verisiyle kullanım için DLP, saklama politikası, gerçek kullanıcı/RBAC ve hukuki değerlendirme gerekir. Mevcut onay API'si de ayrı kalır: kritik aksiyonlar yine insan kararı olmadan uygulanmaz.
 
+Basic Auth arkasındaki `/agent_demo` ekranı bu farkı yalnız sabit sahte verilerle görünür kılar: güvenli teknik yanıt, kişisel veri maskeleme, finansal talepte kod seviyesinde insan devri ve aynı dış referansın ikinci ticket oluşturmaması tarayıcıdan gösterilebilir. Bu ekran agent tokenını istemciye göndermez ve genel amaçlı müşteri verisi girişi kabul etmez.
+
 ## Faz 1: Fortune 500 araştırması
 
 Fortune 500, şirketleri değerlemeye göre değil gelire göre sıralar. 2026 listesi 21 trilyon dolar toplam gelir, 2,1 trilyon dolar toplam kâr, 55 trilyon dolar toplam piyasa değeri ve 30,5 milyon çalışan bildiriyor. [Fortune 500 2026](https://fortune.com/ranking/fortune500/), [Fortune toplu analiz](https://www.fortune.com/2026/06/19/fortune-500-employment-profits-revenue-hiring-jobs-ai/)

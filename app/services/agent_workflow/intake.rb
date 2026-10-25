@@ -44,7 +44,8 @@ module AgentWorkflow
         ticket.update!(priority: triage.priority, sla_due_at: Sla::DeadlineCalculator.call(priority: triage.priority))
 
         code_requires_human = triage.human_required || triage.priority == "high" ||
-                              !SAFE_AUTO_REPLY_CATEGORIES.include?(ticket.category) || triage.suggested_reply.blank?
+                              !SAFE_AUTO_REPLY_CATEGORIES.include?(ticket.category) || triage.suggested_reply.blank? ||
+                              triage.knowledge_ids.empty?
         run = record_run(ticket, triage, code_requires_human)
         code_requires_human ? handoff(ticket, triage) : publish_reply(ticket, triage, run)
         Result.new(ticket:, agent_run: run.reload, duplicate: false)
