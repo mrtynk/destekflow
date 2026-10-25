@@ -61,6 +61,23 @@ DestekFlow başlık ve açıklamaları Türkçe karakterleri normalleştiren det
 
 Sınırlar: Bu küçük veri kümeli sözcük-kümesi yaklaşımı anlam veya kimlik doğrulamaz; eş anlamlılarda yanlış negatif, ortak genel terimlerde yanlış pozitif üretebilir. Otomatik birleştirme yapmaz. Demo ekranında kimlik doğrulama/RBAC bulunmadığından gerçek kişisel veriyle kullanıma uygun değildir.
 
+## Onay ve Eskalasyon Merkezi — agent-first, human-in-the-loop
+
+Bir destek temsilcisi veya token korumalı iç agent endpoint'i; iade, erişim verme ya da talep kapatma gibi kritik bir işlem için gerekçeli insan onayı isteyebilir. Agent kritik işlemi gerçekleştirmez. Onay `requested` olarak açılır; insan tarafından `approved` veya `rejected` yapılabilir. 30 dakika bekleyen kayıt, yapılandırılabilir kuralla `escalated` durumuna ve üst yetkili demo kuyruğuna taşınır; eskalasyon sonrası da insan kararı gerekir.
+
+Durum tablosu:
+
+| Mevcut durum | İzinli sonraki durumlar |
+|---|---|
+| `requested` | `approved`, `rejected`, `escalated` |
+| `escalated` | `approved`, `rejected` |
+| `approved` | Yok |
+| `rejected` | Yok |
+
+Kararlar transaction ve satır kilidi içinde uygulanır; ikinci karar reddedilir. Onay ve eskalasyon olayları hem onay denetim geçmişine hem talep zaman çizelgesine yazılır. İç agent API'si `AGENT_API_TOKEN` Bearer tokenı ister, izinli kritik işlemleri doğrular ve yanıtında `critical_action_executed: false` döndürür. Servis kural tabanlıdır; LLM çağrısı yapmaz ve LLM olarak tanıtılmaz.
+
+Güvenlik ve canlılık sınırı: web yönetim ekranında gerçek auth/RBAC henüz yoktur; görünen karar sahibi adları kontrollü ders simülasyonudur. 30 dakika taraması arayüzden manuel tetiklenir. Gerçek worker/cron kurulmadığı ve bu sürüm Render'a deploy edilmediği için özellik canlıda çalışıyor diye sunulmaz.
+
 ## Faz 1: Fortune 500 araştırması
 
 Fortune 500, şirketleri değerlemeye göre değil gelire göre sıralar. 2026 listesi 21 trilyon dolar toplam gelir, 2,1 trilyon dolar toplam kâr, 55 trilyon dolar toplam piyasa değeri ve 30,5 milyon çalışan bildiriyor. [Fortune 500 2026](https://fortune.com/ranking/fortune500/), [Fortune toplu analiz](https://www.fortune.com/2026/06/19/fortune-500-employment-profits-revenue-hiring-jobs-ai/)
@@ -120,6 +137,8 @@ bin/rails zeitwerk:check
 
 15 Ekim 2026 yeni özellik sonrası yerel sonucu: **18 test, 77 assertion, 0 failure, 0 error**. Benzerlik, farklı e-posta, ilgisiz kayıt, deterministik puan, ilişkilendirme/geri alma, yinelenen ilişki, işlem geçmişi ve SLA/durum korunumu kapsanır. Özellik commit'inin [GitHub Actions koşusu 38773363080](https://github.com/mrtynk/destekflow/actions/runs/38773363080) içindeki test, system-test, lint ve güvenlik job'larının tamamı geçti. Ayrıntılar [docs/TEST_KANITLARI.md](docs/TEST_KANITLARI.md) dosyasındadır.
 
+25 Ekim 2026 onay/eskalasyon paketi yerelde **32 test, 136 assertion, 0 failure, 0 error** sonucu verdi. Oluşturma, onaylama, reddetme, yasak geçiş, 30 dakika sınırı, idempotent eskalasyon, eşzamanlı çift karar, agent API doğrulama/yetkilendirme ve eski testlerin regresyonu kapsanır. RuboCop 65 dosyada ihlal bulmadı; Brakeman 0 güvenlik uyarısı, Bundler Audit ve importmap audit 0 açık, Zeitwerk `All is good!` sonucu verdi. Sistem testi görevi çalıştı ancak projede sistem test dosyası bulunmadığı için `0 runs` raporladı. Bu çalışma henüz push/deploy edilmedi; CI ve canlı kanıt olarak sunulmaz.
+
 ## Deploy
 
 `render.yaml`, Frankfurt bölgesinde ücretsiz Ruby web servisi ve PostgreSQL 17 veritabanını tanımlar. Migration ve idempotent seed ücretsiz planla uyumlu biçimde build sırasında çalışır. `DATABASE_URL` Blueprint veritabanından bağlanır; `SECRET_KEY_BASE` Render tarafından gizli ve rastgele üretilir.
@@ -145,6 +164,7 @@ Canlı dağıtım 15 Ekim 2026 tarihinde Rails 8.1.4 ve Ruby 3.4.7 ile başarıy
 - Ücretsiz Render planında cron hizmeti bulunmadığından 48 saatlik otomatik kapanış canlıda zamanlanmamıştır; job ve davranışı testlerde doğrulanmıştır.
 - Ücretsiz Render web servisi hareketsizlikte uyur ve ilk isteği geciktirebilir. Ücretsiz PostgreSQL veritabanı Render'ın süre ve saklama sınırlarına tabidir.
 - Canlı yönetim ekranında kimlik doğrulama ve rol yetkilendirmesi yoktur. Uygulama yalnız ders demosudur; gerçek müşteri verisiyle veya herkese açık üretim hizmeti olarak kullanılmamalıdır.
+- Onay/eskalasyon sürümünün web ekranı da kimlik doğrulamasız demo kapsamındadır. Gerçek zamanlayıcı yoktur; 30 dakika taraması manuel servis çağrısıyla gösterilir. Bu sürüm Render'a deploy edilmemiştir.
 - Fortune 500'ün 500 satırı incelendi; 28 satırda Market Value boş olduğu için min–max 472 sayısal şirketi kapsar. Özel/boş şirketlere tahmini değer atanmadı; sonuç tüm 500 şirketin eksiksiz değerleme aralığı değildir.
 - Ders materyali G2, G3 ve G4 belgelerinin resmî tanımını vermiyor. Dosyalar bunu açıkça belirterek ödevin doğrulanabilir isterlerine dayalı öneri içerikleri sunuyor; bunlar hocanın resmî tanımı diye gösterilmiyor.
 - Windows Ruby kurulumunda kullanılmayan libvips eklentileri için uyarılar var; test sonucunu etkilemiyor.

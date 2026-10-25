@@ -12,6 +12,9 @@ DestekFlow, destek talebinin oluşturulması, temsilciye atanması, yanıtlanmas
 - atama = Assignment
 - yanıt = Reply
 - işlem geçmişi = Activity / TicketEvent
+- onay talebi = ApprovalRequest
+- onay geçmişi = ApprovalEvent
+- eskalasyon = Escalation
 - öncelik = Priority
 - durum = Status
 - ilk yanıt = First response
@@ -36,6 +39,19 @@ Gerçek yerleşim:
 - SLA risk sıralaması: `app/services/sla/priority_assistant.rb`
 - Çözülmüş taleplerin kapanması: `app/jobs/close_resolved_tickets_job.rb`
 - İşlem geçmişi: `Tickets::Create`, `Tickets::Assign`, `Tickets::Reply` ve `Tickets::Transition` servislerinin oluşturduğu `TicketEvent` kayıtları
+- Onay geçişleri: `ApprovalRequest::TRANSITIONS`, `Approvals::Decide` ve `Approvals::EscalateOverdue`
+- Agent-insan sınırı: `AgentWorkflow::RequestApproval`; agent yalnızca onay ister, kritik işlemi uygulamaz
+
+## Onay ve Eskalasyon Kuralları
+
+- `requested`, yalnızca `approved`, `rejected` veya `escalated` durumuna geçebilir.
+- `escalated`, insan kararıyla `approved` veya `rejected` olur. Son durumlar tekrar değiştirilemez.
+- Kararlar `with_lock` ve transaction içinde alınır; aynı onayın iki kez sonuçlandırılması reddedilir.
+- Varsayılan eskalasyon eşiği 30 dakikadır ve `APPROVAL_ESCALATION_MINUTES` ile yapılandırılır.
+- Ücretsiz canlı ortamda gerçek cron/worker yoktur. Arayüzdeki tarama yalnız kontrollü demo çağrısıdır.
+- Agent endpoint'i `AGENT_API_TOKEN` olmadan çalışmaz. Token repoya yazılmaz.
+- Agent, sabit ve açık kurallı demo servisidir; LLM değildir ve LLM çağrısı yapıldığı iddia edilmez.
+- Web onay ekranındaki aktör adları simülasyondur; kimlik doğrulanmış kullanıcı olarak sunulmaz.
 
 ## Test Kuralları
 

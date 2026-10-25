@@ -1,5 +1,18 @@
 # Test Kanıtları
 
+## Onay ve eskalasyon paketi — 25 Ekim 2026
+
+- Tam komut: `bundle exec rails test`
+- Sonuç: `32 runs, 136 assertions, 0 failures, 0 errors, 0 skips`
+- Kapsam: onay oluşturma/onay/red; terminal durumdan yasak geçiş; 30 dakika öncesi ve sonrası `travel_to`; idempotent eskalasyon; eskalasyon sonrası insan kararı; PostgreSQL satır kilidiyle eşzamanlı iki kararın yalnız birinin kabulü; token korumalı agent API; geçersiz işlem doğrulaması; eski talep akışlarının regresyonu.
+- RuboCop: 65 dosya, 0 ihlal.
+- Brakeman: 0 güvenlik uyarısı.
+- Bundler Audit: ilk koşuda `crass 1.0.7` açığı bulundu; `1.0.8` güncellemesinden sonra `No vulnerabilities found`.
+- Importmap audit: `No vulnerable packages found`.
+- Zeitwerk: `All is good!`.
+- `rails test:system`: başarılı komut, fakat sistem test dosyası olmadığı için `0 runs`; sistem testi varmış gibi sunulmaz.
+- Bu sürüm henüz push edilmediği için GitHub Actions sonucu; deploy edilmediği için Render/canlı uçtan uca kanıtı yoktur.
+
 ## Yerel koşu
 
 - Tarih: 15 Ekim 2026
