@@ -124,3 +124,4 @@ Windows libvips kurulumu uygulamanın kullanmadığı HEIF/JXL/Imagemagick/OpenS
 - Aynı koşuda system-test, RuboCop, Brakeman, bundler-audit ve importmap audit başarılıdır.
 - Bu aşamada kanıt kod ve CI kapsamındadır. `0122e40` Render'a alınmadan ve üç sahte senaryo tarayıcıda çalıştırılmadan agent-first akış “canlı uçtan uca doğrulandı” diye sunulmaz.
 - Güvenlik sertleştirme commit'i `ce1a08d`; [CI 40225765287](https://github.com/mrtynk/destekflow/actions/runs/40225765287) sonucu `64 runs, 262 assertions, 0 failures, 0 errors, 0 skips`tir. Geçersiz LLM booleanı, boş gerekçe, insan gerektiren KB kanıtı, çıktı PII maskelemesi, girdi boyut sınırı ve API kaynak izolasyonu kapsanır.
+- Commit `8a419d6`, yayımlanan yanıtı onaylı sunucu KB içeriğine sabitledi ve kategoriye güvenmeyen finans/hukuk/güvenlik risk politikasını ekledi. [CI 40226175715](https://github.com/mrtynk/destekflow/actions/runs/40226175715): `68 runs, 285 assertions, 0 failures, 0 errors, 0 skips`.

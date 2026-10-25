@@ -92,7 +92,7 @@ Güvenlik ve canlılık sınırı: gerçek kullanıcı hesabı/RBAC henüz yoktu
 
 Token korumalı `/internal/agent_tickets` API'si, bir yazılım ajanının form kullanmadan sahte/anonim müşteri referansıyla talep açmasını ve sonucu takip etmesini sağlar. Aynı `external_reference` tekrar gönderildiğinde ikinci kayıt oluşturulmaz. Müşteri adı ve e-postası yerine opak referans tutulur; açıklamadaki e-posta, telefon ve kart benzeri sayılar Gemini çağrısından ve veritabanına yazımdan önce maskelenir.
 
-Gemini triyajı talebin önceliğini, insan gerekip gerekmediğini ve yalnız yerel bilgi tabanı maddelerine dayanan öneri yanıtını JSON olarak üretir. Ancak yayın kararı modele bırakılmaz: finans, hukuk, güvenlik, kimlik/hesap erişimi, yüksek öncelik, belirsizlik, boş yanıt veya bilgi tabanı kanıtı yoksa kod yanıtı engeller ve talebi insan kuyruğuna bırakır. Güvenli teknik taleplerde kanıtlı yanıt otomatik yayınlanabilir. Her çağrı model, karar, gerekçe, bilgi tabanı kanıtı ve yayın durumu ile `AgentRun` kaydına yazılır.
+Gemini triyajı talebin önceliğini, insan gerekip gerekmediğini ve ilgili yerel bilgi tabanı maddelerini JSON olarak seçer. Modelin serbest metin önerisi doğrudan müşteriye gönderilmez; güvenli teknik talepte yayımlanan cevap sunucu tarafındaki otomatik yanıta izin verilmiş KB maddesinden üretilir. Finans, hukuk, güvenlik, kimlik/hesap erişimi, yüksek öncelik, belirsizlik veya geçerli KB kanıtı yoksa Ruby güvenlik kapısı yanıtı engeller ve talebi insan kuyruğuna bırakır. Kategori yanlış verilse bile metindeki kritik sinyaller ayrıca kontrol edilir. Her çağrı model, karar, gerekçe, KB kanıtı ve yayın durumu ile `AgentRun` kaydına yazılır.
 
 Bu katman insan-insan aktarımını düşük riskli ve bilgi tabanıyla cevaplanabilen taleplerde azaltır; kritik kararları insandan kaldırmaz. Regex maskeleme tam anonimleştirme değildir, gerçek müşteri verisiyle kullanım için DLP, saklama politikası, gerçek kullanıcı/RBAC ve hukuki değerlendirme gerekir. Mevcut onay API'si de ayrı kalır: kritik aksiyonlar yine insan kararı olmadan uygulanmaz.
 
@@ -162,6 +162,8 @@ bin/rails zeitwerk:check
 Agent Demo Merkezi ve kanıtsız yanıt güvenlik kapısı sonrası [CI koşusu 40225273025](https://github.com/mrtynk/destekflow/actions/runs/40225273025) **58 test, 247 assertion, 0 failure, 0 error** verdi. Sistem testi, RuboCop, Brakeman, bundler-audit ve JavaScript bağımlılık taraması da geçti. Bu sonuç kod/CI kanıtıdır; `/agent_demo` canlı kanıtı ancak ilgili commit Render'a deploy edilip sahte senaryolar tarayıcıda çalıştırıldıktan sonra tamamlanır.
 
 Ayrıntılı güvenlik incelemesi sonrası [CI koşusu 40225765287](https://github.com/mrtynk/destekflow/actions/runs/40225765287) **64 test, 262 assertion, 0 failure, 0 error** verdi. Yanlış tipli LLM kararı, boş gerekçe, insan gerektiren KB maddesi, model çıktısındaki PII, aşırı büyük girdi ve web ticketının agent API'den okunamaması ayrıca test edildi.
+
+Onaylı KB yanıtı ve metin tabanlı savunma katmanı sonrası [CI koşusu 40226175715](https://github.com/mrtynk/destekflow/actions/runs/40226175715) **68 test, 285 assertion, 0 failure, 0 error** verdi. Modelin kötü niyetli/konu dışı öneri metninin yayınlanmadığı ve yanlış kategori verilmiş finansal-hukuki talebin insan kuyruğuna taşındığı doğrulandı.
 
 ## Deploy
 

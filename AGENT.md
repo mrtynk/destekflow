@@ -43,6 +43,7 @@ Gerçek yerleşim:
 - Agent-insan sınırı: `AgentWorkflow::RequestApproval`; agent yalnızca onay ister, kritik işlemi uygulamaz
 - Gizlilik korumalı agent intake: `AgentWorkflow::Intake`; dış referansla idempotent talep açar, metni `Privacy::Redactor` ile maskeleyip Gemini triyajına yollar ve denetim kaydı üretir
 - Bilgi tabanı sınırı: `AgentWorkflow::KnowledgeBase`; otomatik yanıt yalnız seçilen yerel bilgi maddelerine dayanabilir
+- Kod tabanlı risk savunması: `AgentWorkflow::RiskPolicy`; kategori yanlış olsa bile finans, hukuk ve güvenlik sinyallerini insan devrine zorlar
 - Gerçek RAG benzerlik akışı: `Tickets::RagSimilarity`; embedding retrieval sonuçlarını sınırlı üretim bağlamına verir, otomatik ilişkilendirme yapmaz
 
 ## Onay ve Eskalasyon Kuralları
@@ -55,6 +56,7 @@ Gerçek yerleşim:
 - Agent endpoint'i `AGENT_API_TOKEN` olmadan çalışmaz. Token repoya yazılmaz.
 - Onay isteyen eski agent servisi sabit kurallıdır ve LLM değildir. Yeni intake/triyaj akışı ise yapılandırıldığında gerçek Gemini çağrısı yapar; model kararı kod düzeyindeki güvenlik kapısını aşamaz.
 - Finans, hukuk, güvenlik, kimlik/hesap erişimi, yüksek öncelik, belirsizlik veya bilgi tabanı kanıtı yokluğunda otomatik yanıt yayınlanmaz ve talep insana bırakılır.
+- Modelin önerdiği serbest metin müşteriye doğrudan yayımlanmaz. Otomatik cevap yalnız `KnowledgeBase.auto_reply_for` tarafından onaylı KB içeriğinden oluşturulur.
 - Regex tabanlı maskeleme e-posta, telefon ve kart benzeri dizileri azaltır; eksiksiz anonimleştirme garantisi değildir. Gerçek kişisel veri demo ortamına gönderilmez.
 - RAG asistanı bundan ayrıdır: yalnız `GEMINI_API_KEY` tanımlıyken gerçek Gemini batch embedding ve generateContent çağrısı yapar. Ad/e-posta göndermez; talimat enjeksiyonuna karşı talep metnini güvenilmeyen veri sayar ve sonucu insan incelemesine bırakır. Ücretsiz katmanda yalnız sahte demo verisi kullanılmalıdır.
 - Web onay ekranındaki aktör adları simülasyondur; kimlik doğrulanmış kullanıcı olarak sunulmaz.
