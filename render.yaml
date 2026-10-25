@@ -31,3 +31,11 @@ services:
         value: 2
       - key: DB_SSLMODE
         value: require
+      - key: DEMO_SITE_AUTH_ENABLED
+        value: true
+      - key: DEMO_SITE_USERNAME
+        sync: false
+      - key: DEMO_SITE_PASSWORD
+        sync: false
+      - key: AGENT_API_TOKEN
+        sync: false

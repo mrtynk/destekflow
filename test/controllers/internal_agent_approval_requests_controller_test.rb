@@ -3,7 +3,7 @@ require "test_helper"
 class InternalAgentApprovalRequestsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @previous_token = Rails.application.config.x.agent_api_token
-    Rails.application.config.x.agent_api_token = "test-agent-token"
+    Rails.application.config.x.agent_api_token = "test-agent-token-with-at-least-32-bytes"
     @ticket = Tickets::Create.call({
       subject: "Agent değerlendirmesi",
       description: "Kritik işlem önerisi",
@@ -21,6 +21,16 @@ class InternalAgentApprovalRequestsControllerTest < ActionDispatch::IntegrationT
       post internal_agent_approval_requests_path, params: valid_params
     end
     assert_response :unauthorized
+  end
+
+  test "eksik veya zayıf token yapılandırması API'yi kapalı tutar" do
+    Rails.application.config.x.agent_api_token = "short"
+
+    assert_no_difference("ApprovalRequest.count") do
+      post internal_agent_approval_requests_path, params: valid_params, headers: auth_header
+    end
+    assert_response :service_unavailable
+    assert_not_includes response.body, "short"
   end
 
   test "geçersiz agent işlemi doğrulamada reddedilir" do
@@ -51,6 +61,6 @@ class InternalAgentApprovalRequestsControllerTest < ActionDispatch::IntegrationT
   end
 
   def auth_header
-    { "Authorization" => "Bearer test-agent-token" }
+    { "Authorization" => "Bearer test-agent-token-with-at-least-32-bytes" }
   end
 end

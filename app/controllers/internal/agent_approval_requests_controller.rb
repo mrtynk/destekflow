@@ -25,8 +25,13 @@ module Internal
 
     def authenticate_agent!
       configured_token = Rails.application.config.x.agent_api_token.to_s
+      unless configured_token.bytesize >= 32
+        render json: { error: "Agent API güvenli biçimde yapılandırılmadığı için devre dışı." }, status: :service_unavailable
+        return
+      end
+
       supplied_token = request.authorization.to_s.delete_prefix("Bearer ")
-      authorized = configured_token.present? && supplied_token.bytesize == configured_token.bytesize &&
+      authorized = supplied_token.bytesize == configured_token.bytesize &&
                    ActiveSupport::SecurityUtils.secure_compare(supplied_token, configured_token)
       render json: { error: "Yetkisiz agent çağrısı." }, status: :unauthorized unless authorized
     end
