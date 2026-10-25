@@ -77,6 +77,7 @@ module Ai
       request.body = JSON.generate(payload)
 
       attempts = 0
+      response = nil
       loop do
         attempts += 1
         response = Net::HTTP.start(

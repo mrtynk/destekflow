@@ -28,4 +28,17 @@ class GeminiClientTest < ActiveSupport::TestCase
     refute_includes Ai::GeminiClient::RETRYABLE_STATUS_CODES, "400"
     refute_includes Ai::GeminiClient::RETRYABLE_STATUS_CODES, "401"
   end
+
+  test "başarılı HTTP yanıtını döngü sonrasında işler" do
+    client = Ai::GeminiClient.new(api_key: "sahte-test-anahtari")
+    response = Net::HTTPOK.new("1.1", "200", "OK")
+    response.instance_variable_set(:@read, true)
+    response.body = '{"ok":true}'
+
+    result = Net::HTTP.stub(:start, response) do
+      client.send(:post, "gemini-3.8-flash", "generateContent", contents: [])
+    end
+
+    assert_equal true, result.fetch("ok")
+  end
 end
