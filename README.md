@@ -63,7 +63,7 @@ Yerel ve açıklanabilir yedek yaklaşım hâlâ küçük veri kümeli Jaccard s
 
 1. İncelenen talep ile en fazla 40 adayın yalnız başlık/açıklaması `gemini-embedding-2` ile vektörleştirilir.
 2. Cosine similarity ile eşik üzerindeki en yakın üç kayıt getirilir.
-3. Getirilen kayıtlar ücretsiz katmanı bulunan `gemini-3.8-flash` için sınırlı kanıt bağlamı olur; model benzerlik ve farkı Türkçe açıklar.
+3. Getirilen kayıtlar düşük gecikmeli `gemini-3.5-flash-lite` için sınırlı kanıt bağlamı olur; model benzerlik ve farkı Türkçe açıklar.
 4. Kullanıcı adı/e-posta modele gönderilmez. Model kritik işlem veya otomatik ilişkilendirme yapamaz; bağlantı kararı insandadır.
 5. Model adı, retrieval kayıtları/skorları, sonuç veya hata `AiAnalysis` kaydında denetlenebilir biçimde tutulur; API anahtarı tutulmaz.
 

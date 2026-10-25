@@ -4,7 +4,7 @@ module Tickets
     Match = Data.define(:ticket, :score)
 
     EMBEDDING_MODEL = ENV.fetch("RAG_EMBEDDING_MODEL", "gemini-embedding-2")
-    GENERATION_MODEL = ENV.fetch("RAG_GENERATION_MODEL", "gemini-3.8-flash")
+    GENERATION_MODEL = ENV.fetch("RAG_GENERATION_MODEL", "gemini-3.5-flash-lite")
     MAX_CANDIDATES = 12
     TOP_K = 3
     MINIMUM_SCORE = 0.45

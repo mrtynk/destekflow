@@ -36,7 +36,7 @@ class GeminiClientTest < ActiveSupport::TestCase
     http_start = ->(*, **, &) { response }
     client = Ai::GeminiClient.new(api_key: "sahte-test-anahtari", http_start:)
 
-    result = client.send(:post, "gemini-3.8-flash", "generateContent", contents: [])
+    result = client.send(:post, "gemini-3.5-flash-lite", "generateContent", contents: [])
 
     assert_equal true, result.fetch("ok")
   end

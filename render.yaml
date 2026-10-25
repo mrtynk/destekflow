@@ -44,4 +44,4 @@ services:
       - key: RAG_EMBEDDING_MODEL
         value: gemini-embedding-2
       - key: RAG_GENERATION_MODEL
-        value: gemini-3.8-flash
+        value: gemini-3.5-flash-lite
