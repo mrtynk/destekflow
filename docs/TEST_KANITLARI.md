@@ -115,3 +115,11 @@ Windows libvips kurulumu uygulamanın kullanmadığı HEIF/JXL/Imagemagick/OpenS
 - DEMO-R insan tarafından reddedildi; onay kaydında iki denetim olayı görüntülendi.
 - DEMO-B gerçek zamanla 30 dakikadan eski duruma geldikten sonra manuel taramayla eskale edildi; kuyrukta `Eskale edilen (1)` görüldü. Gerçek cron/worker bulunduğu iddia edilmez.
 - Kullanıcı DEMO-B akışının tamamlandığını bildirdi. İkinci tarama sayacı ve eskalasyon sonrası nihai karar ayrı ekran kanıtıyla aktarılmadığından bu iki ayrıntı canlıda ayrıca doğrulanmış sayılmaz; davranış otomatik testlerde kapsanır.
+
+## Agent-first gizlilik ve guardrail — 25 Ekim 2026
+
+- Commit `31a6586`, Basic Auth arkasında yalnız sabit sahte veri kullanan `/agent_demo` ekranını ekledi: güvenli teknik talep, PII maskeleme, kritik finansal insan devri ve idempotent tekrar senaryoları.
+- Commit `0122e40`, model `human_required=false` dese bile geçerli bilgi tabanı kanıtı yoksa yanıtın yayınlanmasını kod seviyesinde engelledi.
+- Son CI: [40225273025](https://github.com/mrtynk/destekflow/actions/runs/40225273025); `58 runs, 247 assertions, 0 failures, 0 errors, 0 skips`.
+- Aynı koşuda system-test, RuboCop, Brakeman, bundler-audit ve importmap audit başarılıdır.
+- Bu aşamada kanıt kod ve CI kapsamındadır. `0122e40` Render'a alınmadan ve üç sahte senaryo tarayıcıda çalıştırılmadan agent-first akış “canlı uçtan uca doğrulandı” diye sunulmaz.

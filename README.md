@@ -159,6 +159,8 @@ bin/rails zeitwerk:check
 
 25 Ekim 2026 son GitHub Actions koşusu **45 test, 190 assertion, 0 failure, 0 error** sonucu verdi. Oluşturma, onaylama, reddetme, yasak geçiş, 30 dakika sınırı, idempotent eskalasyon, eşzamanlı çift karar, agent API doğrulama/yetkilendirme, RAG orkestrasyonu ve HTTP istemcisi regresyonu ile eski akışlar kapsanır. Aynı [CI koşusunda](https://github.com/mrtynk/destekflow/actions/runs/40199897119) test, system-test, lint, Ruby ve JavaScript güvenlik işlerinin tamamı geçti.
 
+Agent Demo Merkezi ve kanıtsız yanıt güvenlik kapısı sonrası [CI koşusu 40225273025](https://github.com/mrtynk/destekflow/actions/runs/40225273025) **58 test, 247 assertion, 0 failure, 0 error** verdi. Sistem testi, RuboCop, Brakeman, bundler-audit ve JavaScript bağımlılık taraması da geçti. Bu sonuç kod/CI kanıtıdır; `/agent_demo` canlı kanıtı ancak ilgili commit Render'a deploy edilip sahte senaryolar tarayıcıda çalıştırıldıktan sonra tamamlanır.
+
 ## Deploy
 
 `render.yaml`, Frankfurt bölgesinde ücretsiz Ruby web servisi ve PostgreSQL 17 veritabanını tanımlar. Migration ve idempotent seed ücretsiz planla uyumlu biçimde build sırasında çalışır. `DATABASE_URL` Blueprint veritabanından bağlanır; `SECRET_KEY_BASE` Render tarafından gizli ve rastgele üretilir.
