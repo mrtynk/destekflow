@@ -7,14 +7,21 @@ module Ai
 
     API_ROOT = "https://generativelanguage.googleapis.com/v1beta/models/"
     MODEL_NAME = /\A[a-zA-Z0-9._-]+\z/
+    DEFAULT_OPEN_TIMEOUT = 10
+    DEFAULT_READ_TIMEOUT = 60
 
     def self.configured?
       ENV["GEMINI_API_KEY"].present?
     end
 
-    def initialize(api_key: ENV["GEMINI_API_KEY"], timeout: 20)
+    def initialize(
+      api_key: ENV["GEMINI_API_KEY"],
+      open_timeout: DEFAULT_OPEN_TIMEOUT,
+      read_timeout: DEFAULT_READ_TIMEOUT
+    )
       @api_key = api_key.to_s
-      @timeout = timeout
+      @open_timeout = open_timeout
+      @read_timeout = read_timeout
       raise Error, "GEMINI_API_KEY yapılandırılmamış." if @api_key.blank?
     end
 
@@ -58,7 +65,13 @@ module Ai
       request["Content-Type"] = "application/json"
       request.body = JSON.generate(payload)
 
-      response = Net::HTTP.start(uri.host, uri.port, use_ssl: true, open_timeout: @timeout, read_timeout: @timeout) do |http|
+      response = Net::HTTP.start(
+        uri.host,
+        uri.port,
+        use_ssl: true,
+        open_timeout: @open_timeout,
+        read_timeout: @read_timeout
+      ) do |http|
         http.request(request)
       end
       raise Error, "Gemini isteği başarısız (HTTP #{response.code})." unless response.is_a?(Net::HTTPSuccess)

@@ -12,4 +12,11 @@ class GeminiClientTest < ActiveSupport::TestCase
       client.response(input: "test", instructions: "test", model: "gemini/../../yanlis")
     end
   end
+
+  test "uzun model yanıtları için bağlantı ve okuma zaman aşımını ayırır" do
+    client = Ai::GeminiClient.new(api_key: "sahte-test-anahtari")
+
+    assert_equal 10, client.instance_variable_get(:@open_timeout)
+    assert_equal 60, client.instance_variable_get(:@read_timeout)
+  end
 end
