@@ -25,8 +25,17 @@
 
   <body>
     <header class="topbar">
-      <%= link_to root_path, class: "brand" do %><span class="logo">D</span><span>DestekFlow<small>AI destek operasyonları</small></span><% end %>
-      <nav aria-label="Ana menü"><%= link_to "Talepler", tickets_path %><%= link_to "Onay kuyruğu", approval_requests_path %><%= link_to "Yeni talep", new_ticket_path, class: "button small" %></nav>
+      <div class="topbar-inner">
+        <%= link_to root_path, class: "brand" do %><span class="logo">D</span><span>DestekFlow<small>AI destek operasyonları</small></span><% end %>
+        <div class="nav-cluster">
+          <span class="live-pill"><span></span>Demo canlı</span>
+          <nav aria-label="Ana menü">
+            <%= link_to "Talepler", tickets_path, class: ("active" if controller_name == "tickets" && action_name != "new") %>
+            <%= link_to "Onay kuyruğu", approval_requests_path, class: ("active" if controller_name == "approval_requests") %>
+            <%= link_to "+ Yeni talep", new_ticket_path, class: "button small" %>
+          </nav>
+        </div>
+      </div>
     </header>
     <main class="container">
       <% flash.each do |type, message| %><div class="flash <%= type %>"><%= message %></div><% end %>
