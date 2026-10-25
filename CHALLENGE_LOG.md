@@ -33,6 +33,7 @@ Bir talebe gerekçeli onay isteği eklemek; 30 dakika bekleyen isteği idempoten
 - Yerel tam paket: `32 runs, 136 assertions, 0 failures, 0 errors, 0 skips`.
 - RuboCop: 65 dosya, 0 ihlal. Brakeman: 0 uyarı. Bundler Audit ve importmap audit: güvenlik açığı yok. Zeitwerk: `All is good!`.
 - Bundler Audit'in ilk koşuda bulduğu `crass 1.0.7` CSS sanitizer açığı `1.0.8` sürümüne güncellenerek kapatıldı ve denetim tekrarlandı.
+- Çalışan uygulama ve test değişiklikleri yerel `6efedbd` (`Onay ve eskalasyon merkezini ekle`) commit'inde tutulur. Commit henüz remote'a gönderilmediği için GitHub bağlantısı varmış gibi verilmez.
 
 Bu çalışma için henüz GitHub Actions veya Render demo kanıtı yoktur; açık izin olmadan push/deploy yapılmayacaktır. Yerel doğrulamalar Ruby 3.4.7 çalıştırıcısıyla tamamlanmıştır. Sistem testi komutu başarılı çıkış vermiş ancak projede sistem test dosyası olmadığı için `0 runs` raporlamıştır.
 
