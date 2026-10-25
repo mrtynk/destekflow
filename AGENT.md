@@ -41,6 +41,7 @@ Gerçek yerleşim:
 - İşlem geçmişi: `Tickets::Create`, `Tickets::Assign`, `Tickets::Reply` ve `Tickets::Transition` servislerinin oluşturduğu `TicketEvent` kayıtları
 - Onay geçişleri: `ApprovalRequest::TRANSITIONS`, `Approvals::Decide` ve `Approvals::EscalateOverdue`
 - Agent-insan sınırı: `AgentWorkflow::RequestApproval`; agent yalnızca onay ister, kritik işlemi uygulamaz
+- Gerçek RAG benzerlik akışı: `Tickets::RagSimilarity`; embedding retrieval sonuçlarını sınırlı üretim bağlamına verir, otomatik ilişkilendirme yapmaz
 
 ## Onay ve Eskalasyon Kuralları
 
@@ -51,6 +52,7 @@ Gerçek yerleşim:
 - Ücretsiz canlı ortamda gerçek cron/worker yoktur. Arayüzdeki tarama yalnız kontrollü demo çağrısıdır.
 - Agent endpoint'i `AGENT_API_TOKEN` olmadan çalışmaz. Token repoya yazılmaz.
 - Agent, sabit ve açık kurallı demo servisidir; LLM değildir ve LLM çağrısı yapıldığı iddia edilmez.
+- RAG asistanı bundan ayrıdır: yalnız `OPENAI_API_KEY` tanımlıyken gerçek embedding ve Responses API çağrısı yapar. Ad/e-posta göndermez; talimat enjeksiyonuna karşı talep metnini güvenilmeyen veri sayar ve sonucu insan incelemesine bırakır.
 - Web onay ekranındaki aktör adları simülasyondur; kimlik doğrulanmış kullanıcı olarak sunulmaz.
 - Production web arayüzü `DEMO_SITE_AUTH_ENABLED=true` iken HTTP Basic ile tamamen korunur. Kullanıcı adı ve en az 20 bayt parola Render secret olarak verilir; eksik yapılandırma 503 ile kapalı kalır.
 - Internal agent API en az 32 baytlık `AGENT_API_TOKEN` olmadan 503 ile devre dışı kalır; yanlış veya eksik Bearer token 401 üretir.

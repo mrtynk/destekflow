@@ -1,5 +1,5 @@
 class TicketsController < ApplicationController
-  before_action :set_ticket, only: %i[show assign reply transition link_related unlink_related]
+  before_action :set_ticket, only: %i[show assign reply transition link_related unlink_related analyze_with_rag]
 
   def index
     @tickets = Ticket.includes(:assignee).order(created_at: :desc)
@@ -13,6 +13,16 @@ class TicketsController < ApplicationController
     linked_ids = @ticket.related_tickets.map(&:id)
     candidates = Ticket.where.not(id: [ @ticket.id, *linked_ids ])
     @similar_tickets = Tickets::Similarity.call(@ticket, candidates:)
+    @latest_ai_analysis = @ticket.ai_analyses.order(created_at: :desc).first
+  end
+
+  def analyze_with_rag
+    linked_ids = @ticket.related_tickets.map(&:id)
+    candidates = Ticket.where.not(id: [ @ticket.id, *linked_ids ])
+    Tickets::RagSimilarity.call(@ticket, candidates:)
+    redirect_to @ticket, notice: "RAG analizi tamamlandı; sonuç insan incelemesine sunuldu."
+  rescue Ai::OpenaiClient::Error => error
+    redirect_to @ticket, alert: "RAG analizi çalıştırılamadı: #{error.message}"
   end
 
   def new

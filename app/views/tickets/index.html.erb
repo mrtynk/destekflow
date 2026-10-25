@@ -1,5 +1,10 @@
 <% content_for :title, "Talepler | DestekFlow" %>
-<div class="page-head"><div><h1>Destek talepleri</h1><p class="lead">Ekibin iş yükünü ve SLA risklerini tek ekrandan yönetin.</p></div><%= link_to "Yeni talep oluştur", new_ticket_path, class: "button" %></div>
+<div class="page-head hero-head"><div><span class="eyebrow">OPERASYON MERKEZİ</span><h1>Destek talepleri</h1><p class="lead">SLA riskini görün, doğru kişiyi atayın ve kritik kararları insan denetiminde tutun.</p></div><%= link_to "+ Yeni talep", new_ticket_path, class: "button" %></div>
+<div class="metric-grid">
+  <div class="metric"><span>Toplam görünüm</span><strong><%= @tickets.size %></strong></div>
+  <div class="metric"><span>Aktif</span><strong><%= @tickets.count(&:active?) %></strong></div>
+  <div class="metric danger"><span>SLA riski</span><strong><%= @tickets.count(&:first_response_overdue?) %></strong></div>
+</div>
 <div class="grid">
   <section>
     <%= form_with url: tickets_path, method: :get, class: "filters" do %>
@@ -16,7 +21,7 @@
       <p class="lead"><%= "Henüz talep yok." if @tickets.empty? %></p>
     </div>
   </section>
-  <aside class="card"><h2>Akıllı SLA Öncelik Asistanı</h2><p class="lead">Sıradaki işi kalan süre ve riskle açıklar.</p>
+  <aside class="card assistant-panel"><span class="eyebrow">AÇIKLANABİLİR KURAL MOTORU</span><h2>Akıllı SLA Öncelik Asistanı</h2><p class="lead">Sıradaki işi kalan süre ve riskle açıklar.</p>
     <% @priorities.first(5).each_with_index do |result,index| %><div class="assistant-item"><strong><%= index + 1 %>. <%= link_to result.ticket.subject, result.ticket %></strong><p><%= result.reason %></p></div><% end %>
   </aside>
 </div>

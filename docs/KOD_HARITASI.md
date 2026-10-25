@@ -27,5 +27,9 @@
 | İlişkilendir / geri al servisleri | `app/services/tickets/link.rb:1`, `unlink.rb:1` | kayıtları değiştirmeyen bağlantı ve iki taraflı olaylar |
 | Benzer talep arayüzü | `app/views/tickets/show.html.erb` | puan, eşleşen terim, ilişkilendir ve geri al kontrolleri |
 | İkinci özgün özellik testleri | `test/services/ticket_similarity_test.rb`, `ticket_link_test.rb` | farklı e-posta, ilgisiz talep, tutarlılık, geri alma, SLA/durum korunumu |
+| RAG retrieval ve üretim orkestrasyonu | `app/services/tickets/rag_similarity.rb` | embedding, cosine retrieval, kanıt paketi, insan kararı sınırı |
+| OpenAI HTTP istemcisi | `app/services/ai/openai_client.rb` | `/v1/embeddings`, `/v1/responses`, timeout ve güvenli hata yönetimi |
+| AI denetim kaydı | `app/models/ai_analysis.rb`, `db/migrate/20261025170000_create_ai_analyses.rb` | model, retrieval kanıtı, yanıt ve başarısızlık kaydı; secret saklanmaz |
+| RAG testleri | `test/services/rag_similarity_test.rb` | anlamsal retrieval, PII dışlama, üretim kanıtı ve API hata kaydı |
 
 Satırlar 15 Ekim 2026 son teslim çalışma ağacına göre `rg -n` ile doğrulanmıştır. Kod değişirse sunumdan önce yeniden üretilmelidir.

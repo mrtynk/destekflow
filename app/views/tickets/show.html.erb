@@ -5,9 +5,30 @@
   <section class="card" style="margin-top:20px"><h2>Yanıtlar</h2><% @ticket.replies.includes(:agent).each do |reply| %><div class="reply"><strong><%= reply.agent.name %></strong><small class="meta"> · <%= l reply.created_at, format: :short %></small><p><%= reply.body %></p></div><% end %>
     <% if @ticket.assignee && @ticket.status != "closed" %><%= form_with url: reply_ticket_path(@ticket), class: "field" do %><%= label_tag :body, "Temsilci yanıtı" %><%= text_area_tag :body, nil, required: true %><%= submit_tag "Yanıtı gönder", class: "button" %><% end %><% end %>
   </section>
-  <section class="card" style="margin-top:20px">
-    <h2>Geri Alınabilir Benzer Talep Asistanı</h2>
-    <p class="lead">Benzer metni açıklar; aynı müşteri olduğunu varsaymaz ve otomatik birleştirme yapmaz.</p>
+  <section class="card feature-card" style="margin-top:20px">
+    <span class="eyebrow">HUMAN-IN-THE-LOOP</span>
+    <h2>Benzer Talep ve RAG Asistanı</h2>
+    <p class="lead">Kelime tabanlı kanıtı korur; isteğe bağlı gerçek RAG analizi anlamca yakın kayıtları getirip açıklar. Hiçbir kayıt otomatik birleştirilmez.</p>
+    <div class="ai-callout">
+      <div><strong>AI analizi isteğe bağlıdır</strong><p>Yalnız başlık ve açıklama gönderilir; ad ve e-posta modele gönderilmez. Son karar insandadır.</p></div>
+      <% if Ai::OpenaiClient.configured? %>
+        <%= button_to "RAG analizi çalıştır", analyze_with_rag_ticket_path(@ticket), class: "button ai-button" %>
+      <% else %>
+        <span class="config-badge">API anahtarı yapılandırılmadı</span>
+      <% end %>
+    </div>
+    <% if @latest_ai_analysis&.completed? %>
+      <div class="rag-result">
+        <span class="status-dot"></span><strong>Son gerçek RAG analizi</strong>
+        <p><%= @latest_ai_analysis.answer %></p>
+        <% @latest_ai_analysis.retrieval_evidence.each do |evidence| %>
+          <%= link_to "##{evidence.fetch('ticket_id')} · anlamsal skor %#{(evidence.fetch('score').to_f * 100).round}", ticket_path(evidence.fetch("ticket_id")), class: "evidence-chip" %>
+        <% end %>
+        <p class="meta"><%= @latest_ai_analysis.provider %> · <%= @latest_ai_analysis.embedding_model %> + <%= @latest_ai_analysis.generation_model %> · <%= l @latest_ai_analysis.created_at, format: :short %></p>
+      </div>
+    <% elsif @latest_ai_analysis %>
+      <div class="rag-result failed"><strong>Son RAG denemesi tamamlanamadı</strong><p>Özellik çalışıyor gibi gösterilmez; kelime tabanlı öneriler aşağıda kullanılabilir.</p></div>
+    <% end %>
     <% if @ticket.ticket_links.exists? %>
       <h3>İlişkili talepler</h3>
       <% @ticket.ticket_links.includes(:first_ticket, :second_ticket).each do |link| %>
@@ -19,7 +40,7 @@
         </div>
       <% end %>
     <% end %>
-    <h3>Öneriler</h3>
+    <h3>Yerel ve açıklanabilir öneriler</h3>
     <% @similar_tickets.each do |result| %>
       <div class="assistant-item">
         <strong><%= link_to "##{result.ticket.id} · #{result.ticket.subject}", result.ticket %></strong>

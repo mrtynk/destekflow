@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_25_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_25_170000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -20,6 +20,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_25_120000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_agents_on_email", unique: true
+  end
+
+  create_table "ai_analyses", force: :cascade do |t|
+    t.bigint "ticket_id", null: false
+    t.string "status", null: false
+    t.string "provider", null: false
+    t.string "embedding_model", null: false
+    t.string "generation_model", null: false
+    t.jsonb "retrieval_evidence", default: [], null: false
+    t.text "answer"
+    t.string "error_code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ticket_id", "created_at"], name: "index_ai_analyses_on_ticket_id_and_created_at"
+    t.index ["ticket_id"], name: "index_ai_analyses_on_ticket_id"
   end
 
   create_table "approval_events", force: :cascade do |t|
@@ -101,9 +116,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_25_120000) do
     t.index ["status", "sla_due_at"], name: "index_tickets_on_status_and_sla_due_at"
   end
 
-  add_foreign_key "replies", "agents"
+  add_foreign_key "ai_analyses", "tickets"
   add_foreign_key "approval_events", "approval_requests"
   add_foreign_key "approval_requests", "tickets"
+  add_foreign_key "replies", "agents"
   add_foreign_key "replies", "tickets"
   add_foreign_key "ticket_events", "tickets"
   add_foreign_key "ticket_links", "tickets", column: "first_ticket_id"

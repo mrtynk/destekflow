@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       post :transition
       post :link_related
       delete :unlink_related
+      post :analyze_with_rag
     end
   end
   resources :approval_requests, only: %i[index create] do

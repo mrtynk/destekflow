@@ -93,3 +93,13 @@ Yeni özellik commit'i `e373bb7` için `test`, `system-test`, `lint`, `scan_ruby
 ## Dürüst sınırlar
 
 Windows libvips kurulumu uygulamanın kullanmadığı HEIF/JXL/Imagemagick/OpenSlide/Poppler modülleri için uyarı verdi. Test süreci 0 koduyla bitti ve yukarıdaki sonuçları üretti. Ücretsiz Render planında cron servisi oluşturulmadığı için 48 saatlik otomatik kapanış job'ı canlı zamanlayıcıyla gözlenmedi; davranış otomatik testlerle doğrulandı.
+
+## RAG ve arayüz yenilemesi — 25 Ekim 2026
+
+- Tam Rails paketi: `40 runs, 176 assertions, 0 failures, 0 errors, 0 skips`.
+- Sahte API istemcili RAG testi gerçek orkestrasyonu doğrular: embedding sırası, cosine retrieval, eşik/ilk üç seçimi, getirilen kaydın üretim bağlamına verilmesi ve `AiAnalysis` denetim kaydı.
+- Gizlilik testi, aday e-posta adresinin embedding girdisine ve üretim girdisine eklenmediğini doğrular.
+- Hata testi, API hatasının başarılı sonuç gibi gösterilmediğini ve `failed` denetim kaydı oluşturduğunu doğrular.
+- Anahtarsız controller testi, isteğin kullanıcıya hata dönerek güvenli kapanmasını doğrular.
+- Yerel masaüstü tarayıcı incelemesinde ana ekran, metrik kartları, filtreler, SLA asistanı ve talep detay düzeni yatay taşma olmadan görüntülendi.
+- Gerçek OpenAI ağına çağrı yapılmadı; ücretli/gizli anahtar kullanılmadı. Bu nedenle gerçek model kalitesi ve canlı Render RAG akışı henüz doğrulanmadı.

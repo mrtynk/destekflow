@@ -25,7 +25,7 @@ class TicketsControllerTest < ActionDispatch::IntegrationTest
 
     get ticket_path(first)
     assert_response :success
-    assert_select "h2", "Geri Alınabilir Benzer Talep Asistanı"
+    assert_select "h2", "Benzer Talep ve RAG Asistanı"
     assert_select "form[action='#{link_related_ticket_path(first, related_ticket_id: second.id)}']"
 
     assert_difference("TicketLink.count", 1) do
@@ -38,6 +38,18 @@ class TicketsControllerTest < ActionDispatch::IntegrationTest
       delete unlink_related_ticket_path(first), params: { link_id: link.id }
     end
     assert_redirected_to ticket_path(first)
+  end
+
+  test "RAG anahtarı yokken çalışıyor izlenimi vermez ve başarısız denemeyi kaydeder" do
+    first = Tickets::Create.call({ subject: "Ödeme sorunu", description: "Kartımdan iki kez çekildi", requester_name: "A", requester_email: "a@example.com", category: "billing", priority: "high" })
+    Tickets::Create.call({ subject: "Çift tahsilat", description: "Karttan mükerrer çekim", requester_name: "B", requester_email: "b@example.com", category: "billing", priority: "normal" })
+
+    previous_key = ENV.delete("OPENAI_API_KEY")
+    assert_difference("AiAnalysis.count", 1) { post analyze_with_rag_ticket_path(first) }
+    assert_redirected_to ticket_path(first)
+    assert_equal "failed", first.ai_analyses.last.status
+  ensure
+    ENV["OPENAI_API_KEY"] = previous_key if previous_key
   end
 
   test "başka talebe ait ilişki idsiyle geri alma reddedilir" do

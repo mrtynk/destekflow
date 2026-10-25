@@ -9,7 +9,7 @@
 
 <div class="demo-warning">
   <strong>Kontrollü ders demosu:</strong> “Demo insan karar verici” ve kuyruk adları gerçek oturum açmış kullanıcı değildir.
-  Bu ekranda auth/RBAC yoktur. Eskalasyon taraması bu düğmeyle manuel çalışır; canlı cron/worker kurulmuş değildir.
+  Canlı site genel HTTP Basic ile korunur ancak kullanıcı bazlı auth/RBAC yoktur. Eskalasyon taraması bu düğmeyle manuel çalışır; canlı cron/worker kurulmuş değildir.
 </div>
 
 <% [["requested", "Bekleyen"], ["escalated", "Eskale edilen"], ["approved", "Onaylanan"], ["rejected", "Reddedilen"]].each do |status, title| %>
