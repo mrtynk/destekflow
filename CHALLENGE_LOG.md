@@ -30,16 +30,17 @@ Bir talebe gerekçeli onay isteği eklemek; 30 dakika bekleyen isteği idempoten
 - İç API Bearer token ister; token kodda veya Git geçmişinde tutulmaz.
 - Onay kuyruğu, talep içi onay formu, karar düğmeleri ve iki seviyeli zaman çizelgesi eklendi.
 - Testler; oluşturma/onay/red, yasak geçiş, 30 dakika öncesi/sonrası `travel_to`, çift eskalasyon, eşzamanlı karar, API yetkilendirmesi ve regresyon paketini kapsayacak şekilde eklendi.
-- Yerel tam paket: `32 runs, 136 assertions, 0 failures, 0 errors, 0 skips`.
-- RuboCop: 65 dosya, 0 ihlal. Brakeman: 0 uyarı. Bundler Audit ve importmap audit: güvenlik açığı yok. Zeitwerk: `All is good!`.
+- Yayın öncesi yerel tam paket: `37 runs, 158 assertions, 0 failures, 0 errors, 0 skips`.
+- RuboCop: 66 dosya, 0 ihlal. Brakeman: 0 uyarı. Bundler Audit ve importmap audit: güvenlik açığı yok. Zeitwerk: `All is good!`. Production asset build başarılıdır.
 - Bundler Audit'in ilk koşuda bulduğu `crass 1.0.7` CSS sanitizer açığı `1.0.8` sürümüne güncellenerek kapatıldı ve denetim tekrarlandı.
 - Çalışan uygulama ve test değişiklikleri yerel `6efedbd` (`Onay ve eskalasyon merkezini ekle`) commit'inde tutulur. Commit henüz remote'a gönderilmediği için GitHub bağlantısı varmış gibi verilmez.
+- Yayın öncesi denetimde kimlik doğrulamasız web karar uçları ve zayıf agent tokenı riski bulundu. Site geneli fail-closed HTTP Basic, en az 32 bayt agent tokenı ve erişim testleri yerel `8b2c879` (`Demo ve agent erisimini fail closed koru`) commit'inde düzeltildi.
 
 Bu çalışma için henüz GitHub Actions veya Render demo kanıtı yoktur; açık izin olmadan push/deploy yapılmayacaktır. Yerel doğrulamalar Ruby 3.4.7 çalıştırıcısıyla tamamlanmıştır. Sistem testi komutu başarılı çıkış vermiş ancak projede sistem test dosyası olmadığı için `0 runs` raporlamıştır.
 
 Yapılamayanlar:
 
-- Gerçek kullanıcı kimlik doğrulaması ve rol tabanlı yetkilendirme yoktur.
+- Gerçek kullanıcı hesabı ve rol tabanlı yetkilendirme yoktur. Kontrollü yayın yalnız site geneli HTTP Basic demo korumasıyla yapılabilir.
 - Gerçek cron/worker ile otomatik 30 dakika taraması yoktur; manuel demo çağrısı vardır.
 - Gerçek LLM entegrasyonu yoktur; açıkça kural tabanlı demo agent kullanılır.
 - İnsan ve agent süreleri ölçülmedi; süre uydurulmadı.

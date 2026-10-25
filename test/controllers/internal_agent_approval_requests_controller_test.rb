@@ -23,6 +23,21 @@ class InternalAgentApprovalRequestsControllerTest < ActionDispatch::IntegrationT
     assert_response :unauthorized
   end
 
+  test "yanlış token reddedilir ve yanıta ya da parametre filtresine sızmaz" do
+    supplied = "wrong-agent-token-with-at-least-32-byte"
+    post internal_agent_approval_requests_path,
+         params: valid_params,
+         headers: { "Authorization" => "Bearer #{supplied}" }
+
+    assert_response :unauthorized
+    assert_not_includes response.body, supplied
+    assert_not_includes response.body, Rails.application.config.x.agent_api_token
+    filter = ActiveSupport::ParameterFilter.new(Rails.application.config.filter_parameters)
+    filtered = filter.filter("authorization" => supplied, "agent_api_token" => Rails.application.config.x.agent_api_token)
+    assert_equal "[FILTERED]", filtered["authorization"]
+    assert_equal "[FILTERED]", filtered["agent_api_token"]
+  end
+
   test "eksik veya zayıf token yapılandırması API'yi kapalı tutar" do
     Rails.application.config.x.agent_api_token = "short"
 

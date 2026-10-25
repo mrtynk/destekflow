@@ -13,6 +13,15 @@
 - `rails test:system`: başarılı komut, fakat sistem test dosyası olmadığı için `0 runs`; sistem testi varmış gibi sunulmaz.
 - Bu sürüm henüz push edilmediği için GitHub Actions sonucu; deploy edilmediği için Render/canlı uçtan uca kanıtı yoktur.
 
+### TASK 17 yayın öncesi tekrar doğrulaması
+
+- Tam paket: `37 runs, 158 assertions, 0 failures, 0 errors, 0 skips`.
+- Yeni güvenlik testleri: production benzeri site korumasında kimliksiz/yanlış erişim 401; eksik secret yapılandırması 503; doğru HTTP Basic erişimi 200; eksik/zayıf agent tokenı 503; tokensız agent çağrısı 401.
+- Production asset build: başarılı (`application-5915d808.css` üretildi, ardından yerel build artığı temizlendi).
+- Test PostgreSQL migration durumu: `20261015090000`, `20261015190000`, `20261025120000` kayıtlarının tamamı `up`.
+- RuboCop: 66 dosya, 0 ihlal. Brakeman: 0 uyarı. Bundler Audit ve importmap audit: açık yok. Zeitwerk: `All is good!`.
+- GitHub Actions ve Render sonucu hâlâ yoktur; push/deploy yapılmamıştır.
+
 ## Yerel koşu
 
 - Tarih: 15 Ekim 2026
