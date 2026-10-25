@@ -161,6 +161,8 @@ bin/rails zeitwerk:check
 
 Agent Demo Merkezi ve kanıtsız yanıt güvenlik kapısı sonrası [CI koşusu 40225273025](https://github.com/mrtynk/destekflow/actions/runs/40225273025) **58 test, 247 assertion, 0 failure, 0 error** verdi. Sistem testi, RuboCop, Brakeman, bundler-audit ve JavaScript bağımlılık taraması da geçti. Bu sonuç kod/CI kanıtıdır; `/agent_demo` canlı kanıtı ancak ilgili commit Render'a deploy edilip sahte senaryolar tarayıcıda çalıştırıldıktan sonra tamamlanır.
 
+Ayrıntılı güvenlik incelemesi sonrası [CI koşusu 40225765287](https://github.com/mrtynk/destekflow/actions/runs/40225765287) **64 test, 262 assertion, 0 failure, 0 error** verdi. Yanlış tipli LLM kararı, boş gerekçe, insan gerektiren KB maddesi, model çıktısındaki PII, aşırı büyük girdi ve web ticketının agent API'den okunamaması ayrıca test edildi.
+
 ## Deploy
 
 `render.yaml`, Frankfurt bölgesinde ücretsiz Ruby web servisi ve PostgreSQL 17 veritabanını tanımlar. Migration ve idempotent seed ücretsiz planla uyumlu biçimde build sırasında çalışır. `DATABASE_URL` Blueprint veritabanından bağlanır; `SECRET_KEY_BASE` Render tarafından gizli ve rastgele üretilir.
