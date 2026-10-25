@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   end
   namespace :internal do
     resources :agent_approval_requests, only: :create
+    resources :agent_tickets, only: %i[create show]
   end
   root "tickets#index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

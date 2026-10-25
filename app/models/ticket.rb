@@ -15,6 +15,7 @@ class Ticket < ApplicationRecord
   has_many :ticket_events, dependent: :destroy
   has_many :approval_requests, dependent: :destroy
   has_many :ai_analyses, dependent: :destroy
+  has_many :agent_runs, dependent: :destroy
   has_many :outgoing_ticket_links, class_name: "TicketLink", foreign_key: :first_ticket_id, inverse_of: :first_ticket, dependent: :destroy
   has_many :incoming_ticket_links, class_name: "TicketLink", foreign_key: :second_ticket_id, inverse_of: :second_ticket, dependent: :destroy
 
@@ -22,6 +23,8 @@ class Ticket < ApplicationRecord
   validates :priority, inclusion: { in: PRIORITIES }
   validates :category, inclusion: { in: CATEGORIES }
   validates :status, inclusion: { in: STATUSES }
+  validates :origin, inclusion: { in: %w[web agent_api] }
+  validates :agent_external_reference, uniqueness: true, allow_nil: true
 
   scope :active, -> { where(status: %w[new open pending]) }
   scope :overdue, -> { active.where(first_responded_at: nil).where(sla_due_at: ...Time.current) }
