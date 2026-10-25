@@ -16,6 +16,10 @@ Rails.application.routes.draw do
     end
     collection { post :run_escalation }
   end
+  resource :agent_demo, only: :show do
+    post :run
+    post :repeat
+  end
   namespace :internal do
     resources :agent_approval_requests, only: :create
     resources :agent_tickets, only: %i[create show]

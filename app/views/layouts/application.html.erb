@@ -31,6 +31,7 @@
         <nav class="sidebar-nav" aria-label="Ana menü">
           <%= link_to tickets_path, class: ("active" if controller_name == "tickets" && action_name != "new") do %><span class="nav-icon">⌁</span><span>Talepler</span><small>Operasyon kuyruğu</small><% end %>
           <%= link_to approval_requests_path, class: ("active" if controller_name == "approval_requests") do %><span class="nav-icon">✓</span><span>Onay merkezi</span><small>İnsan denetimi</small><% end %>
+          <%= link_to agent_demo_path, class: ("active" if controller_name == "agent_demos") do %><span class="nav-icon">AI</span><span>Agent demo</span><small>Gizlilik ve guardrail</small><% end %>
           <%= link_to new_ticket_path, class: ("active" if controller_name == "tickets" && action_name == "new") do %><span class="nav-icon">＋</span><span>Yeni talep</span><small>Kayıt oluştur</small><% end %>
         </nav>
         <div class="sidebar-card">
