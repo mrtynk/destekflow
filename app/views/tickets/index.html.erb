@@ -1,5 +1,5 @@
 <% content_for :title, "Talepler | DestekFlow" %>
-<div class="page-head hero-head"><div><span class="eyebrow">OPERASYON MERKEZİ</span><h1>Destek talepleri</h1><p class="lead">SLA riskini görün, doğru kişiyi atayın ve kritik kararları insan denetiminde tutun.</p></div><%= link_to "+ Yeni talep", new_ticket_path, class: "button" %></div>
+<div class="dashboard-hero"><div><span class="hero-chip">OPERASYON MERKEZİ</span><h1>Destek taleplerini<br><em>tek akışta</em> yönetin.</h1><p>SLA riskini görün, doğru kişiyi atayın ve kritik kararları insan denetiminde tutun.</p><div class="hero-actions"><%= link_to "+ Yeni talep oluştur", new_ticket_path, class: "button hero-button" %><%= link_to "Onay kuyruğunu aç →", approval_requests_path, class: "hero-link" %></div></div><div class="hero-visual" aria-hidden="true"><div class="pulse-card"><span>CANLI ÖNCELİK</span><strong><%= @tickets.count(&:first_response_overdue?) %> riskli talep</strong><small>AI destekli, insan kontrollü</small></div><div class="orb orb-one"></div><div class="orb orb-two"></div></div></div>
 <div class="metric-grid">
   <div class="metric"><span class="metric-icon">01</span><div><span>Toplam görünüm</span><strong><%= @tickets.size %></strong></div></div>
   <div class="metric"><span class="metric-icon active">02</span><div><span>Aktif talepler</span><strong><%= @tickets.count(&:active?) %></strong></div></div>
@@ -22,7 +22,7 @@
       <p class="lead"><%= "Henüz talep yok." if @tickets.empty? %></p>
     </div>
   </section>
-  <aside class="card assistant-panel"><span class="eyebrow">AÇIKLANABİLİR KURAL MOTORU</span><h2>Akıllı SLA Öncelik Asistanı</h2><p class="lead">Sıradaki işi kalan süre ve riskle açıklar.</p>
+  <aside class="card assistant-panel"><div class="assistant-mark">✦</div><span class="eyebrow">AÇIKLANABİLİR KURAL MOTORU</span><h2>Akıllı SLA Öncelik Asistanı</h2><p class="lead">Sıradaki işi kalan süre ve riskle açıklar.</p>
     <% @priorities.first(5).each_with_index do |result,index| %><div class="assistant-item"><strong><%= index + 1 %>. <%= link_to result.ticket.subject, result.ticket %></strong><p><%= result.reason %></p></div><% end %>
   </aside>
 </div>

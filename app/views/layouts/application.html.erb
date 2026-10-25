@@ -23,23 +23,33 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <header class="topbar">
-      <div class="topbar-inner">
-        <%= link_to root_path, class: "brand" do %><span class="logo">D</span><span>DestekFlow<small>AI destek operasyonları</small></span><% end %>
-        <div class="nav-cluster">
-          <span class="live-pill"><span></span>Demo canlı</span>
-          <nav aria-label="Ana menü">
-            <%= link_to "Talepler", tickets_path, class: ("active" if controller_name == "tickets" && action_name != "new") %>
-            <%= link_to "Onay kuyruğu", approval_requests_path, class: ("active" if controller_name == "approval_requests") %>
-            <%= link_to "+ Yeni talep", new_ticket_path, class: "button small" %>
-          </nav>
+  <body class="app-body">
+    <div class="app-shell">
+      <aside class="sidebar">
+        <%= link_to root_path, class: "brand sidebar-brand" do %><span class="logo">D</span><span>DestekFlow<small>AI destek operasyonları</small></span><% end %>
+        <div class="sidebar-label">ÇALIŞMA ALANI</div>
+        <nav class="sidebar-nav" aria-label="Ana menü">
+          <%= link_to tickets_path, class: ("active" if controller_name == "tickets" && action_name != "new") do %><span class="nav-icon">⌁</span><span>Talepler</span><small>Operasyon kuyruğu</small><% end %>
+          <%= link_to approval_requests_path, class: ("active" if controller_name == "approval_requests") do %><span class="nav-icon">✓</span><span>Onay merkezi</span><small>İnsan denetimi</small><% end %>
+          <%= link_to new_ticket_path, class: ("active" if controller_name == "tickets" && action_name == "new") do %><span class="nav-icon">＋</span><span>Yeni talep</span><small>Kayıt oluştur</small><% end %>
+        </nav>
+        <div class="sidebar-card">
+          <span class="sidebar-card-icon">AI</span>
+          <strong>Human-in-the-loop</strong>
+          <p>AI önerir, kritik kararı insan verir.</p>
         </div>
-      </div>
-    </header>
-    <main class="container">
-      <% flash.each do |type, message| %><div class="flash <%= type %>"><%= message %></div><% end %>
-      <%= yield %>
-    </main>
+        <div class="sidebar-footer"><span class="live-pill"><span></span>Demo ortamı aktif</span><small>HTTP Basic korumalı</small></div>
+      </aside>
+      <section class="workspace">
+        <header class="workspace-topbar">
+          <div><span class="workspace-kicker">DESTEK OPERASYON PLATFORMU</span><strong>Kontrol paneli</strong></div>
+          <div class="workspace-actions"><span class="secure-chip">● Güvenli demo</span><%= link_to "+ Yeni talep", new_ticket_path, class: "button small" %></div>
+        </header>
+        <main class="container">
+          <% flash.each do |type, message| %><div class="flash <%= type %>"><%= message %></div><% end %>
+          <%= yield %>
+        </main>
+      </section>
+    </div>
   </body>
 </html>

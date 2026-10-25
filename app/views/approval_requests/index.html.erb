@@ -13,6 +13,7 @@
   Canlı site genel HTTP Basic ile korunur ancak kullanıcı bazlı auth/RBAC yoktur. Eskalasyon taraması bu düğmeyle manuel çalışır; canlı cron/worker kurulmuş değildir.
 </div>
 
+<div class="approval-board">
 <% [["requested", "Bekleyen"], ["escalated", "Eskale edilen"], ["approved", "Onaylanan"], ["rejected", "Reddedilen"]].each do |status, title| %>
   <section class="card approval-section">
     <h2><%= title %> (<%= @approval_requests.fetch(status, []).size %>)</h2>
@@ -43,3 +44,4 @@
     <p class="meta"><%= "Bu durumda kayıt yok." if @approval_requests.fetch(status, []).empty? %></p>
   </section>
 <% end %>
+</div>
