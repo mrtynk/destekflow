@@ -45,3 +45,5 @@ services:
         value: gemini-embedding-2
       - key: RAG_GENERATION_MODEL
         value: gemini-3.5-flash-lite
+      - key: AGENT_TRIAGE_MODEL
+        value: gemini-3.5-flash-lite

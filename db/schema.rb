@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_25_170000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_25_190000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -35,6 +35,23 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_25_170000) do
     t.datetime "updated_at", null: false
     t.index ["ticket_id", "created_at"], name: "index_ai_analyses_on_ticket_id_and_created_at"
     t.index ["ticket_id"], name: "index_ai_analyses_on_ticket_id"
+  end
+
+  create_table "agent_runs", force: :cascade do |t|
+    t.bigint "ticket_id", null: false
+    t.string "status", null: false
+    t.string "provider", null: false
+    t.string "model", null: false
+    t.string "decision", null: false
+    t.text "reason", null: false
+    t.boolean "reply_published", default: false, null: false
+    t.text "suggested_reply"
+    t.jsonb "knowledge_evidence", default: [], null: false
+    t.string "error_code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ticket_id", "created_at"], name: "index_agent_runs_on_ticket_id_and_created_at"
+    t.index ["ticket_id"], name: "index_agent_runs_on_ticket_id"
   end
 
   create_table "approval_events", force: :cascade do |t|
@@ -112,11 +129,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_25_170000) do
     t.datetime "closed_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "origin", default: "web", null: false
+    t.string "agent_external_reference"
+    t.string "requester_reference"
+    t.boolean "privacy_mode", default: false, null: false
+    t.index ["agent_external_reference"], name: "index_tickets_on_agent_external_reference", unique: true, where: "(agent_external_reference IS NOT NULL)"
     t.index ["assignee_id"], name: "index_tickets_on_assignee_id"
     t.index ["status", "sla_due_at"], name: "index_tickets_on_status_and_sla_due_at"
   end
 
   add_foreign_key "ai_analyses", "tickets"
+  add_foreign_key "agent_runs", "tickets"
   add_foreign_key "approval_events", "approval_requests"
   add_foreign_key "approval_requests", "tickets"
   add_foreign_key "replies", "agents"

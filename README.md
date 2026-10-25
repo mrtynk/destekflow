@@ -88,6 +88,14 @@ Kararlar transaction ve satır kilidi içinde uygulanır; ikinci karar reddedili
 
 Güvenlik ve canlılık sınırı: gerçek kullanıcı hesabı/RBAC henüz yoktur; görünen karar sahibi adları kontrollü ders simülasyonudur. Production arayüzünün tamamı `DEMO_SITE_USERNAME` ve en az 20 baytlık `DEMO_SITE_PASSWORD` ile HTTP Basic korumasına alınır; bilgiler eksikse uygulama `/up` dışında 503 ile kapalı kalır. İç agent API en az 32 baytlık `AGENT_API_TOKEN` olmadan devre dışıdır. Bu gizli değerler Render secret olarak girilir ve repoya yazılmaz. Onay/eskalasyon kodu `e8bca94` commit'iyle canlıdadır; ancak 30 dakika taraması arayüzden manuel tetiklenir, uygulama saatini değiştiren production parametresi ve gerçek worker/cron yoktur.
 
+## Gizlilik korumalı agent-first destek akışı
+
+Token korumalı `/internal/agent_tickets` API'si, bir yazılım ajanının form kullanmadan sahte/anonim müşteri referansıyla talep açmasını ve sonucu takip etmesini sağlar. Aynı `external_reference` tekrar gönderildiğinde ikinci kayıt oluşturulmaz. Müşteri adı ve e-postası yerine opak referans tutulur; açıklamadaki e-posta, telefon ve kart benzeri sayılar Gemini çağrısından ve veritabanına yazımdan önce maskelenir.
+
+Gemini triyajı talebin önceliğini, insan gerekip gerekmediğini ve yalnız yerel bilgi tabanı maddelerine dayanan öneri yanıtını JSON olarak üretir. Ancak yayın kararı modele bırakılmaz: finans, hukuk, güvenlik, kimlik/hesap erişimi, yüksek öncelik, belirsizlik, boş yanıt veya bilgi tabanı kanıtı yoksa kod yanıtı engeller ve talebi insan kuyruğuna bırakır. Güvenli teknik taleplerde kanıtlı yanıt otomatik yayınlanabilir. Her çağrı model, karar, gerekçe, bilgi tabanı kanıtı ve yayın durumu ile `AgentRun` kaydına yazılır.
+
+Bu katman insan-insan aktarımını düşük riskli ve bilgi tabanıyla cevaplanabilen taleplerde azaltır; kritik kararları insandan kaldırmaz. Regex maskeleme tam anonimleştirme değildir, gerçek müşteri verisiyle kullanım için DLP, saklama politikası, gerçek kullanıcı/RBAC ve hukuki değerlendirme gerekir. Mevcut onay API'si de ayrı kalır: kritik aksiyonlar yine insan kararı olmadan uygulanmaz.
+
 ## Faz 1: Fortune 500 araştırması
 
 Fortune 500, şirketleri değerlemeye göre değil gelire göre sıralar. 2026 listesi 21 trilyon dolar toplam gelir, 2,1 trilyon dolar toplam kâr, 55 trilyon dolar toplam piyasa değeri ve 30,5 milyon çalışan bildiriyor. [Fortune 500 2026](https://fortune.com/ranking/fortune500/), [Fortune toplu analiz](https://www.fortune.com/2026/06/19/fortune-500-employment-profits-revenue-hiring-jobs-ai/)
@@ -178,6 +186,7 @@ Canlı dağıtım 15 Ekim 2026 tarihinde Rails 8.1.4 ve Ruby 3.4.7 ile başarıy
 - Ücretsiz Render web servisi hareketsizlikte uyur ve ilk isteği geciktirebilir. Ücretsiz PostgreSQL veritabanı Render'ın süre ve saklama sınırlarına tabidir.
 - Gerçek kullanıcı hesabı ve rol yetkilendirmesi yoktur. Production demosu site geneli HTTP Basic ile sınırlandırılır; bu koruma gerçek çok kullanıcılı auth/RBAC yerine geçmez. Gerçek müşteri verisi kullanılmamalıdır.
 - RAG canlıda yalnız sahte demo verisiyle doğrulanmıştır. Ücretsiz Gemini katmanında gönderilen içerik sağlayıcının ürün geliştirmesinde kullanılabildiğinden gerçek müşteri veya kişisel veri gönderilmemelidir.
+- Agent-first intake akışı kod ve CI testlerinde doğrulanmıştır; henüz Render'da doğru tokenla pozitif uçtan uca çağrı yapılmadığı sürece canlıda doğrulandı diye sunulmamalıdır. Regex maskeleme tam anonimleştirme veya mevzuat uyumu garantisi değildir.
 - Onay/eskalasyon sürümünde gerçek zamanlayıcı yoktur; 30 dakika taraması yetkili demo ekranından manuel servis çağrısıyla gösterilir. Canlı DEMO-B kaydı 30 dakikadan eski olduktan sonra eskale edilmiştir; bu, cron bulunduğu anlamına gelmez.
 - Fortune 500'ün 500 satırı incelendi; 28 satırda Market Value boş olduğu için min–max 472 sayısal şirketi kapsar. Özel/boş şirketlere tahmini değer atanmadı; sonuç tüm 500 şirketin eksiksiz değerleme aralığı değildir.
 - Ders materyali G2, G3 ve G4 belgelerinin resmî tanımını vermiyor. Dosyalar bunu açıkça belirterek ödevin doğrulanabilir isterlerine dayalı öneri içerikleri sunuyor; bunlar hocanın resmî tanımı diye gösterilmiyor.
