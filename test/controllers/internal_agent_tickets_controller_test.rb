@@ -16,7 +16,7 @@ class InternalAgentTicketsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "tokensız ajan talebi takip edemez" do
-    ticket = Tickets::Create.call(subject: "Test", description: "Test", requester_name: "Test", requester_email: "test@example.com", category: "other", priority: "normal")
+    ticket = Tickets::Create.call({ subject: "Test", description: "Test", requester_name: "Test", requester_email: "test@example.com", category: "other", priority: "normal" })
     get internal_agent_ticket_path(ticket)
     assert_response :unauthorized
   end
