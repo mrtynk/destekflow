@@ -10,11 +10,12 @@ module Internal
     end
 
     def show
-      ticket = Ticket.find(params[:id])
+      ticket = Ticket.where(origin: "agent_api").find(params[:id])
       render json: {
         id: ticket.id, status: ticket.status, priority: ticket.priority,
         privacy_mode: ticket.privacy_mode, requester_reference: ticket.requester_reference,
-        latest_agent_decision: ticket.agent_runs.order(:created_at).last&.decision
+        latest_agent_decision: ticket.agent_runs.order(:created_at).last&.decision,
+        reply_published: ticket.agent_runs.order(:created_at).last&.reply_published
       }
     rescue ActiveRecord::RecordNotFound
       render json: { error: "Talep bulunamadı." }, status: :not_found

@@ -21,6 +21,13 @@ class InternalAgentTicketsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unauthorized
   end
 
+  test "doğru token normal web talebini agent API üzerinden okuyamaz" do
+    ticket = Tickets::Create.call({ subject: "Web talebi", description: "Normal kanal", requester_name: "Test", requester_email: "test@example.com", category: "other", priority: "normal" })
+    get internal_agent_ticket_path(ticket), headers: { "Authorization" => "Bearer test-agent-token-with-at-least-32-bytes" }
+
+    assert_response :not_found
+  end
+
   private
 
   def valid_params

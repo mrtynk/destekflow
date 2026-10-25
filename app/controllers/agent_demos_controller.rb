@@ -26,6 +26,7 @@ class AgentDemosController < ApplicationController
 
   def result_message(result)
     return "Aynı dış referans yakalandı; ikinci talep oluşturulmadı." if result.duplicate
+    return "Gemini triyajı tamamlanamadı; güvenli varsayılanla yanıt yayınlanmadan insana devredildi." if result.agent_run.status == "failed"
 
     if result.agent_run.reply_published?
       "Agent talebi değerlendirdi ve bilgi tabanlı yanıtı yayınladı."

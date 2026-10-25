@@ -59,6 +59,37 @@ class AgentIntakeTest < ActiveSupport::TestCase
     assert_empty result.ticket.replies
   end
 
+  test "insan onayı isteyen bilgi maddesi otomatik yanıtı engeller" do
+    result = AgentWorkflow::Intake.call(params("agent-kb-human-001", category: "technical"), client: FakeClient.new({
+      priority: "normal", human_required: false, reason: "KB-03 hesap erişimi",
+      suggested_reply: "Erişim açıldı.", knowledge_ids: [ "KB-03" ]
+    }))
+
+    assert_equal "human_handoff", result.agent_run.decision
+    assert_empty result.ticket.replies
+  end
+
+  test "model çıktısındaki kişisel veriyi de maskeler" do
+    result = AgentWorkflow::Intake.call(params("agent-output-pii-001", category: "technical"), client: FakeClient.new({
+      priority: "normal", human_required: false, reason: "mert@example.com için KB-01",
+      suggested_reply: "0555 123 45 67 numarasını arayın.", knowledge_ids: [ "KB-01" ]
+    }))
+
+    refute_includes result.agent_run.reason, "mert@example.com"
+    refute_includes result.ticket.replies.first.body, "0555 123"
+    assert_includes result.ticket.replies.first.body, "[TELEFON MASKELENDİ]"
+  end
+
+  test "aşırı uzun agent girdisini modele göndermeden reddeder" do
+    client = Object.new
+    client.define_singleton_method(:response) { raise "Model çağrılmamalı" }
+    input = params("agent-too-long-001", category: "technical").merge(description: "a" * 4_001)
+
+    assert_no_difference("Ticket.count") do
+      assert_raises(ArgumentError) { AgentWorkflow::Intake.call(input, client:) }
+    end
+  end
+
   test "aynı dış referansı ikinci kez kayıt oluşturmaz" do
     input = params("agent-idempotent-001", category: "technical")
     client = FakeClient.new({ priority: "normal", human_required: true, reason: "İnsan gerekli", suggested_reply: "", knowledge_ids: [] })

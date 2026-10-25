@@ -19,13 +19,20 @@ module AgentWorkflow
       parsed = JSON.parse(raw.to_s.gsub(/\A```json\s*|\s*```\z/, ""))
       priority = parsed.fetch("priority")
       raise Ai::GeminiClient::Error, "Triyaj önceliği geçersiz." unless Ticket::PRIORITIES.include?(priority)
+      human_required = parsed.fetch("human_required")
+      unless [ true, false ].include?(human_required)
+        raise Ai::GeminiClient::Error, "Triyaj insan kararı geçersiz."
+      end
 
       ids = Array(parsed["knowledge_ids"]) & KnowledgeBase.ids
+      reason = Privacy::Redactor.call(parsed.fetch("reason")).strip.first(500)
+      raise Ai::GeminiClient::Error, "Triyaj gerekçesi boş olamaz." if reason.blank?
+
       Result.new(
         priority:,
-        human_required: parsed.fetch("human_required") == true,
-        reason: parsed.fetch("reason").to_s.first(500),
-        suggested_reply: parsed.fetch("suggested_reply", "").to_s.first(2_000),
+        human_required:,
+        reason:,
+        suggested_reply: Privacy::Redactor.call(parsed.fetch("suggested_reply", "")).first(2_000),
         knowledge_ids: ids
       )
     rescue JSON::ParserError, KeyError => error

@@ -25,6 +25,8 @@ class Ticket < ApplicationRecord
   validates :status, inclusion: { in: STATUSES }
   validates :origin, inclusion: { in: %w[web agent_api] }
   validates :agent_external_reference, uniqueness: true, allow_nil: true
+  validates :agent_external_reference, presence: true, if: -> { origin == "agent_api" }
+  validates :requester_reference, presence: true, if: :privacy_mode?
 
   scope :active, -> { where(status: %w[new open pending]) }
   scope :overdue, -> { active.where(first_responded_at: nil).where(sla_due_at: ...Time.current) }

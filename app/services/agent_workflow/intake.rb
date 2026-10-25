@@ -13,12 +13,16 @@ module AgentWorkflow
       if (existing = Ticket.find_by(agent_external_reference: reference))
         return Result.new(ticket: existing, agent_run: existing.agent_runs.order(:created_at).last, duplicate: true)
       end
+      subject = attributes.fetch(:subject).to_s.strip
+      description = attributes.fetch(:description).to_s.strip
+      raise ArgumentError, "Başlık 5-200 karakter olmalıdır." unless subject.length.between?(5, 200)
+      raise ArgumentError, "Açıklama 5-4000 karakter olmalıdır." unless description.length.between?(5, 4_000)
 
       Ticket.transaction do
         ticket = Tickets::Create.call(
           {
-            subject: Privacy::Redactor.call(attributes.fetch(:subject)),
-            description: Privacy::Redactor.call(attributes.fetch(:description)),
+            subject: Privacy::Redactor.call(subject),
+            description: Privacy::Redactor.call(description),
             requester_name: "Gizli müşteri",
             requester_email: "#{SecureRandom.uuid}@privacy.invalid",
             requester_reference:,
@@ -45,11 +49,17 @@ module AgentWorkflow
 
         code_requires_human = triage.human_required || triage.priority == "high" ||
                               !SAFE_AUTO_REPLY_CATEGORIES.include?(ticket.category) || triage.suggested_reply.blank? ||
-                              triage.knowledge_ids.empty?
+                              triage.knowledge_ids.empty? ||
+                              (triage.knowledge_ids - KnowledgeBase.auto_reply_ids).any?
         run = record_run(ticket, triage, code_requires_human)
         code_requires_human ? handoff(ticket, triage) : publish_reply(ticket, triage, run)
         Result.new(ticket:, agent_run: run.reload, duplicate: false)
       end
+    rescue ActiveRecord::RecordNotUnique => error
+      existing = Ticket.find_by(agent_external_reference: reference)
+      raise error unless existing
+
+      Result.new(ticket: existing, agent_run: existing.agent_runs.order(:created_at).last, duplicate: true)
     end
 
     def self.record_run(ticket, triage, human_required)
