@@ -37,9 +37,9 @@ class RagSimilarityTest < ActiveSupport::TestCase
     source = create_ticket(subject: "Ödeme sorunu", description: "Tahsilat görünmüyor")
     other = create_ticket(subject: "Başka ödeme", description: "Kart çekimi eksik", email: "b@example.com")
     failing_client = Object.new
-    failing_client.define_singleton_method(:embeddings) { |**| raise Ai::OpenaiClient::Error, "servis kullanılamıyor" }
+    failing_client.define_singleton_method(:embeddings) { |**| raise Ai::GeminiClient::Error, "servis kullanılamıyor" }
 
-    assert_raises(Ai::OpenaiClient::Error) do
+    assert_raises(Ai::GeminiClient::Error) do
       Tickets::RagSimilarity.call(source, candidates: Ticket.where(id: other.id), client: failing_client)
     end
     assert_equal "failed", source.ai_analyses.last.status

@@ -21,7 +21,7 @@ class TicketsController < ApplicationController
     candidates = Ticket.where.not(id: [ @ticket.id, *linked_ids ])
     Tickets::RagSimilarity.call(@ticket, candidates:)
     redirect_to @ticket, notice: "RAG analizi tamamlandı; sonuç insan incelemesine sunuldu."
-  rescue Ai::OpenaiClient::Error => error
+  rescue Ai::GeminiClient::Error => error
     redirect_to @ticket, alert: "RAG analizi çalıştırılamadı: #{error.message}"
   end
 

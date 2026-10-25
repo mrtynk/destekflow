@@ -11,7 +11,7 @@
     <p class="lead">Kelime tabanlı kanıtı korur; isteğe bağlı gerçek RAG analizi anlamca yakın kayıtları getirip açıklar. Hiçbir kayıt otomatik birleştirilmez.</p>
     <div class="ai-callout">
       <div><strong>AI analizi isteğe bağlıdır</strong><p>Yalnız başlık ve açıklama gönderilir; ad ve e-posta modele gönderilmez. Son karar insandadır.</p></div>
-      <% if Ai::OpenaiClient.configured? %>
+      <% if Ai::GeminiClient.configured? %>
         <%= button_to "RAG analizi çalıştır", analyze_with_rag_ticket_path(@ticket), class: "button ai-button" %>
       <% else %>
         <span class="config-badge">API anahtarı yapılandırılmadı</span>

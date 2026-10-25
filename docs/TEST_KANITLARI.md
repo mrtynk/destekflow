@@ -96,10 +96,11 @@ Windows libvips kurulumu uygulamanın kullanmadığı HEIF/JXL/Imagemagick/OpenS
 
 ## RAG ve arayüz yenilemesi — 25 Ekim 2026
 
-- Tam Rails paketi: `40 runs, 176 assertions, 0 failures, 0 errors, 0 skips`.
+- Gemini dönüşümü sonrası tam Rails paketi: `42 runs, 178 assertions, 0 failures, 0 errors, 0 skips`.
 - Sahte API istemcili RAG testi gerçek orkestrasyonu doğrular: embedding sırası, cosine retrieval, eşik/ilk üç seçimi, getirilen kaydın üretim bağlamına verilmesi ve `AiAnalysis` denetim kaydı.
 - Gizlilik testi, aday e-posta adresinin embedding girdisine ve üretim girdisine eklenmediğini doğrular.
 - Hata testi, API hatasının başarılı sonuç gibi gösterilmediğini ve `failed` denetim kaydı oluşturduğunu doğrular.
 - Anahtarsız controller testi, isteğin kullanıcıya hata dönerek güvenli kapanmasını doğrular.
+- Gemini istemci testleri anahtarsız fail-closed davranışını ve model adına URL parçası enjekte edilmesinin reddedildiğini doğrular.
 - Yerel masaüstü tarayıcı incelemesinde ana ekran, metrik kartları, filtreler, SLA asistanı ve talep detay düzeni yatay taşma olmadan görüntülendi.
-- Gerçek OpenAI ağına çağrı yapılmadı; ücretli/gizli anahtar kullanılmadı. Bu nedenle gerçek model kalitesi ve canlı Render RAG akışı henüz doğrulanmadı.
+- Gerçek Gemini ağına çağrı yapılmadı; gizli anahtar kullanılmadı. Bu nedenle gerçek model kalitesi ve canlı Render RAG akışı henüz doğrulanmadı.

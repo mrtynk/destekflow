@@ -3,8 +3,8 @@ module Tickets
     Result = Data.define(:analysis, :matches)
     Match = Data.define(:ticket, :score)
 
-    EMBEDDING_MODEL = ENV.fetch("RAG_EMBEDDING_MODEL", "text-embedding-3-small")
-    GENERATION_MODEL = ENV.fetch("RAG_GENERATION_MODEL", "gpt-6-luna")
+    EMBEDDING_MODEL = ENV.fetch("RAG_EMBEDDING_MODEL", "gemini-embedding-2")
+    GENERATION_MODEL = ENV.fetch("RAG_GENERATION_MODEL", "gemini-3.8-flash")
     MAX_CANDIDATES = 40
     TOP_K = 3
     MINIMUM_SCORE = 0.45
@@ -20,8 +20,8 @@ module Tickets
     end
 
     def call
-      @client ||= Ai::OpenaiClient.new
-      raise Ai::OpenaiClient::Error, "Karşılaştırılacak başka talep yok." if candidates.empty?
+      @client ||= Ai::GeminiClient.new
+      raise Ai::GeminiClient::Error, "Karşılaştırılacak başka talep yok." if candidates.empty?
 
       vectors = client.embeddings(inputs: [ text_for(ticket), *candidates.map { |item| text_for(item) } ], model: EMBEDDING_MODEL)
       source_vector = vectors.shift
@@ -32,16 +32,16 @@ module Tickets
       answer = matches.empty? ? "Anlamsal eşik üzerinde benzer bir talep bulunamadı." : generate_answer(matches)
       analysis = ticket.ai_analyses.create!(
         status: "completed",
-        provider: "OpenAI",
+        provider: "Google Gemini",
         embedding_model: EMBEDDING_MODEL,
         generation_model: GENERATION_MODEL,
         retrieval_evidence: matches.map { |match| { ticket_id: match.ticket.id, score: match.score.round(4) } },
         answer:
       )
       Result.new(analysis:, matches:)
-    rescue Ai::OpenaiClient::Error => error
+    rescue Ai::GeminiClient::Error => error
       ticket.ai_analyses.create!(
-        status: "failed", provider: "OpenAI", embedding_model: EMBEDDING_MODEL,
+        status: "failed", provider: "Google Gemini", embedding_model: EMBEDDING_MODEL,
         generation_model: GENERATION_MODEL, answer: nil, error_code: error.message.first(180)
       )
       raise
@@ -67,7 +67,7 @@ module Tickets
     end
 
     def cosine_similarity(left, right)
-      raise Ai::OpenaiClient::Error, "Embedding boyutları uyuşmuyor." unless left.length == right.length && left.any?
+      raise Ai::GeminiClient::Error, "Embedding boyutları uyuşmuyor." unless left.length == right.length && left.any?
 
       dot = left.zip(right).sum { |a, b| a.to_f * b.to_f }
       magnitude = Math.sqrt(left.sum { |value| value.to_f**2 }) * Math.sqrt(right.sum { |value| value.to_f**2 })

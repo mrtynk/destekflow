@@ -44,12 +44,12 @@ class TicketsControllerTest < ActionDispatch::IntegrationTest
     first = Tickets::Create.call({ subject: "Ödeme sorunu", description: "Kartımdan iki kez çekildi", requester_name: "A", requester_email: "a@example.com", category: "billing", priority: "high" })
     Tickets::Create.call({ subject: "Çift tahsilat", description: "Karttan mükerrer çekim", requester_name: "B", requester_email: "b@example.com", category: "billing", priority: "normal" })
 
-    previous_key = ENV.delete("OPENAI_API_KEY")
+    previous_key = ENV.delete("GEMINI_API_KEY")
     assert_difference("AiAnalysis.count", 1) { post analyze_with_rag_ticket_path(first) }
     assert_redirected_to ticket_path(first)
     assert_equal "failed", first.ai_analyses.last.status
   ensure
-    ENV["OPENAI_API_KEY"] = previous_key if previous_key
+    ENV["GEMINI_API_KEY"] = previous_key if previous_key
   end
 
   test "başka talebe ait ilişki idsiyle geri alma reddedilir" do

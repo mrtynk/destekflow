@@ -61,13 +61,13 @@ DestekFlow başlık ve açıklamaları Türkçe karakterleri normalleştiren det
 
 Yerel ve açıklanabilir yedek yaklaşım hâlâ küçük veri kümeli Jaccard sözcük benzerliğidir; anlam veya kimlik doğrulamaz, eş anlamlılarda yanlış negatif ve genel terimlerde yanlış pozitif üretebilir. Bunun üzerine isteğe bağlı gerçek RAG katmanı eklenmiştir:
 
-1. İncelenen talep ile en fazla 40 adayın yalnız başlık/açıklaması `text-embedding-3-small` ile vektörleştirilir.
+1. İncelenen talep ile en fazla 40 adayın yalnız başlık/açıklaması `gemini-embedding-2` ile vektörleştirilir.
 2. Cosine similarity ile eşik üzerindeki en yakın üç kayıt getirilir.
-3. Getirilen kayıtlar güncel, düşük maliyetli `gpt-6-luna` için sınırlı kanıt bağlamı olur; model benzerlik ve farkı Türkçe açıklar.
+3. Getirilen kayıtlar ücretsiz katmanı bulunan `gemini-3.8-flash` için sınırlı kanıt bağlamı olur; model benzerlik ve farkı Türkçe açıklar.
 4. Kullanıcı adı/e-posta modele gönderilmez. Model kritik işlem veya otomatik ilişkilendirme yapamaz; bağlantı kararı insandadır.
 5. Model adı, retrieval kayıtları/skorları, sonuç veya hata `AiAnalysis` kaydında denetlenebilir biçimde tutulur; API anahtarı tutulmaz.
 
-`OPENAI_API_KEY` yoksa arayüz “API anahtarı yapılandırılmadı” der ve RAG'ı çalışıyor gibi göstermez; kelime tabanlı açıklanabilir öneri kullanılmaya devam eder. Resmî OpenAI belgeleri embedding'leri metinler arası yakınlık için sayısal gösterim olarak tanımlar ve ilgili uç noktaları belgeler: [Embeddings rehberi](https://developers.openai.com/api/docs/guides/embeddings), [Responses API](https://developers.openai.com/api/reference/resources/responses/methods/create).
+`GEMINI_API_KEY` yoksa arayüz “API anahtarı yapılandırılmadı” der ve RAG'ı çalışıyor gibi göstermez; kelime tabanlı açıklanabilir öneri kullanılmaya devam eder. Google'ın resmî Gemini belgeleri embedding'lerin RAG ve anlamsal arama kullanımını, batch embedding uç noktasını ve metin üretimini açıklar: [Embeddings](https://ai.google.dev/gemini-api/docs/embeddings), [metin üretimi](https://ai.google.dev/gemini-api/docs/text-generation?lang=rest), [ücretsiz katman](https://ai.google.dev/gemini-api/docs/pricing).
 
 Sınırlar: RAG sonucu da kimlik doğrulamaz ve kesin mükerrer kararı değildir. Otomatik birleştirme yapmaz. Site geneli Basic koruma gerçek kullanıcı/RBAC değildir; gerçek kişisel veriyle kullanıma uygun değildir. Mevcut canlı `e8bca94` sürümünde RAG bulunmaz; yeni kod güvenli anahtar yapılandırması ve gerçek canlı çağrı doğrulanmadan “canlı AI” olarak sunulmaz.
 
@@ -175,7 +175,7 @@ Canlı dağıtım 15 Ekim 2026 tarihinde Rails 8.1.4 ve Ruby 3.4.7 ile başarıy
 - Ücretsiz Render planında cron hizmeti bulunmadığından 48 saatlik otomatik kapanış canlıda zamanlanmamıştır; job ve davranışı testlerde doğrulanmıştır.
 - Ücretsiz Render web servisi hareketsizlikte uyur ve ilk isteği geciktirebilir. Ücretsiz PostgreSQL veritabanı Render'ın süre ve saklama sınırlarına tabidir.
 - Gerçek kullanıcı hesabı ve rol yetkilendirmesi yoktur. Production demosu site geneli HTTP Basic ile sınırlandırılır; bu koruma gerçek çok kullanıcılı auth/RBAC yerine geçmez. Gerçek müşteri verisi kullanılmamalıdır.
-- RAG katmanı yerelde sahte istemciyle doğrulanmıştır; mevcut canlı `e8bca94` sürümünde bulunmaz. Gerçek OpenAI API anahtarı Render secret olarak yapılandırılıp canlı çağrı doğrulanana kadar “canlı RAG” iddiası yoktur.
+- RAG katmanı yerelde sahte istemciyle doğrulanmıştır; mevcut canlı `e8bca94` sürümünde bulunmaz. Gemini API anahtarı Render secret olarak yapılandırılıp gerçek canlı çağrı doğrulanana kadar “canlı RAG” iddiası yoktur. Ücretsiz Gemini katmanında gönderilen içerik sağlayıcının ürün geliştirmesinde kullanılabildiğinden yalnız sahte demo verisi gönderilmelidir.
 - Onay/eskalasyon sürümünde gerçek zamanlayıcı yoktur; 30 dakika taraması yetkili demo ekranından manuel servis çağrısıyla gösterilir. Bu sürüm Render'a deploy edilmemiştir.
 - Fortune 500'ün 500 satırı incelendi; 28 satırda Market Value boş olduğu için min–max 472 sayısal şirketi kapsar. Özel/boş şirketlere tahmini değer atanmadı; sonuç tüm 500 şirketin eksiksiz değerleme aralığı değildir.
 - Ders materyali G2, G3 ve G4 belgelerinin resmî tanımını vermiyor. Dosyalar bunu açıkça belirterek ödevin doğrulanabilir isterlerine dayalı öneri içerikleri sunuyor; bunlar hocanın resmî tanımı diye gösterilmiyor.
