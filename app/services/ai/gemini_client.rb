@@ -30,11 +30,15 @@ module Ai
       requests = inputs.map do |input|
         {
           model: "models/#{model}",
-          content: { parts: [ { text: "Anlamsal destek talebi benzerliği için: #{input}" } ] }
+          content: { parts: [ { text: "Anlamsal destek talebi benzerliği için: #{input}" } ] },
+          taskType: "SEMANTIC_SIMILARITY",
+          outputDimensionality: 768
         }
       end
       response = post(model, "batchEmbedContents", requests:)
       response.fetch("embeddings").map { |embedding| embedding.fetch("values") }
+    rescue Error => error
+      raise Error, "Embedding aşaması: #{error.message}"
     end
 
     def response(input:, instructions:, model:)
@@ -43,10 +47,15 @@ module Ai
         "generateContent",
         system_instruction: { parts: [ { text: instructions } ] },
         contents: [ { role: "user", parts: [ { text: input } ] } ],
-        generationConfig: { maxOutputTokens: 220, temperature: 0.2 }
+        generationConfig: {
+          maxOutputTokens: 220,
+          thinkingConfig: { thinkingLevel: "low" }
+        }
       )
       payload.fetch("candidates").first.fetch("content").fetch("parts").filter_map { |part| part["text"] }.join("\n").presence ||
         raise(Error, "Gemini boş yanıt döndürdü.")
+    rescue Error => error
+      raise Error, "Üretim aşaması: #{error.message}"
     end
 
     private

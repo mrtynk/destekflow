@@ -8,9 +8,11 @@ class GeminiClientTest < ActiveSupport::TestCase
   test "model adına url parçası enjekte edilmesini reddeder" do
     client = Ai::GeminiClient.new(api_key: "sahte-test-anahtari")
 
-    assert_raises(Ai::GeminiClient::Error) do
+    error = assert_raises(Ai::GeminiClient::Error) do
       client.response(input: "test", instructions: "test", model: "gemini/../../yanlis")
     end
+
+    assert_match "Üretim aşaması", error.message
   end
 
   test "uzun model yanıtları için bağlantı ve okuma zaman aşımını ayırır" do
