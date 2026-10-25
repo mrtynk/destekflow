@@ -61,7 +61,7 @@ DestekFlow başlık ve açıklamaları Türkçe karakterleri normalleştiren det
 
 Yerel ve açıklanabilir yedek yaklaşım hâlâ küçük veri kümeli Jaccard sözcük benzerliğidir; anlam veya kimlik doğrulamaz, eş anlamlılarda yanlış negatif ve genel terimlerde yanlış pozitif üretebilir. Bunun üzerine isteğe bağlı gerçek RAG katmanı eklenmiştir:
 
-1. İncelenen talep ile en fazla 40 adayın yalnız başlık/açıklaması `gemini-embedding-2` ile vektörleştirilir.
+1. İncelenen talep ile en fazla 12 adayın yalnız başlık/açıklaması `gemini-embedding-2` ile vektörleştirilir.
 2. Cosine similarity ile eşik üzerindeki en yakın üç kayıt getirilir.
 3. Getirilen kayıtlar düşük gecikmeli `gemini-3.5-flash-lite` için sınırlı kanıt bağlamı olur; model benzerlik ve farkı Türkçe açıklar.
 4. Kullanıcı adı/e-posta modele gönderilmez. Model kritik işlem veya otomatik ilişkilendirme yapamaz; bağlantı kararı insandadır.
@@ -69,7 +69,7 @@ Yerel ve açıklanabilir yedek yaklaşım hâlâ küçük veri kümeli Jaccard s
 
 `GEMINI_API_KEY` yoksa arayüz “API anahtarı yapılandırılmadı” der ve RAG'ı çalışıyor gibi göstermez; kelime tabanlı açıklanabilir öneri kullanılmaya devam eder. Google'ın resmî Gemini belgeleri embedding'lerin RAG ve anlamsal arama kullanımını, batch embedding uç noktasını ve metin üretimini açıklar: [Embeddings](https://ai.google.dev/gemini-api/docs/embeddings), [metin üretimi](https://ai.google.dev/gemini-api/docs/text-generation?lang=rest), [ücretsiz katman](https://ai.google.dev/gemini-api/docs/pricing).
 
-Sınırlar: RAG sonucu da kimlik doğrulamaz ve kesin mükerrer kararı değildir. Otomatik birleştirme yapmaz. Site geneli Basic koruma gerçek kullanıcı/RBAC değildir; gerçek kişisel veriyle kullanıma uygun değildir. Mevcut canlı `e8bca94` sürümünde RAG bulunmaz; yeni kod güvenli anahtar yapılandırması ve gerçek canlı çağrı doğrulanmadan “canlı AI” olarak sunulmaz.
+Sınırlar: RAG sonucu da kimlik doğrulamaz ve kesin mükerrer kararı değildir. Otomatik birleştirme yapmaz. Site geneli Basic koruma gerçek kullanıcı/RBAC değildir; gerçek kişisel veriyle kullanıma uygun değildir. Canlı `3de863c` sürümünde yalnız sahte demo verisiyle gerçek Gemini çağrısı doğrulanmıştır; bu doğrulama gerçek müşteri verisiyle kullanıma onay anlamına gelmez.
 
 ## Onay ve Eskalasyon Merkezi — agent-first, human-in-the-loop
 
@@ -147,7 +147,7 @@ bin/rails zeitwerk:check
 
 15 Ekim 2026 yeni özellik sonrası yerel sonucu: **18 test, 77 assertion, 0 failure, 0 error**. Benzerlik, farklı e-posta, ilgisiz kayıt, deterministik puan, ilişkilendirme/geri alma, yinelenen ilişki, işlem geçmişi ve SLA/durum korunumu kapsanır. Özellik commit'inin [GitHub Actions koşusu 38773363080](https://github.com/mrtynk/destekflow/actions/runs/38773363080) içindeki test, system-test, lint ve güvenlik job'larının tamamı geçti. Ayrıntılar [docs/TEST_KANITLARI.md](docs/TEST_KANITLARI.md) dosyasındadır.
 
-25 Ekim 2026 yayın öncesi son koşu yerelde **37 test, 158 assertion, 0 failure, 0 error** sonucu verdi. Oluşturma, onaylama, reddetme, yasak geçiş, 30 dakika sınırı, idempotent eskalasyon, eşzamanlı çift karar, agent API doğrulama/yetkilendirme ve token filtreleme, production demo erişiminin fail-closed davranışı ve eski testlerin regresyonu kapsanır. Production asset build başarılıdır. RuboCop 66 dosyada ihlal bulmadı; Brakeman 0 güvenlik uyarısı, Bundler Audit ve importmap audit 0 açık, Zeitwerk `All is good!` sonucu verdi. Sistem testi görevi çalıştı ancak projede sistem test dosyası bulunmadığı için `0 runs` raporladı. Bu çalışma henüz push/deploy edilmedi; CI ve canlı kanıt olarak sunulmaz.
+25 Ekim 2026 son GitHub Actions koşusu **45 test, 190 assertion, 0 failure, 0 error** sonucu verdi. Oluşturma, onaylama, reddetme, yasak geçiş, 30 dakika sınırı, idempotent eskalasyon, eşzamanlı çift karar, agent API doğrulama/yetkilendirme, RAG orkestrasyonu ve HTTP istemcisi regresyonu ile eski akışlar kapsanır. Aynı [CI koşusunda](https://github.com/mrtynk/destekflow/actions/runs/40199897119) test, system-test, lint, Ruby ve JavaScript güvenlik işlerinin tamamı geçti.
 
 ## Deploy
 
@@ -156,6 +156,8 @@ bin/rails zeitwerk:check
 Canlı dağıtım 15 Ekim 2026 tarihinde Rails 8.1.4 ve Ruby 3.4.7 ile başarıyla açıldı. `/up` sağlık kontrolü HTTP 200 döndürdü. Canlı ortamda #2 numaralı yüksek öncelikli talep oluşturuldu, Mehmet Kaya'ya atandı, yanıtlandı, çözüldü ve beş işlem geçmişi kaydı doğrulandı. Akıllı SLA Öncelik Asistanı açık yüksek öncelikli talebi ilk sırada, kalan ilk yanıt süresi ve gerekçesiyle gösterdi.
 
 16 Ekim 2026'da `e373bb7` Render'a manuel deploy edildi; PostgreSQL `CreateTicketLinks` migrationı ve idempotent sahte seed başarılı oldu. `/up` HTTP 200 döndürdü. Canlı #4/#5 farklı `.example` e-postalı taleplerde %73 puan ve sekiz ortak terim görüldü; ilişki kuruldu, iki detayda da ayrı kayıt/durum/SLA korundu, ilişki geri alındı ve her iki olay geçmişte doğrulandı. Eski #2 oluştur–ata–yanıtla–çöz akışı ve beş olay da yeni deploy altında aynen görüntülendi.
+
+25 Ekim 2026'da `3de863c` Render'a manuel deploy edildi. `GEMINI_API_KEY` secret olarak, üretim modeli `gemini-3.5-flash-lite` olarak yapılandırıldı. Sahte demo talebinde canlı RAG çağrısı tamamlandı; #9 (%94), #11 (%86) ve #8 (%79) kanıt kayıtları getirildi, Türkçe benzerlik/fark açıklaması üretildi ve nihai kararın insanda olduğu açıkça belirtildi.
 
 ## Belgeler
 
@@ -175,8 +177,8 @@ Canlı dağıtım 15 Ekim 2026 tarihinde Rails 8.1.4 ve Ruby 3.4.7 ile başarıy
 - Ücretsiz Render planında cron hizmeti bulunmadığından 48 saatlik otomatik kapanış canlıda zamanlanmamıştır; job ve davranışı testlerde doğrulanmıştır.
 - Ücretsiz Render web servisi hareketsizlikte uyur ve ilk isteği geciktirebilir. Ücretsiz PostgreSQL veritabanı Render'ın süre ve saklama sınırlarına tabidir.
 - Gerçek kullanıcı hesabı ve rol yetkilendirmesi yoktur. Production demosu site geneli HTTP Basic ile sınırlandırılır; bu koruma gerçek çok kullanıcılı auth/RBAC yerine geçmez. Gerçek müşteri verisi kullanılmamalıdır.
-- RAG katmanı yerelde sahte istemciyle doğrulanmıştır; mevcut canlı `e8bca94` sürümünde bulunmaz. Gemini API anahtarı Render secret olarak yapılandırılıp gerçek canlı çağrı doğrulanana kadar “canlı RAG” iddiası yoktur. Ücretsiz Gemini katmanında gönderilen içerik sağlayıcının ürün geliştirmesinde kullanılabildiğinden yalnız sahte demo verisi gönderilmelidir.
-- Onay/eskalasyon sürümünde gerçek zamanlayıcı yoktur; 30 dakika taraması yetkili demo ekranından manuel servis çağrısıyla gösterilir. Bu sürüm Render'a deploy edilmemiştir.
+- RAG canlıda yalnız sahte demo verisiyle doğrulanmıştır. Ücretsiz Gemini katmanında gönderilen içerik sağlayıcının ürün geliştirmesinde kullanılabildiğinden gerçek müşteri veya kişisel veri gönderilmemelidir.
+- Onay/eskalasyon sürümünde gerçek zamanlayıcı yoktur; 30 dakika taraması yetkili demo ekranından manuel servis çağrısıyla gösterilir. Canlı DEMO-B kaydı 30 dakikadan eski olduktan sonra eskale edilmiştir; bu, cron bulunduğu anlamına gelmez.
 - Fortune 500'ün 500 satırı incelendi; 28 satırda Market Value boş olduğu için min–max 472 sayısal şirketi kapsar. Özel/boş şirketlere tahmini değer atanmadı; sonuç tüm 500 şirketin eksiksiz değerleme aralığı değildir.
 - Ders materyali G2, G3 ve G4 belgelerinin resmî tanımını vermiyor. Dosyalar bunu açıkça belirterek ödevin doğrulanabilir isterlerine dayalı öneri içerikleri sunuyor; bunlar hocanın resmî tanımı diye gösterilmiyor.
 - Windows Ruby kurulumunda kullanılmayan libvips eklentileri için uyarılar var; test sonucunu etkilemiyor.

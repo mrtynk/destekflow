@@ -5,4 +5,4 @@
 - Fortune 500'ün 500 satırı elde edildi; 472 sayısal `Market Value` analiz edildi. Kalan 28 satır boş olduğundan tahmin edilmedi. Bu nedenle sonuç bütün 500 şirketin eksiksiz “şirket değerlemesi” değil, yayımlanan özsermaye piyasa değerlerinin min–max'ıdır; gelir veya enterprise value ile karıştırılmaz.
 - Sağlanan materyaller G2, G3 ve G4'ün gerçek tanımlarını vermiyor.
 - Canlı demo site geneli HTTP Basic ile korunur; ancak gerçek kullanıcı hesabı ve rol tabanlı yetkilendirme yoktur. Bu koruma çok kullanıcılı auth/RBAC yerine geçmez; gerçek müşteri veya kişisel veriyle kullanım uygun değildir.
-- Gemini RAG kodu ve sahte istemcili testleri yerelde tamamlandı. `GEMINI_API_KEY` güvenli biçimde yapılandırılıp gerçek API çağrısı canlıda doğrulanmadan özellik “canlı AI” olarak sunulamaz; mevcut canlı `e8bca94` sürümünde RAG yoktur. Ücretsiz katman gerçek kişisel veriye uygun kabul edilmez.
+- Gemini RAG, canlı `3de863c` sürümünde sahte demo verisiyle gerçek API çağrısı üzerinden doğrulandı. Buna rağmen ücretsiz katman gerçek kişisel veriye uygun kabul edilmez; model sonucu kesin mükerrer kararı değildir ve otomatik işlem yapmaz.

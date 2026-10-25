@@ -103,4 +103,15 @@ Windows libvips kurulumu uygulamanın kullanmadığı HEIF/JXL/Imagemagick/OpenS
 - Anahtarsız controller testi, isteğin kullanıcıya hata dönerek güvenli kapanmasını doğrular.
 - Gemini istemci testleri anahtarsız fail-closed davranışını ve model adına URL parçası enjekte edilmesinin reddedildiğini doğrular.
 - Yerel masaüstü tarayıcı incelemesinde ana ekran, metrik kartları, filtreler, SLA asistanı ve talep detay düzeni yatay taşma olmadan görüntülendi.
-- Gerçek Gemini ağına çağrı yapılmadı; gizli anahtar kullanılmadı. Bu nedenle gerçek model kalitesi ve canlı Render RAG akışı henüz doğrulanmadı.
+- Son CI: [40199897119](https://github.com/mrtynk/destekflow/actions/runs/40199897119), commit `3de863c`; `45 runs, 190 assertions, 0 failures, 0 errors, 0 skips`. Test, system-test, lint, Ruby ve JavaScript güvenlik işlerinin tamamı başarılıdır.
+- Render kaynak commit'i `3de863c` olarak manuel deploy edildi. Secret değerleri kanıta veya Git geçmişine yazılmadı.
+- Canlı sahte demo talebinde gerçek Gemini çağrısı tamamlandı. Sonuç #9'u %94, #11'i %86 ve #8'i %79 anlamsal skorla getirdi; Türkçe açıklama benzerlik/farkı belirtti ve nihai kararın insanda olduğunu açıkça korudu.
+- İlk canlı denemelerde üretim aşamasında `Net::ReadTimeout` ve geçici HTTP 503 gözlendi. İstek küçültüldü, düşünme düzeyi düşürüldü, geçici durumlara sınırlı retry eklendi ve üretim modeli `gemini-3.5-flash-lite` olarak yapılandırıldı. Başarılı son çağrı önceki hataları gizlemez.
+- Bu kanıt yalnız sahte veriyi kapsar; gerçek müşteri verisi gönderilmedi. Sonuç otomatik ilişkilendirme veya kritik aksiyon gerçekleştirmedi.
+
+### Canlı onay ve eskalasyon demo kanıtı — 25 Ekim 2026
+
+- DEMO-A insan tarafından onaylandı; onay kaydında iki denetim olayı görüntülendi.
+- DEMO-R insan tarafından reddedildi; onay kaydında iki denetim olayı görüntülendi.
+- DEMO-B gerçek zamanla 30 dakikadan eski duruma geldikten sonra manuel taramayla eskale edildi; kuyrukta `Eskale edilen (1)` görüldü. Gerçek cron/worker bulunduğu iddia edilmez.
+- Kullanıcı DEMO-B akışının tamamlandığını bildirdi. İkinci tarama sayacı ve eskalasyon sonrası nihai karar ayrı ekran kanıtıyla aktarılmadığından bu iki ayrıntı canlıda ayrıca doğrulanmış sayılmaz; davranış otomatik testlerde kapsanır.

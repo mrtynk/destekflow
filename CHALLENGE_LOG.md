@@ -33,18 +33,18 @@ Bir talebe gerekçeli onay isteği eklemek; 30 dakika bekleyen isteği idempoten
 - Yayın öncesi yerel tam paket: `37 runs, 158 assertions, 0 failures, 0 errors, 0 skips`.
 - RuboCop: 66 dosya, 0 ihlal. Brakeman: 0 uyarı. Bundler Audit ve importmap audit: güvenlik açığı yok. Zeitwerk: `All is good!`. Production asset build başarılıdır.
 - Bundler Audit'in ilk koşuda bulduğu `crass 1.0.7` CSS sanitizer açığı `1.0.8` sürümüne güncellenerek kapatıldı ve denetim tekrarlandı.
-- Çalışan uygulama ve test değişiklikleri yerel `6efedbd` (`Onay ve eskalasyon merkezini ekle`) commit'inde tutulur. Commit henüz remote'a gönderilmediği için GitHub bağlantısı varmış gibi verilmez.
+- Çalışan uygulama ve test değişiklikleri [`6efedbd`](https://github.com/mrtynk/destekflow/commit/6efedbd) (`Onay ve eskalasyon merkezini ekle`) commit'inde başladı; güvenlik ve yayın düzeltmeleri sonraki commitlerde korunmuştur.
 - Yayın öncesi denetimde kimlik doğrulamasız web karar uçları ve zayıf agent tokenı riski bulundu. Site geneli fail-closed HTTP Basic, en az 32 bayt agent tokenı ve erişim testleri yerel `8b2c879` (`Demo ve agent erisimini fail closed koru`) commit'inde düzeltildi.
 
-Bu çalışma için henüz GitHub Actions veya Render demo kanıtı yoktur; açık izin olmadan push/deploy yapılmayacaktır. Yerel doğrulamalar Ruby 3.4.7 çalıştırıcısıyla tamamlanmıştır. Sistem testi komutu başarılı çıkış vermiş ancak projede sistem test dosyası olmadığı için `0 runs` raporlamıştır.
+Son doğrulanan GitHub Actions koşusu [40199897119](https://github.com/mrtynk/destekflow/actions/runs/40199897119) olup commit `3de863c` için `45 runs, 190 assertions, 0 failures, 0 errors` ve tüm lint/güvenlik işlerinde başarı verdi. Aynı commit Render'da canlıdır. DEMO-A onay, DEMO-R ret ve 30 dakikadan eski DEMO-B manuel eskalasyon akışları sahte verilerle gözlendi. Canlı RAG çağrısı #9, #11 ve #8 kayıtlarını sırasıyla %94, %86 ve %79 skorla getirip nihai kararı insanda bıraktı.
 
 Yapılamayanlar:
 
 - Gerçek kullanıcı hesabı ve rol tabanlı yetkilendirme yoktur. Kontrollü yayın yalnız site geneli HTTP Basic demo korumasıyla yapılabilir.
 - Gerçek cron/worker ile otomatik 30 dakika taraması yoktur; manuel demo çağrısı vardır.
-- Gerçek LLM entegrasyonu yoktur; açıkça kural tabanlı demo agent kullanılır.
+- İç onay agentı hâlâ kural tabanlıdır ve LLM diye sunulmaz. Ayrı RAG benzerlik katmanı gerçek Google Gemini çağrısı yapar; kritik işlem gerçekleştirmez.
 - İnsan ve agent süreleri ölçülmedi; süre uydurulmadı.
-- Bu sürüm Render'da doğrulanmadı ve canlı özellik olarak sunulamaz.
+- Agent API'nin doğru tokenla pozitif canlı çağrısı güvenli secret erişimi olmadan ayrıca doğrulanmadı; negatif erişim kontrolleri korunur.
 
 ## Zaman
 
