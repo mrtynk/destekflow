@@ -17,5 +17,12 @@ module AgentWorkflow
     def self.auto_reply_ids
       ARTICLES.select { |article| article[:auto_reply] }.pluck(:id)
     end
+
+    def self.auto_reply_for(ids)
+      articles = ARTICLES.select { |article| ids.include?(article[:id]) && article[:auto_reply] }
+      raise ArgumentError, "Otomatik yanıta uygun bilgi tabanı kanıtı yok." if articles.empty?
+
+      articles.map { |article| article[:body] }.join("\n\n")
+    end
   end
 end

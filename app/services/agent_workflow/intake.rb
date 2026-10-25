@@ -47,12 +47,10 @@ module AgentWorkflow
         end
         ticket.update!(priority: triage.priority, sla_due_at: Sla::DeadlineCalculator.call(priority: triage.priority))
 
-        code_requires_human = triage.human_required || triage.priority == "high" ||
-                              !SAFE_AUTO_REPLY_CATEGORIES.include?(ticket.category) || triage.suggested_reply.blank? ||
-                              triage.knowledge_ids.empty? ||
-                              (triage.knowledge_ids - KnowledgeBase.auto_reply_ids).any?
-        run = record_run(ticket, triage, code_requires_human)
-        code_requires_human ? handoff(ticket, triage) : publish_reply(ticket, triage, run)
+        guardrail_reasons = guardrail_reasons(ticket, triage)
+        code_requires_human = guardrail_reasons.any?
+        run = record_run(ticket, triage, guardrail_reasons)
+        code_requires_human ? handoff(ticket, run.reason) : publish_reply(ticket, triage, run)
         Result.new(ticket:, agent_run: run.reload, duplicate: false)
       end
     rescue ActiveRecord::RecordNotUnique => error
@@ -62,24 +60,38 @@ module AgentWorkflow
       Result.new(ticket: existing, agent_run: existing.agent_runs.order(:created_at).last, duplicate: true)
     end
 
-    def self.record_run(ticket, triage, human_required)
+    def self.guardrail_reasons(ticket, triage)
+      reasons = []
+      reasons << "model insan incelemesi istedi" if triage.human_required
+      reasons << "yüksek öncelik" if triage.priority == "high"
+      reasons << "kategori otomatik yanıta kapalı" unless SAFE_AUTO_REPLY_CATEGORIES.include?(ticket.category)
+      reasons << "bilgi tabanı kanıtı yok" if triage.knowledge_ids.empty?
+      reasons << "kanıt insan onayı gerektiriyor" if (triage.knowledge_ids - KnowledgeBase.auto_reply_ids).any?
+      reasons.concat(RiskPolicy.reasons(subject: ticket.subject, description: ticket.description))
+      reasons.uniq
+    end
+    private_class_method :guardrail_reasons
+
+    def self.record_run(ticket, triage, guardrail_reasons)
+      reason = triage.reason
+      reason = "#{reason} Kod güvenlik kapısı: #{guardrail_reasons.join(', ')}." if guardrail_reasons.any?
       ticket.agent_runs.create!(
         status: "completed", provider: "Google Gemini", model: Triage::MODEL,
-        decision: human_required ? "human_handoff" : "auto_reply", reason: triage.reason,
+        decision: guardrail_reasons.any? ? "human_handoff" : "auto_reply", reason:,
         suggested_reply: triage.suggested_reply, knowledge_evidence: triage.knowledge_ids
       )
     end
     private_class_method :record_run
 
-    def self.handoff(ticket, triage)
-      ticket.ticket_events.create!(event_type: "agent_handoff", actor_name: "DestekFlow güvenlik katmanı", details: "AI önerisi yayınlanmadı; insan incelemesi gerekiyor. Gerekçe: #{triage.reason}")
+    def self.handoff(ticket, reason)
+      ticket.ticket_events.create!(event_type: "agent_handoff", actor_name: "DestekFlow güvenlik katmanı", details: "AI önerisi yayınlanmadı; insan incelemesi gerekiyor. Gerekçe: #{reason}")
     end
     private_class_method :handoff
 
     def self.publish_reply(ticket, triage, run)
       agent = Agent.find_or_create_by!(email: "ai-agent@destekflow.invalid") { |record| record.name = "DestekFlow AI Agent" }
       Tickets::Assign.call(ticket:, agent:, actor_name: "Agent orkestrasyonu")
-      Tickets::Reply.call(ticket:, agent:, body: triage.suggested_reply)
+      Tickets::Reply.call(ticket:, agent:, body: KnowledgeBase.auto_reply_for(triage.knowledge_ids))
       run.update!(reply_published: true)
     end
     private_class_method :publish_reply
