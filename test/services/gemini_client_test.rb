@@ -21,4 +21,11 @@ class GeminiClientTest < ActiveSupport::TestCase
     assert_equal 10, client.instance_variable_get(:@open_timeout)
     assert_equal 60, client.instance_variable_get(:@read_timeout)
   end
+
+  test "yalnız geçici HTTP durumlarını sınırlı sayıda yeniden dener" do
+    assert_equal 3, Ai::GeminiClient::MAX_ATTEMPTS
+    assert_includes Ai::GeminiClient::RETRYABLE_STATUS_CODES, "503"
+    refute_includes Ai::GeminiClient::RETRYABLE_STATUS_CODES, "400"
+    refute_includes Ai::GeminiClient::RETRYABLE_STATUS_CODES, "401"
+  end
 end

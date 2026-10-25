@@ -9,6 +9,8 @@ module Ai
     MODEL_NAME = /\A[a-zA-Z0-9._-]+\z/
     DEFAULT_OPEN_TIMEOUT = 10
     DEFAULT_READ_TIMEOUT = 60
+    MAX_ATTEMPTS = 3
+    RETRYABLE_STATUS_CODES = %w[429 500 502 503 504].freeze
 
     def self.configured?
       ENV["GEMINI_API_KEY"].present?
@@ -74,14 +76,25 @@ module Ai
       request["Content-Type"] = "application/json"
       request.body = JSON.generate(payload)
 
-      response = Net::HTTP.start(
-        uri.host,
-        uri.port,
-        use_ssl: true,
-        open_timeout: @open_timeout,
-        read_timeout: @read_timeout
-      ) do |http|
-        http.request(request)
+      attempts = 0
+      loop do
+        attempts += 1
+        response = Net::HTTP.start(
+          uri.host,
+          uri.port,
+          use_ssl: true,
+          open_timeout: @open_timeout,
+          read_timeout: @read_timeout
+        ) do |http|
+          http.request(request)
+        end
+
+        if RETRYABLE_STATUS_CODES.include?(response.code) && attempts < MAX_ATTEMPTS
+          sleep(2**(attempts - 1))
+          next
+        end
+
+        break
       end
       raise Error, "Gemini isteği başarısız (HTTP #{response.code})." unless response.is_a?(Net::HTTPSuccess)
 
