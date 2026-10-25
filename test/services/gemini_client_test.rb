@@ -1,4 +1,5 @@
 require "test_helper"
+require "minitest/mock"
 
 class GeminiClientTest < ActiveSupport::TestCase
   test "anahtar olmadan kapalı kalır" do
