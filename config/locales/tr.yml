@@ -7,3 +7,6 @@ tr:
     statuses: { new: "Yeni", open: "Açık", pending: "Beklemede", solved: "Çözüldü", closed: "Kapalı" }
     priorities: { normal: "Normal", high: "Yüksek" }
     categories: { technical: "Teknik", billing: "Faturalama", account: "Hesap", other: "Diğer" }
+  approvals:
+    statuses: { requested: "Bekliyor", approved: "Onaylandı", rejected: "Reddedildi", escalated: "Eskale edildi" }
+    actions: { refund: "İade", close_ticket: "Talebi kapatma", grant_access: "Erişim verme" }

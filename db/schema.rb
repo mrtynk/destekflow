@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_15_190000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_25_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -20,6 +20,34 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_15_190000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_agents_on_email", unique: true
+  end
+
+  create_table "approval_events", force: :cascade do |t|
+    t.bigint "approval_request_id", null: false
+    t.string "event_type", null: false
+    t.string "actor_name", null: false
+    t.text "details", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["approval_request_id"], name: "index_approval_events_on_approval_request_id"
+  end
+
+  create_table "approval_requests", force: :cascade do |t|
+    t.bigint "ticket_id", null: false
+    t.text "reason", null: false
+    t.string "requested_action", null: false
+    t.string "decision_owner", null: false
+    t.string "requested_by", null: false
+    t.string "status", default: "requested", null: false
+    t.datetime "escalated_at"
+    t.datetime "decided_at"
+    t.string "decided_by"
+    t.integer "lock_version", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["status", "created_at"], name: "index_approval_requests_on_status_and_created_at"
+    t.index ["ticket_id"], name: "index_approval_requests_on_ticket_id"
+    t.check_constraint "status::text = ANY (ARRAY['requested'::character varying, 'approved'::character varying, 'rejected'::character varying, 'escalated'::character varying]::text[])", name: "approval_requests_valid_status"
   end
 
   create_table "replies", force: :cascade do |t|
@@ -74,6 +102,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_15_190000) do
   end
 
   add_foreign_key "replies", "agents"
+  add_foreign_key "approval_events", "approval_requests"
+  add_foreign_key "approval_requests", "tickets"
   add_foreign_key "replies", "tickets"
   add_foreign_key "ticket_events", "tickets"
   add_foreign_key "ticket_links", "tickets", column: "first_ticket_id"

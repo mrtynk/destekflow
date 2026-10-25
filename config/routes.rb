@@ -8,6 +8,16 @@ Rails.application.routes.draw do
       delete :unlink_related
     end
   end
+  resources :approval_requests, only: %i[index create] do
+    member do
+      post :approve
+      post :reject
+    end
+    collection { post :run_escalation }
+  end
+  namespace :internal do
+    resources :agent_approval_requests, only: :create
+  end
   root "tickets#index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

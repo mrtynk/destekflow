@@ -1,0 +1,44 @@
+<% content_for :title, "Onay Kuyruğu | DestekFlow" %>
+<div class="page-head">
+  <div>
+    <h1>Onay Kuyruğu</h1>
+    <p class="lead">Agent önerir; kritik işlem insan kararı olmadan gerçekleşmez.</p>
+  </div>
+  <%= button_to "30 dakika kuralını şimdi tara", run_escalation_approval_requests_path, class: "secondary" %>
+</div>
+
+<div class="demo-warning">
+  <strong>Kontrollü ders demosu:</strong> “Demo insan karar verici” ve kuyruk adları gerçek oturum açmış kullanıcı değildir.
+  Bu ekranda auth/RBAC yoktur. Eskalasyon taraması bu düğmeyle manuel çalışır; canlı cron/worker kurulmuş değildir.
+</div>
+
+<% [["requested", "Bekleyen"], ["escalated", "Eskale edilen"], ["approved", "Onaylanan"], ["rejected", "Reddedilen"]].each do |status, title| %>
+  <section class="card approval-section">
+    <h2><%= title %> (<%= @approval_requests.fetch(status, []).size %>)</h2>
+    <% @approval_requests.fetch(status, []).each do |approval| %>
+      <article class="approval-item" id="approval-<%= approval.id %>">
+        <div>
+          <strong>Onay #<%= approval.id %> · <%= link_to "Talep ##{approval.ticket.id}", approval.ticket %></strong>
+          <p><b>İşlem:</b> <%= t("approvals.actions.#{approval.requested_action}") %> · <b>Durum:</b> <%= t("approvals.statuses.#{approval.status}") %> · <b>Karar sahibi:</b> <%= approval.decision_owner %></p>
+          <p><b>Gerekçe:</b> <%= approval.reason %></p>
+          <p class="meta">İsteyen: <%= approval.requested_by %> · <%= l approval.created_at, format: :long %></p>
+          <details>
+            <summary>Denetim geçmişi</summary>
+            <ul class="timeline compact">
+              <% approval.approval_events.order(:created_at).each do |event| %>
+                <li><strong><%= event.actor_name %></strong> · <%= event.details %></li>
+              <% end %>
+            </ul>
+          </details>
+        </div>
+        <% if approval.pending_decision? %>
+          <div class="approval-actions">
+            <%= button_to "Onayla", approve_approval_request_path(approval), class: "button" %>
+            <%= button_to "Reddet", reject_approval_request_path(approval), class: "danger-button" %>
+          </div>
+        <% end %>
+      </article>
+    <% end %>
+    <p class="meta"><%= "Bu durumda kayıt yok." if @approval_requests.fetch(status, []).empty? %></p>
+  </section>
+<% end %>

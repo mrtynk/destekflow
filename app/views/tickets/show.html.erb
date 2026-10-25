@@ -30,6 +30,26 @@
     <% end %>
     <p class="meta"><%= "Eşik üzerinde ilişkilendirilmemiş öneri yok." if @similar_tickets.empty? %></p>
   </section>
+  <section class="card" style="margin-top:20px">
+    <h2>Onay ve Eskalasyon Merkezi</h2>
+    <p class="lead">Ders demosu: aktör adları simüledir; gerçek kimlik doğrulama veya yetki rolü değildir.</p>
+    <%= form_with url: approval_requests_path, class: "field" do %>
+      <%= hidden_field_tag :ticket_id, @ticket.id %>
+      <%= label_tag :requested_action, "Kritik işlem" %>
+      <%= select_tag :requested_action, options_for_select([["İade", "refund"], ["Talebi kapatma", "close_ticket"], ["Erişim verme", "grant_access"]]), required: true %>
+      <%= label_tag :decision_owner, "Karar sahibi", style: "margin-top:10px" %>
+      <%= text_field_tag :decision_owner, "Takım Lideri (demo)", required: true %>
+      <%= label_tag :reason, "Onay gerekçesi", style: "margin-top:10px" %>
+      <%= text_area_tag :reason, nil, required: true, placeholder: "Kritik işlemin neden insan onayı gerektirdiğini yazın." %>
+      <%= submit_tag "İnsan onayı iste", class: "button" %>
+    <% end %>
+    <% @ticket.approval_requests.order(created_at: :desc).each do |approval| %>
+      <div class="assistant-item">
+        <strong>Onay #<%= approval.id %> · <%= t("approvals.actions.#{approval.requested_action}") %></strong>
+        <p><%= t("approvals.statuses.#{approval.status}") %> · <%= approval.decision_owner %> · <%= approval.reason %></p>
+      </div>
+    <% end %>
+  </section>
   <section class="card" style="margin-top:20px"><h2>İşlem geçmişi</h2><ul class="timeline"><% @ticket.ticket_events.order(created_at: :desc).each do |event| %><li><strong><%= event.actor_name %></strong> · <%= event.details %><br><small><%= l event.created_at, format: :short %></small></li><% end %></ul></section>
 </div><aside class="card actions"><h2>Yönetim</h2><div><strong>İlk yanıt SLA</strong><div class="meta"><%= l @ticket.sla_due_at, format: :long %><%= " · İHLAL" if @ticket.first_response_overdue? %></div></div>
   <% if @ticket.status != "closed" %><%= form_with url: assign_ticket_path(@ticket) do %><%= label_tag :agent_id, "Temsilci" %><%= select_tag :agent_id, options_from_collection_for_select(@agents, :id, :name, @ticket.assignee_id), required: true %><%= submit_tag "Ata", class: "button", style: "margin-top:8px;width:100%" %><% end %><% end %>

@@ -26,7 +26,7 @@
   <body>
     <header class="topbar">
       <%= link_to root_path, class: "brand" do %><span class="logo">D</span> DestekFlow<% end %>
-      <nav><%= link_to "Talepler", tickets_path %><%= link_to "Yeni talep", new_ticket_path, class: "button small" %></nav>
+      <nav><%= link_to "Talepler", tickets_path %><%= link_to "Onay kuyruğu", approval_requests_path %><%= link_to "Yeni talep", new_ticket_path, class: "button small" %></nav>
     </header>
     <main class="container">
       <% flash.each do |type, message| %><div class="flash <%= type %>"><%= message %></div><% end %>
