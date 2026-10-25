@@ -19,11 +19,13 @@ module Ai
     def initialize(
       api_key: ENV["GEMINI_API_KEY"],
       open_timeout: DEFAULT_OPEN_TIMEOUT,
-      read_timeout: DEFAULT_READ_TIMEOUT
+      read_timeout: DEFAULT_READ_TIMEOUT,
+      http_start: Net::HTTP.method(:start)
     )
       @api_key = api_key.to_s
       @open_timeout = open_timeout
       @read_timeout = read_timeout
+      @http_start = http_start
       raise Error, "GEMINI_API_KEY yapılandırılmamış." if @api_key.blank?
     end
 
@@ -80,7 +82,7 @@ module Ai
       response = nil
       loop do
         attempts += 1
-        response = Net::HTTP.start(
+        response = @http_start.call(
           uri.host,
           uri.port,
           use_ssl: true,

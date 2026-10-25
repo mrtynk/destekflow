@@ -1,5 +1,4 @@
 require "test_helper"
-require "minitest/mock"
 
 class GeminiClientTest < ActiveSupport::TestCase
   test "anahtar olmadan kapalı kalır" do
@@ -31,14 +30,13 @@ class GeminiClientTest < ActiveSupport::TestCase
   end
 
   test "başarılı HTTP yanıtını döngü sonrasında işler" do
-    client = Ai::GeminiClient.new(api_key: "sahte-test-anahtari")
     response = Net::HTTPOK.new("1.1", "200", "OK")
     response.instance_variable_set(:@read, true)
     response.body = '{"ok":true}'
+    http_start = ->(*, **, &) { response }
+    client = Ai::GeminiClient.new(api_key: "sahte-test-anahtari", http_start:)
 
-    result = Net::HTTP.stub(:start, response) do
-      client.send(:post, "gemini-3.8-flash", "generateContent", contents: [])
-    end
+    result = client.send(:post, "gemini-3.8-flash", "generateContent", contents: [])
 
     assert_equal true, result.fetch("ok")
   end
