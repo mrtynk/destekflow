@@ -32,19 +32,19 @@
           <%= link_to tickets_path, class: ("active" if controller_name == "tickets" && action_name != "new") do %><span class="nav-icon">⌁</span><span>Talepler</span><small>Operasyon kuyruğu</small><% end %>
           <%= link_to approval_requests_path, class: ("active" if controller_name == "approval_requests") do %><span class="nav-icon">✓</span><span>Onay merkezi</span><small>İnsan denetimi</small><% end %>
           <%= link_to agent_demo_path, class: ("active" if controller_name == "agent_demos") do %><span class="nav-icon">AI</span><span>Agent demo</span><small>Gizlilik ve guardrail</small><% end %>
-          <%= link_to new_ticket_path, class: ("active" if controller_name == "tickets" && action_name == "new") do %><span class="nav-icon">＋</span><span>Yeni talep</span><small>Kayıt oluştur</small><% end %>
+          <% unless public_demo_read_only? %><%= link_to new_ticket_path, class: ("active" if controller_name == "tickets" && action_name == "new") do %><span class="nav-icon">＋</span><span>Yeni talep</span><small>Kayıt oluştur</small><% end %><% end %>
         </nav>
         <div class="sidebar-card">
           <span class="sidebar-card-icon">AI</span>
           <strong>Human-in-the-loop</strong>
           <p>AI önerir, kritik kararı insan verir.</p>
         </div>
-        <div class="sidebar-footer"><span class="live-pill"><span></span>Demo ortamı aktif</span><small>HTTP Basic korumalı</small></div>
+        <div class="sidebar-footer"><span class="live-pill"><span></span>Demo ortamı aktif</span><small><%= public_demo_read_only? ? "Herkese açık · salt okunur" : "Yerel geliştirme" %></small></div>
       </aside>
       <section class="workspace">
         <header class="workspace-topbar">
           <div><span class="workspace-kicker">DESTEK OPERASYON PLATFORMU</span><strong>Kontrol paneli</strong></div>
-          <div class="workspace-actions"><span class="secure-chip">● Güvenli demo</span><%= link_to "+ Yeni talep", new_ticket_path, class: "button small" %></div>
+          <div class="workspace-actions"><span class="secure-chip">● <%= public_demo_read_only? ? "Salt okunur demo" : "Geliştirme modu" %></span><% unless public_demo_read_only? %><%= link_to "+ Yeni talep", new_ticket_path, class: "button small" %><% end %></div>
         </header>
         <main class="container">
           <% flash.each do |type, message| %><div class="flash <%= type %>"><%= message %></div><% end %>

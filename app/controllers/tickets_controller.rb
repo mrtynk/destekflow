@@ -1,4 +1,5 @@
 class TicketsController < ApplicationController
+  before_action :reject_public_new_ticket!, only: :new
   before_action :set_ticket, only: %i[show assign reply transition link_related unlink_related analyze_with_rag]
 
   def index
@@ -72,6 +73,10 @@ class TicketsController < ApplicationController
   end
 
   private
+
+  def reject_public_new_ticket!
+    render plain: "Herkese açık demo salt okunurdur; yeni talep oluşturma kapalıdır.", status: :forbidden if public_demo_read_only?
+  end
 
   def set_ticket
     @ticket = Ticket.find(params[:id])

@@ -69,7 +69,7 @@ Yerel ve açıklanabilir yedek yaklaşım hâlâ küçük veri kümeli Jaccard s
 
 `GEMINI_API_KEY` yoksa arayüz “API anahtarı yapılandırılmadı” der ve RAG'ı çalışıyor gibi göstermez; kelime tabanlı açıklanabilir öneri kullanılmaya devam eder. Google'ın resmî Gemini belgeleri embedding'lerin RAG ve anlamsal arama kullanımını, batch embedding uç noktasını ve metin üretimini açıklar: [Embeddings](https://ai.google.dev/gemini-api/docs/embeddings), [metin üretimi](https://ai.google.dev/gemini-api/docs/text-generation?lang=rest), [ücretsiz katman](https://ai.google.dev/gemini-api/docs/pricing).
 
-Sınırlar: RAG sonucu da kimlik doğrulamaz ve kesin mükerrer kararı değildir. Otomatik birleştirme yapmaz. Site geneli Basic koruma gerçek kullanıcı/RBAC değildir; gerçek kişisel veriyle kullanıma uygun değildir. Canlı `3de863c` sürümünde yalnız sahte demo verisiyle gerçek Gemini çağrısı doğrulanmıştır; bu doğrulama gerçek müşteri verisiyle kullanıma onay anlamına gelmez.
+Sınırlar: RAG sonucu kimlik doğrulamaz ve kesin mükerrer kararı değildir; otomatik birleştirme yapmaz. Herkese açık production arayüzü salt okunurdur ve kişisel alanları görüntüleme sırasında maskeler. Bu koruma gerçek kullanıcı/RBAC veya tam anonimleştirme değildir; gerçek kişisel veriyle kullanıma uygun değildir. Canlı `3de863c` sürümünde yalnız sahte demo verisiyle gerçek Gemini çağrısı doğrulanmıştır; bu doğrulama gerçek müşteri verisiyle kullanıma onay anlamına gelmez.
 
 ## Onay ve Eskalasyon Merkezi — agent-first, human-in-the-loop
 
@@ -86,7 +86,7 @@ Durum tablosu:
 
 Kararlar transaction ve satır kilidi içinde uygulanır; ikinci karar reddedilir. Onay ve eskalasyon olayları hem onay denetim geçmişine hem talep zaman çizelgesine yazılır. İç agent API'si `AGENT_API_TOKEN` Bearer tokenı ister, izinli kritik işlemleri doğrular ve yanıtında `critical_action_executed: false` döndürür. Bu onay servisi kural tabanlıdır; LLM çağrısı yapmaz ve LLM olarak tanıtılmaz. RAG benzerlik asistanı ayrı bir bileşendir ve yalnız yapılandırıldığında gerçek model çağrısı yapar.
 
-Güvenlik ve canlılık sınırı: gerçek kullanıcı hesabı/RBAC henüz yoktur; görünen karar sahibi adları kontrollü ders simülasyonudur. Production arayüzünün tamamı `DEMO_SITE_USERNAME` ve en az 20 baytlık `DEMO_SITE_PASSWORD` ile HTTP Basic korumasına alınır; bilgiler eksikse uygulama `/up` dışında 503 ile kapalı kalır. İç agent API en az 32 baytlık `AGENT_API_TOKEN` olmadan devre dışıdır. Bu gizli değerler Render secret olarak girilir ve repoya yazılmaz. Onay/eskalasyon kodu `e8bca94` commit'iyle canlıdadır; ancak 30 dakika taraması arayüzden manuel tetiklenir, uygulama saatini değiştiren production parametresi ve gerçek worker/cron yoktur.
+Güvenlik ve canlılık sınırı: gerçek kullanıcı hesabı/RBAC henüz yoktur; görünen karar sahibi adları kontrollü ders simülasyonudur. LinkedIn portföy paylaşımı için production HTML arayüzü şifresiz fakat `PUBLIC_DEMO_READ_ONLY=true` ile salt okunur yayımlanır. Sunucu bütün HTML yazma isteklerini `403 Forbidden` ile reddeder; oluşturma, atama, yanıtlama, ilişkilendirme, RAG çalıştırma, onay/ret ve manuel eskalasyon kontrolleri gösterilmez. İsim/e-posta alanları gizlenir; açıklama, yanıt ve gerekçelerde e-posta/telefon/kart biçimleri görüntüleme sırasında maskelenir. İç agent API bu değişiklikten bağımsızdır ve en az 32 baytlık `AGENT_API_TOKEN` Bearer tokenı olmadan çalışmaz. Token repoya veya tarayıcıya verilmez. 30 dakika taraması için gerçek worker/cron yoktur.
 
 ## Gizlilik korumalı agent-first destek akışı
 
@@ -96,7 +96,7 @@ Gemini triyajı talebin önceliğini, insan gerekip gerekmediğini ve ilgili yer
 
 Bu katman insan-insan aktarımını düşük riskli ve bilgi tabanıyla cevaplanabilen taleplerde azaltır; kritik kararları insandan kaldırmaz. Regex maskeleme tam anonimleştirme değildir, gerçek müşteri verisiyle kullanım için DLP, saklama politikası, gerçek kullanıcı/RBAC ve hukuki değerlendirme gerekir. Mevcut onay API'si de ayrı kalır: kritik aksiyonlar yine insan kararı olmadan uygulanmaz.
 
-Basic Auth arkasındaki `/agent_demo` ekranı bu farkı yalnız sabit sahte verilerle görünür kılar: güvenli teknik yanıt, kişisel veri maskeleme, finansal talepte kod seviyesinde insan devri ve aynı dış referansın ikinci ticket oluşturmaması tarayıcıdan gösterilebilir. Bu ekran agent tokenını istemciye göndermez ve genel amaçlı müşteri verisi girişi kabul etmez.
+Herkese açık salt-okunur `/agent_demo` ekranı, daha önce sabit sahte verilerle üretilmiş güvenli teknik yanıt, kişisel veri maskeleme, finansal talepte kod seviyesinde insan devri ve idempotency kanıtlarını gösterir. Public modda senaryo çalıştırma ve tekrar düğmeleri yoktur. Ekran agent tokenını istemciye göndermez ve genel amaçlı müşteri verisi girişi kabul etmez.
 
 ## Faz 1: Fortune 500 araştırması
 
@@ -192,7 +192,7 @@ Canlı dağıtım 15 Ekim 2026 tarihinde Rails 8.1.4 ve Ruby 3.4.7 ile başarıy
 
 - Ücretsiz Render planında cron hizmeti bulunmadığından 48 saatlik otomatik kapanış canlıda zamanlanmamıştır; job ve davranışı testlerde doğrulanmıştır.
 - Ücretsiz Render web servisi hareketsizlikte uyur ve ilk isteği geciktirebilir. Ücretsiz PostgreSQL veritabanı Render'ın süre ve saklama sınırlarına tabidir.
-- Gerçek kullanıcı hesabı ve rol yetkilendirmesi yoktur. Production demosu site geneli HTTP Basic ile sınırlandırılır; bu koruma gerçek çok kullanıcılı auth/RBAC yerine geçmez. Gerçek müşteri verisi kullanılmamalıdır.
+- Gerçek kullanıcı hesabı ve rol yetkilendirmesi yoktur. Production demosu herkese açık, kişisel alanları maskelenmiş ve sunucu tarafında salt okunurdur. Bu sınır gerçek çok kullanıcılı auth/RBAC veya tam anonimleştirme yerine geçmez; gerçek müşteri verisi kullanılmamalıdır.
 - RAG canlıda yalnız sahte demo verisiyle doğrulanmıştır. Ücretsiz Gemini katmanında gönderilen içerik sağlayıcının ürün geliştirmesinde kullanılabildiğinden gerçek müşteri veya kişisel veri gönderilmemelidir.
 - Agent-first intake akışı kod ve CI testlerinde doğrulanmıştır; henüz Render'da doğru tokenla pozitif uçtan uca çağrı yapılmadığı sürece canlıda doğrulandı diye sunulmamalıdır. Regex maskeleme tam anonimleştirme veya mevzuat uyumu garantisi değildir.
 - Onay/eskalasyon sürümünde gerçek zamanlayıcı yoktur; 30 dakika taraması yetkili demo ekranından manuel servis çağrısıyla gösterilir. Canlı DEMO-B kaydı 30 dakikadan eski olduktan sonra eskale edilmiştir; bu, cron bulunduğu anlamına gelmez.

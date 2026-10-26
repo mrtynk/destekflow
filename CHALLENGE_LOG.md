@@ -44,7 +44,7 @@ Son doğrulanan GitHub Actions koşusu [40199897119](https://github.com/mrtynk/d
 
 Yapılamayanlar:
 
-- Gerçek kullanıcı hesabı ve rol tabanlı yetkilendirme yoktur. Kontrollü yayın yalnız site geneli HTTP Basic demo korumasıyla yapılabilir.
+- Gerçek kullanıcı hesabı ve rol tabanlı yetkilendirme yoktur. LinkedIn paylaşımı için site geneli HTTP Basic kaldırılmış; production HTML arayüzü şifresiz, kişisel alanları maskelenmiş ve sunucu tarafında salt okunur hâle getirilmiştir. Bu, gerçek auth/RBAC yerine geçmez.
 - Gerçek cron/worker ile otomatik 30 dakika taraması yoktur; manuel demo çağrısı vardır.
 - İç onay agentı hâlâ kural tabanlıdır ve LLM diye sunulmaz. Ayrı RAG benzerlik katmanı gerçek Google Gemini çağrısı yapar; kritik işlem gerçekleştirmez.
 - İnsan ve agent süreleri ölçülmedi; süre uydurulmadı.
@@ -58,3 +58,12 @@ Yapılamayanlar:
 ## Karar
 
 **DEVAM.** Mevcut talep altyapısını koruyarak onay/eskalasyon değeri ekliyoruz. Production kararı için önce auth/RBAC, gerçek zamanlayıcı, başarılı CI ve kontrollü canlı doğrulama zorunludur.
+
+### 26 Ekim 2026 — herkese açık portföy sınırı
+
+- HTTP Basic bağımlılığı koddan ve `render.yaml` dosyasından kaldırıldı; `DEMO_SITE_AUTH_ENABLED`, `DEMO_SITE_USERNAME` ve `DEMO_SITE_PASSWORD` artık uygulama tarafından okunmaz.
+- Production'da `PUBLIC_DEMO_READ_ONLY=true` varsayılanı kullanılır. Şifresiz GET/HEAD erişimi açık, bütün HTML yazma istekleri `403 Forbidden` ile kapalıdır.
+- Yeni talep, yanıt, atama, durum değişimi, ilişkilendirme, RAG çalıştırma, agent demo çalıştırma, onay/ret ve manuel eskalasyon kontrolleri public arayüzden kaldırıldı.
+- İsim ve e-posta alanları public görünümde saklanır; açıklama, yanıt ve gerekçelerde e-posta, telefon ve kart biçimleri görüntüleme sırasında maskelenir. Veritabanındaki geçmiş kayıtlar silinmedi veya değiştirilmedi.
+- Seed kayıtları `.example` e-postalar ve açıkça sahte demo içerikleridir. Buna rağmen canlı veritabanına geçmişte elle girilmiş her serbest metnin kökeni koddan kesin doğrulanamadığı için maskeleme korunur ve gerçek veri kullanımına izin verildiği iddia edilmez.
+- Internal agent API ayrı `ActionController::API` zincirinde kalır ve `AGENT_API_TOKEN` Bearer doğrulamasını aynen korur; token değiştirilmedi veya görüntülenmedi.

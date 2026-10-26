@@ -1,5 +1,6 @@
 <% content_for :title, "Talepler | DestekFlow" %>
-<div class="dashboard-hero"><div><span class="hero-chip">OPERASYON MERKEZİ</span><h1>Destek talepleri</h1><div class="hero-subtitle">tek akışta yönetin.</div><p>SLA riskini görün, doğru kişiyi atayın ve kritik kararları insan denetiminde tutun.</p><div class="hero-actions"><%= link_to "+ Yeni talep oluştur", new_ticket_path, class: "button hero-button" %><%= link_to "Onay kuyruğunu aç →", approval_requests_path, class: "hero-link" %></div></div><div class="hero-visual" aria-hidden="true"><div class="pulse-card"><span>CANLI ÖNCELİK</span><strong><%= @tickets.count(&:first_response_overdue?) %> riskli talep</strong><small>AI destekli, insan kontrollü</small></div><div class="orb orb-one"></div><div class="orb orb-two"></div></div></div>
+<div class="dashboard-hero"><div><span class="hero-chip">OPERASYON MERKEZİ</span><h1>Destek talepleri</h1><div class="hero-subtitle">tek akışta yönetin.</div><p>SLA riskini görün, doğru kişiyi atayın ve kritik kararları insan denetiminde tutun.</p><div class="hero-actions"><% unless public_demo_read_only? %><%= link_to "+ Yeni talep oluştur", new_ticket_path, class: "button hero-button" %><% end %><%= link_to "Onay kuyruğunu aç →", approval_requests_path, class: "hero-link" %></div></div><div class="hero-visual" aria-hidden="true"><div class="pulse-card"><span>CANLI ÖNCELİK</span><strong><%= @tickets.count(&:first_response_overdue?) %> riskli talep</strong><small>AI destekli, insan kontrollü</small></div><div class="orb orb-one"></div><div class="orb orb-two"></div></div></div>
+<% if public_demo_read_only? %><div class="public-demo-notice"><strong>Herkese açık portföy demosu</strong><span>Kayıtlar incelenebilir; oluşturma, karar ve diğer değişiklik işlemleri güvenlik nedeniyle kapalıdır. Kişisel alanlar maskelenir.</span></div><% end %>
 <div class="metric-grid">
   <div class="metric"><span class="metric-icon">01</span><div><span>Toplam görünüm</span><strong><%= @tickets.size %></strong></div></div>
   <div class="metric"><span class="metric-icon active">02</span><div><span>Aktif talepler</span><strong><%= @tickets.count(&:active?) %></strong></div></div>
@@ -15,7 +16,7 @@
     <div class="ticket-list">
       <% @tickets.each do |ticket| %>
         <%= link_to ticket, class: "ticket-row" do %>
-          <div><strong>#<%= ticket.id %> · <%= ticket.subject %></strong><div class="meta"><%= ticket.requester_name %> · <%= ticket.assignee&.name || "Atanmamış" %></div><div class="badges"><span class="badge <%= ticket.priority %>"><%= t("tickets.priorities.#{ticket.priority}") %></span><span class="badge <%= ticket.status %>"><%= t("tickets.statuses.#{ticket.status}") %></span></div></div>
+          <div><strong>#<%= ticket.id %> · <%= public_demo_text(ticket.subject) %></strong><div class="meta"><%= public_requester_label(ticket) %> · <%= ticket.assignee&.name || "Atanmamış" %></div><div class="badges"><span class="badge <%= ticket.priority %>"><%= t("tickets.priorities.#{ticket.priority}") %></span><span class="badge <%= ticket.status %>"><%= t("tickets.statuses.#{ticket.status}") %></span></div></div>
           <div class="sla-block"><span>SLA hedefi</span><strong><%= l ticket.sla_due_at, format: :short %></strong></div>
         <% end %>
       <% end %>

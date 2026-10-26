@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
-  before_action :authenticate_demo_site!
+  before_action :enforce_public_demo_read_only!
+  helper_method :public_demo_read_only?
 
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern
@@ -9,24 +10,14 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def authenticate_demo_site!
-    return unless Rails.application.config.x.demo_site_auth_enabled
-
-    username = Rails.application.config.x.demo_site_username.to_s
-    password = Rails.application.config.x.demo_site_password.to_s
-    unless username.present? && password.bytesize >= 20
-      render plain: "Demo erişimi güvenli biçimde yapılandırılmadığı için kapalı.", status: :service_unavailable
-      return
-    end
-
-    authenticated = authenticate_with_http_basic do |supplied_username, supplied_password|
-      secure_match?(supplied_username, username) && secure_match?(supplied_password, password)
-    end
-    request_http_basic_authentication("DestekFlow kontrollü demo") unless authenticated
+  def public_demo_read_only?
+    Rails.application.config.x.public_demo_read_only
   end
 
-  def secure_match?(supplied, expected)
-    supplied = supplied.to_s
-    supplied.bytesize == expected.bytesize && ActiveSupport::SecurityUtils.secure_compare(supplied, expected)
+  def enforce_public_demo_read_only!
+    return unless public_demo_read_only?
+    return if request.get? || request.head?
+
+    render plain: "Herkese açık demo salt okunurdur; değişiklik işlemleri kapalıdır.", status: :forbidden
   end
 end

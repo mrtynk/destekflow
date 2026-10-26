@@ -1,11 +1,11 @@
-<% content_for :title, "##{@ticket.id} #{@ticket.subject} | DestekFlow" %>
-<div class="page-head"><div><h1>#<%= @ticket.id %> · <%= @ticket.subject %></h1><div class="badges"><span class="badge <%= @ticket.priority %>"><%= t("tickets.priorities.#{@ticket.priority}") %></span><span class="badge <%= @ticket.status %>"><%= t("tickets.statuses.#{@ticket.status}") %></span></div></div><%= link_to "Tüm talepler", tickets_path, class: "button secondary" %></div>
+<% content_for :title, "##{@ticket.id} #{public_demo_text(@ticket.subject)} | DestekFlow" %>
+<div class="page-head"><div><h1>#<%= @ticket.id %> · <%= public_demo_text(@ticket.subject) %></h1><div class="badges"><span class="badge <%= @ticket.priority %>"><%= t("tickets.priorities.#{@ticket.priority}") %></span><span class="badge <%= @ticket.status %>"><%= t("tickets.statuses.#{@ticket.status}") %></span></div></div><%= link_to "Tüm talepler", tickets_path, class: "button secondary" %></div>
 <div class="detail"><div>
-  <section class="card"><h2>Talep</h2><div class="meta"><% if @ticket.privacy_mode? %><span class="badge">Gizlilik modu</span> · Referans: <%= @ticket.requester_reference %><% else %><%= @ticket.requester_name %> · <%= @ticket.requester_email %><% end %> · <%= t("tickets.categories.#{@ticket.category}") %></div><p class="description"><%= @ticket.description %></p>
-    <% if (agent_run = @ticket.agent_runs.order(created_at: :desc).first) %><div class="agent-decision <%= agent_run.decision %>"><strong>Agent kararı: <%= agent_run.decision == "auto_reply" ? "Bilgi tabanlı yanıt yayınlandı" : "İnsan incelemesine devredildi" %></strong><p><%= agent_run.reason %></p><small>Kanıt: <%= agent_run.knowledge_evidence.join(", ").presence || "Güvenli varsayılan" %> · <%= agent_run.provider %> / <%= agent_run.model %></small></div><% end %>
+  <section class="card"><h2>Talep</h2><div class="meta"><% if @ticket.privacy_mode? %><span class="badge">Gizlilik modu</span> · Referans: <%= @ticket.requester_reference %><% elsif public_demo_read_only? %>Anonim demo müşteri<% else %><%= @ticket.requester_name %> · <%= @ticket.requester_email %><% end %> · <%= t("tickets.categories.#{@ticket.category}") %></div><p class="description"><%= public_demo_text(@ticket.description) %></p>
+    <% if (agent_run = @ticket.agent_runs.order(created_at: :desc).first) %><div class="agent-decision <%= agent_run.decision %>"><strong>Agent kararı: <%= agent_run.decision == "auto_reply" ? "Bilgi tabanlı yanıt yayınlandı" : "İnsan incelemesine devredildi" %></strong><p><%= public_demo_text(agent_run.reason) %></p><small>Kanıt: <%= agent_run.knowledge_evidence.join(", ").presence || "Güvenli varsayılan" %> · <%= agent_run.provider %> / <%= agent_run.model %></small></div><% end %>
   </section>
-  <section class="card" style="margin-top:20px"><h2>Yanıtlar</h2><% @ticket.replies.includes(:agent).each do |reply| %><div class="reply"><strong><%= reply.agent.name %></strong><small class="meta"> · <%= l reply.created_at, format: :short %></small><p><%= reply.body %></p></div><% end %>
-    <% if @ticket.assignee && @ticket.status != "closed" %><%= form_with url: reply_ticket_path(@ticket), class: "field" do %><%= label_tag :body, "Temsilci yanıtı" %><%= text_area_tag :body, nil, required: true %><%= submit_tag "Yanıtı gönder", class: "button" %><% end %><% end %>
+  <section class="card" style="margin-top:20px"><h2>Yanıtlar</h2><% @ticket.replies.includes(:agent).each do |reply| %><div class="reply"><strong><%= reply.agent.name %></strong><small class="meta"> · <%= l reply.created_at, format: :short %></small><p><%= public_demo_text(reply.body) %></p></div><% end %>
+    <% if !public_demo_read_only? && @ticket.assignee && @ticket.status != "closed" %><%= form_with url: reply_ticket_path(@ticket), class: "field" do %><%= label_tag :body, "Temsilci yanıtı" %><%= text_area_tag :body, nil, required: true %><%= submit_tag "Yanıtı gönder", class: "button" %><% end %><% end %>
   </section>
   <section class="card feature-card" style="margin-top:20px">
     <span class="eyebrow">HUMAN-IN-THE-LOOP</span>
@@ -13,16 +13,16 @@
     <p class="lead">Kelime tabanlı kanıtı korur; isteğe bağlı gerçek RAG analizi anlamca yakın kayıtları getirip açıklar. Hiçbir kayıt otomatik birleştirilmez.</p>
     <div class="ai-callout">
       <div><strong>AI analizi isteğe bağlıdır</strong><p>Yalnız başlık ve açıklama gönderilir; ad ve e-posta modele gönderilmez. Son karar insandadır.</p></div>
-      <% if Ai::GeminiClient.configured? %>
+      <% if Ai::GeminiClient.configured? && !public_demo_read_only? %>
         <%= button_to "RAG analizi çalıştır", analyze_with_rag_ticket_path(@ticket), class: "button ai-button" %>
       <% else %>
-        <span class="config-badge">API anahtarı yapılandırılmadı</span>
+        <span class="config-badge"><%= public_demo_read_only? ? "Salt okunur mod" : "API anahtarı yapılandırılmadı" %></span>
       <% end %>
     </div>
     <% if @latest_ai_analysis&.completed? %>
       <div class="rag-result">
         <span class="status-dot"></span><strong>Son gerçek RAG analizi</strong>
-        <p><%= @latest_ai_analysis.answer %></p>
+        <p><%= public_demo_text(@latest_ai_analysis.answer) %></p>
         <% @latest_ai_analysis.retrieval_evidence.each do |evidence| %>
           <%= link_to "##{evidence.fetch('ticket_id')} · anlamsal skor %#{(evidence.fetch('score').to_f * 100).round}", ticket_path(evidence.fetch("ticket_id")), class: "evidence-chip" %>
         <% end %>
@@ -37,8 +37,8 @@
         <% related = link.other_ticket(@ticket) %>
         <div class="assistant-item">
           <strong><%= link_to "##{related.id} · #{related.subject}", related %></strong>
-          <p><%= related.requester_email %> · Kayıtlar, durumlar ve SLA süreleri ayrı tutulur.</p>
-          <%= button_to "İlişkiyi geri al", unlink_related_ticket_path(@ticket, link_id: link.id), method: :delete, class: "secondary" %>
+          <p>Kişisel alanlar maskeli · Kayıtlar, durumlar ve SLA süreleri ayrı tutulur.</p>
+          <% unless public_demo_read_only? %><%= button_to "İlişkiyi geri al", unlink_related_ticket_path(@ticket, link_id: link.id), method: :delete, class: "secondary" %><% end %>
         </div>
       <% end %>
     <% end %>
@@ -47,8 +47,8 @@
       <div class="assistant-item">
         <strong><%= link_to "##{result.ticket.id} · #{result.ticket.subject}", result.ticket %></strong>
         <p><strong>%<%= result.score %> benzerlik</strong> · Eşleşen ifadeler: <%= result.matched_terms.join(", ") %></p>
-        <p class="meta"><%= result.ticket.requester_email %> · E-posta eşitliği puana katılmaz.</p>
-        <%= button_to "Talepleri ilişkilendir", link_related_ticket_path(@ticket, related_ticket_id: result.ticket.id), class: "button" %>
+        <p class="meta"><%= public_demo_read_only? ? "Kişisel alanlar maskeli" : result.ticket.requester_email %> · E-posta eşitliği puana katılmaz.</p>
+        <% unless public_demo_read_only? %><%= button_to "Talepleri ilişkilendir", link_related_ticket_path(@ticket, related_ticket_id: result.ticket.id), class: "button" %><% end %>
       </div>
     <% end %>
     <p class="meta"><%= "Eşik üzerinde ilişkilendirilmemiş öneri yok." if @similar_tickets.empty? %></p>
@@ -56,7 +56,7 @@
   <section class="card" style="margin-top:20px">
     <h2>Onay ve Eskalasyon Merkezi</h2>
     <p class="lead">Ders demosu: aktör adları simüledir; gerçek kimlik doğrulama veya yetki rolü değildir.</p>
-    <%= form_with url: approval_requests_path, class: "field" do %>
+    <% unless public_demo_read_only? %><%= form_with url: approval_requests_path, class: "field" do %>
       <%= hidden_field_tag :ticket_id, @ticket.id %>
       <%= label_tag :requested_action, "Kritik işlem" %>
       <%= select_tag :requested_action, options_for_select([["İade", "refund"], ["Talebi kapatma", "close_ticket"], ["Erişim verme", "grant_access"]]), required: true %>
@@ -65,16 +65,16 @@
       <%= label_tag :reason, "Onay gerekçesi", style: "margin-top:10px" %>
       <%= text_area_tag :reason, nil, required: true, placeholder: "Kritik işlemin neden insan onayı gerektirdiğini yazın." %>
       <%= submit_tag "İnsan onayı iste", class: "button" %>
-    <% end %>
+    <% end %><% end %>
     <% @ticket.approval_requests.order(created_at: :desc).each do |approval| %>
       <div class="assistant-item">
         <strong>Onay #<%= approval.id %> · <%= t("approvals.actions.#{approval.requested_action}") %></strong>
-        <p><%= t("approvals.statuses.#{approval.status}") %> · <%= approval.decision_owner %> · <%= approval.reason %></p>
+        <p><%= t("approvals.statuses.#{approval.status}") %> · <%= approval.decision_owner %> · <%= public_demo_text(approval.reason) %></p>
       </div>
     <% end %>
   </section>
-  <section class="card" style="margin-top:20px"><h2>İşlem geçmişi</h2><ul class="timeline"><% @ticket.ticket_events.order(created_at: :desc).each do |event| %><li><strong><%= event.actor_name %></strong> · <%= event.details %><br><small><%= l event.created_at, format: :short %></small></li><% end %></ul></section>
+  <section class="card" style="margin-top:20px"><h2>İşlem geçmişi</h2><ul class="timeline"><% @ticket.ticket_events.order(created_at: :desc).each do |event| %><li><strong><%= event.actor_name %></strong> · <%= public_demo_text(event.details) %><br><small><%= l event.created_at, format: :short %></small></li><% end %></ul></section>
 </div><aside class="card actions"><h2>Yönetim</h2><div><strong>İlk yanıt SLA</strong><div class="meta"><%= l @ticket.sla_due_at, format: :long %><%= " · İHLAL" if @ticket.first_response_overdue? %></div></div>
-  <% if @ticket.status != "closed" %><%= form_with url: assign_ticket_path(@ticket) do %><%= label_tag :agent_id, "Temsilci" %><%= select_tag :agent_id, options_from_collection_for_select(@agents, :id, :name, @ticket.assignee_id), required: true %><%= submit_tag "Ata", class: "button", style: "margin-top:8px;width:100%" %><% end %><% end %>
-  <% @ticket.allowed_transitions.each do |status| %><%= button_to "Durumu #{t("tickets.statuses.#{status}")} yap", transition_ticket_path(@ticket, to: status), class: "secondary" %><% end %>
+  <% unless public_demo_read_only? %><% if @ticket.status != "closed" %><%= form_with url: assign_ticket_path(@ticket) do %><%= label_tag :agent_id, "Temsilci" %><%= select_tag :agent_id, options_from_collection_for_select(@agents, :id, :name, @ticket.assignee_id), required: true %><%= submit_tag "Ata", class: "button", style: "margin-top:8px;width:100%" %><% end %><% end %>
+  <% @ticket.allowed_transitions.each do |status| %><%= button_to "Durumu #{t("tickets.statuses.#{status}")} yap", transition_ticket_path(@ticket, to: status), class: "secondary" %><% end %><% else %><p class="meta">Herkese açık demoda yönetim işlemleri kapalıdır.</p><% end %>
 </aside></div>
