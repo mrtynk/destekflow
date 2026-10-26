@@ -4,14 +4,14 @@ class DemoSiteAuthenticationTest < ActionDispatch::IntegrationTest
   setup do
     @previous_read_only = Rails.application.config.x.public_demo_read_only
     Rails.application.config.x.public_demo_read_only = true
-    @ticket = Tickets::Create.call(
+    @ticket = Tickets::Create.call({
       subject: "Kişisel veri testi",
       description: "Bana gerçek@example.com ve 0532 111 22 33 üzerinden ulaşın.",
       requester_name: "Gerçek Görünen İsim",
       requester_email: "gercek@example.com",
       category: "technical",
       priority: "normal"
-    )
+    })
   end
 
   teardown do

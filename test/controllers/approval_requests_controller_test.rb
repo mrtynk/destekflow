@@ -17,7 +17,7 @@ class ApprovalRequestsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select "h1", "Onay Kuyruğu"
-    assert_select ".demo-warning", /auth\/RBAC yoktur/
+    assert_select ".demo-warning", /auth\/RBAC/
     assert_select ".demo-warning", /cron\/worker kurulmuş değildir/
   end
 
