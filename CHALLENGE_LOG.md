@@ -44,7 +44,7 @@ Son doğrulanan GitHub Actions koşusu [40199897119](https://github.com/mrtynk/d
 
 Yapılamayanlar:
 
-- Gerçek kullanıcı hesabı ve rol tabanlı yetkilendirme yoktur. LinkedIn paylaşımı için site geneli HTTP Basic kaldırılmış; production HTML arayüzü şifresiz, kişisel alanları maskelenmiş ve sunucu tarafında salt okunur hâle getirilmiştir. Bu, gerçek auth/RBAC yerine geçmez.
+- Gerçek kullanıcı hesabı ve rol tabanlı yetkilendirme yoktur. Ders ve portföy paylaşımı için production HTML arayüzü şifresiz ve herkes tarafından değiştirilebilir hâle getirilmiştir. Bu bilinçli demo sınırı gerçek auth/RBAC yerine geçmez ve ticari kullanıma uygun değildir.
 - Gerçek cron/worker ile otomatik 30 dakika taraması yoktur; manuel demo çağrısı vardır.
 - İç onay agentı hâlâ kural tabanlıdır ve LLM diye sunulmaz. Ayrı RAG benzerlik katmanı gerçek Google Gemini çağrısı yapar; kritik işlem gerçekleştirmez.
 - İnsan ve agent süreleri ölçülmedi; süre uydurulmadı.
@@ -62,8 +62,16 @@ Yapılamayanlar:
 ### 26 Ekim 2026 — herkese açık portföy sınırı
 
 - HTTP Basic bağımlılığı koddan ve `render.yaml` dosyasından kaldırıldı; `DEMO_SITE_AUTH_ENABLED`, `DEMO_SITE_USERNAME` ve `DEMO_SITE_PASSWORD` artık uygulama tarafından okunmaz.
-- Production'da `PUBLIC_DEMO_READ_ONLY=true` varsayılanı kullanılır. Şifresiz GET/HEAD erişimi açık, bütün HTML yazma istekleri `403 Forbidden` ile kapalıdır.
+- TASK 20 sırasında `PUBLIC_DEMO_READ_ONLY=true` ile şifresiz fakat salt-okunur yayın hazırlanmıştı. Bu geçici yaklaşım, kullanıcının riskleri kabul ederek verdiği TASK 21 onayıyla aşağıdaki açık eğitim demosuna dönüştürüldü.
 - Yeni talep, yanıt, atama, durum değişimi, ilişkilendirme, RAG çalıştırma, agent demo çalıştırma, onay/ret ve manuel eskalasyon kontrolleri public arayüzden kaldırıldı.
 - İsim ve e-posta alanları public görünümde saklanır; açıklama, yanıt ve gerekçelerde e-posta, telefon ve kart biçimleri görüntüleme sırasında maskelenir. Veritabanındaki geçmiş kayıtlar silinmedi veya değiştirilmedi.
 - Seed kayıtları `.example` e-postalar ve açıkça sahte demo içerikleridir. Buna rağmen canlı veritabanına geçmişte elle girilmiş her serbest metnin kökeni koddan kesin doğrulanamadığı için maskeleme korunur ve gerçek veri kullanımına izin verildiği iddia edilmez.
 - Internal agent API ayrı `ActionController::API` zincirinde kalır ve `AGENT_API_TOKEN` Bearer doğrulamasını aynen korur; token değiştirilmedi veya görüntülenmedi.
+
+### 26 Ekim 2026 — TASK 21 açık ve kullanılabilir eğitim demosu
+
+- Kullanıcı, canlı kayıtların demo amaçlı olduğunu ve anonim ziyaretçilerin kayıtları değiştirmesi, spam ve ücretsiz Gemini kotası tüketimi risklerini kabul ederek public yazma erişimini açıkça onayladı.
+- Salt-okunur `403` katmanı ve `PUBLIC_DEMO_READ_ONLY` ayarı kaldırıldı. Talep oluşturma, atama, yanıt, geçiş, ilişkilendirme, RAG, onay, ret ve manuel eskalasyon anonim HTML arayüzünde kullanılabilir.
+- Yeni taleplerde ad/e-posta alanları kaldırıldı; sunucu `Anonim Demo Ziyaretçisi` ve rastgele `.example` adresi üretir. Konu, açıklama, yanıt ve onay gerekçesindeki e-posta/telefon/kart biçimleri kaydetmeden önce maskelenir. Mevcut kayıtlar silinmedi.
+- Gemini dış istekleri ortak PostgreSQL sayacı ve satır kilidiyle varsayılan dakikada 4, günde 40 istekle sınırlandırılır. Her yeniden deneme de bütçeden düşer; sınır aşımında güvenli Türkçe hata gösterilir.
+- CSRF, model/form doğrulamaları, Ticket durum makinesi, onay transaction/locking ve idempotent eskalasyon korunur. Agent API yalnız Bearer tokenla erişilebilir kalır.

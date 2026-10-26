@@ -20,12 +20,14 @@ module Ai
       api_key: ENV["GEMINI_API_KEY"],
       open_timeout: DEFAULT_OPEN_TIMEOUT,
       read_timeout: DEFAULT_READ_TIMEOUT,
-      http_start: Net::HTTP.method(:start)
+      http_start: Net::HTTP.method(:start),
+      usage_limiter: Ai::UsageLimiter.new
     )
       @api_key = api_key.to_s
       @open_timeout = open_timeout
       @read_timeout = read_timeout
       @http_start = http_start
+      @usage_limiter = usage_limiter
       raise Error, "GEMINI_API_KEY yapılandırılmamış." if @api_key.blank?
     end
 
@@ -82,6 +84,7 @@ module Ai
       response = nil
       loop do
         attempts += 1
+        @usage_limiter.consume!
         response = @http_start.call(
           uri.host,
           uri.port,
@@ -102,6 +105,8 @@ module Ai
       raise Error, "Gemini isteği başarısız (HTTP #{response.code})." unless response.is_a?(Net::HTTPSuccess)
 
       JSON.parse(response.body)
+    rescue Ai::UsageLimiter::LimitExceeded => error
+      raise Error, error.message
     rescue JSON::ParserError, KeyError => error
       raise Error, "Gemini yanıtı doğrulanamadı: #{error.class}."
     rescue Net::OpenTimeout, Net::ReadTimeout, SocketError => error

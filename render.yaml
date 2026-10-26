@@ -31,8 +31,6 @@ services:
         value: 2
       - key: DB_SSLMODE
         value: require
-      - key: PUBLIC_DEMO_READ_ONLY
-        value: true
       - key: AGENT_API_TOKEN
         sync: false
       - key: GEMINI_API_KEY
@@ -43,3 +41,7 @@ services:
         value: gemini-3.5-flash-lite
       - key: AGENT_TRIAGE_MODEL
         value: gemini-3.5-flash-lite
+      - key: GEMINI_REQUESTS_PER_MINUTE
+        value: 4
+      - key: GEMINI_REQUESTS_PER_DAY
+        value: 40

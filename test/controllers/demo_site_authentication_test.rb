@@ -1,59 +1,80 @@
 require "test_helper"
 
 class DemoSiteAuthenticationTest < ActionDispatch::IntegrationTest
+  include ActiveSupport::Testing::TimeHelpers
+
   setup do
-    @previous_read_only = Rails.application.config.x.public_demo_read_only
     @previous_agent_token = Rails.application.config.x.agent_api_token
-    Rails.application.config.x.public_demo_read_only = true
     Rails.application.config.x.agent_api_token = "a" * 32
-    @ticket = Tickets::Create.call({
-      subject: "Kişisel veri testi",
-      description: "Bana gerçek@example.com ve 0532 111 22 33 üzerinden ulaşın.",
-      requester_name: "Gerçek Görünen İsim",
-      requester_email: "gercek@example.com",
-      category: "technical",
-      priority: "normal"
-    })
+    @agent = Agent.create!(name: "Demo Temsilci", email: "public-agent@example.com")
   end
 
   teardown do
-    Rails.application.config.x.public_demo_read_only = @previous_read_only
     Rails.application.config.x.agent_api_token = @previous_agent_token
   end
 
-  test "ziyaretçi kimlik bilgisi olmadan listeyi ve maskeli detayı görür" do
+  test "anonim ziyaretçi talep oluşturur atar yanıtlar ve durum değiştirir" do
     get tickets_path
     assert_response :success
-    assert_select ".public-demo-notice", /Herkese açık portföy demosu/
-    assert_no_match(/Gerçek Görünen İsim/, response.body)
+    assert_select ".public-demo-notice", /Herkese Açık Eğitim Demosu/
 
-    get ticket_path(@ticket)
-    assert_response :success
-    assert_match(/Anonim demo müşteri/, response.body)
-    assert_match(/E-POSTA MASKELENDİ/, response.body)
-    assert_match(/TELEFON MASKELENDİ/, response.body)
-    assert_no_match(/gercek@example.com/, response.body)
+    assert_difference("Ticket.count", 1) do
+      post tickets_path, params: { ticket: {
+        subject: "Demo bağlantı sorunu", description: "Sahte demo açıklaması",
+        category: "technical", priority: "normal"
+      } }
+    end
+    ticket = Ticket.order(:id).last
+    assert_redirected_to ticket_path(ticket)
+    assert_equal "Anonim Demo Ziyaretçisi", ticket.requester_name
+    assert_match(/@example\.com\z/, ticket.requester_email)
+
+    post assign_ticket_path(ticket), params: { agent_id: @agent.id }
+    assert_redirected_to ticket_path(ticket)
+    assert_equal @agent, ticket.reload.assignee
+
+    assert_difference("Reply.count", 1) do
+      post reply_ticket_path(ticket), params: { body: "Demo yanıtı" }
+    end
+    assert_redirected_to ticket_path(ticket)
+
+    post transition_ticket_path(ticket), params: { to: "solved" }
+    assert_response :redirect
+    assert_equal "new", ticket.reload.status
+
+    post transition_ticket_path(ticket), params: { to: "open" }
+    post transition_ticket_path(ticket), params: { to: "solved" }
+    assert_equal "solved", ticket.reload.status
   end
 
-  test "üretim benzeri salt okunur mod bütün web değişikliklerini engeller" do
-    assert_no_difference("Ticket.count") do
-      post tickets_path, params: { ticket: { subject: "Kötüye kullanım", description: "Yazma", requester_name: "X", requester_email: "x@example.com", category: "technical", priority: "high" } }
+  test "anonim ziyaretçi onay ret ve manuel eskalasyon akışlarını kullanır" do
+    ticket = Tickets::Create.call({
+      subject: "Demo onay", description: "Sahte kayıt", requester_name: "Demo",
+      requester_email: "approval@example.com", category: "billing", priority: "high"
+    })
+
+    assert_difference("ApprovalRequest.count", 1) do
+      post approval_requests_path, params: { ticket_id: ticket.id, reason: "Demo iade", requested_action: "refund" }
     end
-    assert_response :forbidden
+    approval = ApprovalRequest.order(:id).last
+    post approve_approval_request_path(approval)
+    assert_equal "approved", approval.reload.status
 
-    get new_ticket_path
-    assert_response :forbidden
+    post approval_requests_path, params: { ticket_id: ticket.id, reason: "Demo ret", requested_action: "refund" }
+    rejected = ApprovalRequest.order(:id).last
+    post reject_approval_request_path(rejected)
+    assert_equal "rejected", rejected.reload.status
 
-    assert_no_difference("ApprovalRequest.count") do
-      post approval_requests_path, params: { ticket_id: @ticket.id, reason: "x", requested_action: "refund", decision_owner: "x" }
+    travel_to 31.minutes.ago do
+      post approval_requests_path, params: { ticket_id: ticket.id, reason: "Demo eskalasyon", requested_action: "grant_access" }
     end
-    assert_response :forbidden
-
+    escalated = ApprovalRequest.order(:id).last
     post run_escalation_approval_requests_path
-    assert_response :forbidden
+    assert_response :redirect
+    assert_equal "escalated", escalated.reload.status
   end
 
-  test "salt okunur web modu agent API bearer token korumasını kaldırmaz" do
+  test "public HTML erişimi agent API bearer token korumasını kaldırmaz" do
     post internal_agent_tickets_path, params: {
       external_reference: "PUBLIC-DEMO-1", requester_reference: "anon-1",
       subject: "Yetkisiz çağrı", description: "Bu kayıt oluşmamalı", category: "technical"

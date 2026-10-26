@@ -1,5 +1,4 @@
 class TicketsController < ApplicationController
-  before_action :reject_public_new_ticket!, only: :new
   before_action :set_ticket, only: %i[show assign reply transition link_related unlink_related analyze_with_rag]
 
   def index
@@ -31,7 +30,7 @@ class TicketsController < ApplicationController
   end
 
   def create
-    @ticket = Tickets::Create.call(ticket_params)
+    @ticket = Tickets::Create.call(public_demo_ticket_params)
     redirect_to @ticket, notice: "Destek talebiniz oluşturuldu."
   rescue ActiveRecord::RecordInvalid => error
     @ticket = error.record
@@ -45,7 +44,7 @@ class TicketsController < ApplicationController
 
   def reply
     agent = @ticket.assignee || Agent.find(params[:agent_id])
-    Tickets::Reply.call(ticket: @ticket, agent:, body: params[:body])
+    Tickets::Reply.call(ticket: @ticket, agent:, body: Privacy::Redactor.call(params[:body]))
     redirect_to @ticket, notice: "Yanıt eklendi."
   rescue ActiveRecord::RecordInvalid => error
     redirect_to @ticket, alert: error.record.errors.full_messages.to_sentence
@@ -74,15 +73,21 @@ class TicketsController < ApplicationController
 
   private
 
-  def reject_public_new_ticket!
-    render plain: "Herkese açık demo salt okunurdur; yeni talep oluşturma kapalıdır.", status: :forbidden if public_demo_read_only?
-  end
-
   def set_ticket
     @ticket = Ticket.find(params[:id])
   end
 
   def ticket_params
-    params.require(:ticket).permit(:subject, :description, :requester_name, :requester_email, :category, :priority)
+    params.require(:ticket).permit(:subject, :description, :category, :priority)
+  end
+
+  def public_demo_ticket_params
+    permitted = ticket_params.to_h.symbolize_keys
+    permitted.merge(
+      subject: Privacy::Redactor.call(permitted[:subject]),
+      description: Privacy::Redactor.call(permitted[:description]),
+      requester_name: "Anonim Demo Ziyaretçisi",
+      requester_email: "demo-#{SecureRandom.uuid}@example.com"
+    )
   end
 end

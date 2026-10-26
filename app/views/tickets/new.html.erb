@@ -3,8 +3,7 @@
 <div class="card" style="max-width:760px">
   <% if @ticket.errors.any? %><div class="errors"><%= @ticket.errors.full_messages.to_sentence %></div><% end %>
   <%= form_with model: @ticket do |f| %>
-    <div class="field"><%= f.label :requester_name, "Adınız" %><%= f.text_field :requester_name, required: true %></div>
-    <div class="field"><%= f.label :requester_email, "E-posta" %><%= f.email_field :requester_email, required: true %></div>
+    <div class="demo-warning"><strong>Anonim demo kaydı:</strong> Ad ve e-posta toplanmaz. Açıklamaya gerçek kişisel veya müşteri verisi yazmayın.</div>
     <div class="field"><%= f.label :subject, "Başlık" %><%= f.text_field :subject, required: true %></div>
     <div class="field"><%= f.label :description, "Açıklama" %><%= f.text_area :description, required: true %></div>
     <div class="inline"><div class="field"><%= f.label :category, "Kategori" %><%= f.select :category, Ticket::CATEGORIES.map { |c| [t("tickets.categories.#{c}"),c] } %></div><div class="field"><%= f.label :priority, "Öncelik" %><%= f.select :priority, Ticket::PRIORITIES.map { |p| [t("tickets.priorities.#{p}"),p] } %></div></div>

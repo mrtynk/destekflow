@@ -9,9 +9,9 @@ class ApprovalRequestsController < ApplicationController
     ticket = Ticket.find(params.require(:ticket_id))
     approval = Approvals::Request.call(
       ticket:,
-      reason: params.require(:reason),
+      reason: Privacy::Redactor.call(params.require(:reason)),
       requested_action: params.require(:requested_action),
-      decision_owner: params.require(:decision_owner),
+      decision_owner: "Herkese Açık Demo Kuyruğu",
       requested_by: "Demo destek temsilcisi"
     )
     redirect_to approval_requests_path(anchor: "approval-#{approval.id}"), notice: "Onay talebi oluşturuldu; kritik işlem henüz uygulanmadı."
