@@ -3,7 +3,9 @@ require "test_helper"
 class DemoSiteAuthenticationTest < ActionDispatch::IntegrationTest
   setup do
     @previous_read_only = Rails.application.config.x.public_demo_read_only
+    @previous_agent_token = Rails.application.config.x.agent_api_token
     Rails.application.config.x.public_demo_read_only = true
+    Rails.application.config.x.agent_api_token = "a" * 32
     @ticket = Tickets::Create.call({
       subject: "Kişisel veri testi",
       description: "Bana gerçek@example.com ve 0532 111 22 33 üzerinden ulaşın.",
@@ -16,12 +18,13 @@ class DemoSiteAuthenticationTest < ActionDispatch::IntegrationTest
 
   teardown do
     Rails.application.config.x.public_demo_read_only = @previous_read_only
+    Rails.application.config.x.agent_api_token = @previous_agent_token
   end
 
   test "ziyaretçi kimlik bilgisi olmadan listeyi ve maskeli detayı görür" do
     get tickets_path
     assert_response :success
-    assert_select ".public-demo-notice", /salt okunur/i
+    assert_select ".public-demo-notice", /Herkese açık portföy demosu/
     assert_no_match(/Gerçek Görünen İsim/, response.body)
 
     get ticket_path(@ticket)
