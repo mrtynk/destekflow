@@ -40,10 +40,10 @@ class DemoSiteAuthenticationTest < ActionDispatch::IntegrationTest
 
     post transition_ticket_path(ticket), params: { to: "solved" }
     assert_response :redirect
-    assert_equal "new", ticket.reload.status
+    assert_equal "solved", ticket.reload.status
 
-    post transition_ticket_path(ticket), params: { to: "open" }
-    post transition_ticket_path(ticket), params: { to: "solved" }
+    post transition_ticket_path(ticket), params: { to: "pending" }
+    assert_response :redirect
     assert_equal "solved", ticket.reload.status
   end
 
