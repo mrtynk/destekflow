@@ -12,13 +12,13 @@ class ApprovalRequestsControllerTest < ActionDispatch::IntegrationTest
     })
   end
 
-  test "onay kuyruğu demo ve cron sınırını açıkça gösterir" do
+  test "onay kuyruğu kontrollü karar ve manuel tarama bilgisini gösterir" do
     get approval_requests_path
 
     assert_response :success
     assert_select "h1", "Onay Kuyruğu"
-    assert_select ".demo-warning", /auth\/RBAC/
-    assert_select ".demo-warning", /cron\/worker kurulmuş değildir/
+    assert_select ".demo-warning", /Kritik işlemler insan kararı olmadan uygulanmaz/
+    assert_select ".demo-warning", /manuel taramayla üst yetkili kuyruğuna/
   end
 
   test "talep ekranından onay istenir ve insan kararı verilir" do

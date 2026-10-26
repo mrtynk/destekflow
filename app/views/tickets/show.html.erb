@@ -1,7 +1,7 @@
 <% content_for :title, "##{@ticket.id} #{public_demo_text(@ticket.subject)} | DestekFlow" %>
 <div class="page-head"><div><h1>#<%= @ticket.id %> · <%= public_demo_text(@ticket.subject) %></h1><div class="badges"><span class="badge <%= @ticket.priority %>"><%= t("tickets.priorities.#{@ticket.priority}") %></span><span class="badge <%= @ticket.status %>"><%= t("tickets.statuses.#{@ticket.status}") %></span></div></div><%= link_to "Tüm talepler", tickets_path, class: "button secondary" %></div>
 <div class="detail"><div>
-  <section class="card"><h2>Talep</h2><div class="meta"><% if @ticket.privacy_mode? %><span class="badge">Gizlilik modu</span> · Referans: <%= @ticket.requester_reference %><% else %>Anonim demo müşteri<% end %> · <%= t("tickets.categories.#{@ticket.category}") %></div><p class="description"><%= public_demo_text(@ticket.description) %></p>
+  <section class="card"><h2>Talep</h2><div class="meta"><% if @ticket.privacy_mode? %><span class="badge">Gizlilik modu</span> · Referans: <%= @ticket.requester_reference %><% else %>Anonim müşteri<% end %> · <%= t("tickets.categories.#{@ticket.category}") %></div><p class="description"><%= public_demo_text(@ticket.description) %></p>
     <% if (agent_run = @ticket.agent_runs.order(created_at: :desc).first) %><div class="agent-decision <%= agent_run.decision %>"><strong>Agent kararı: <%= agent_run.decision == "auto_reply" ? "Bilgi tabanlı yanıt yayınlandı" : "İnsan incelemesine devredildi" %></strong><p><%= public_demo_text(agent_run.reason) %></p><small>Kanıt: <%= agent_run.knowledge_evidence.join(", ").presence || "Güvenli varsayılan" %> · <%= agent_run.provider %> / <%= agent_run.model %></small></div><% end %>
   </section>
   <section class="card" style="margin-top:20px"><h2>Yanıtlar</h2><% @ticket.replies.includes(:agent).each do |reply| %><div class="reply"><strong><%= reply.agent.name %></strong><small class="meta"> · <%= l reply.created_at, format: :short %></small><p><%= public_demo_text(reply.body) %></p></div><% end %>
@@ -55,7 +55,7 @@
   </section>
   <section class="card" style="margin-top:20px">
     <h2>Onay ve Eskalasyon Merkezi</h2>
-    <p class="lead">Ders demosu: aktör adları simüledir; gerçek kimlik doğrulama veya yetki rolü değildir.</p>
+    <p class="lead">Kritik işlemler denetlenebilir onay akışıyla yönetilir ve tüm kararlar geçmişe kaydedilir.</p>
     <%= form_with url: approval_requests_path, class: "field" do %>
       <%= hidden_field_tag :ticket_id, @ticket.id %>
       <%= label_tag :requested_action, "Kritik işlem" %>

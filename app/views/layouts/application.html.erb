@@ -31,7 +31,7 @@
         <nav class="sidebar-nav" aria-label="Ana menü">
           <%= link_to tickets_path, class: ("active" if controller_name == "tickets" && action_name != "new") do %><span class="nav-icon">⌁</span><span>Talepler</span><small>Operasyon kuyruğu</small><% end %>
           <%= link_to approval_requests_path, class: ("active" if controller_name == "approval_requests") do %><span class="nav-icon">✓</span><span>Onay merkezi</span><small>İnsan denetimi</small><% end %>
-          <%= link_to agent_demo_path, class: ("active" if controller_name == "agent_demos") do %><span class="nav-icon">AI</span><span>Agent demo</span><small>Gizlilik ve guardrail</small><% end %>
+          <%= link_to agent_demo_path, class: ("active" if controller_name == "agent_demos") do %><span class="nav-icon">AI</span><span>AI Agent</span><small>Gizlilik ve güvenlik</small><% end %>
           <%= link_to new_ticket_path, class: ("active" if controller_name == "tickets" && action_name == "new") do %><span class="nav-icon">＋</span><span>Yeni talep</span><small>Kayıt oluştur</small><% end %>
         </nav>
         <div class="sidebar-card">
@@ -39,15 +39,15 @@
           <strong>Human-in-the-loop</strong>
           <p>AI önerir, kritik kararı insan verir.</p>
         </div>
-        <div class="sidebar-footer"><span class="live-pill"><span></span>Herkese açık demo</span><small>Anonim · değiştirilebilir</small></div>
+        <div class="sidebar-footer"><span class="live-pill"><span></span>Sistem aktif</span><small>Canlı operasyon merkezi</small></div>
       </aside>
       <section class="workspace">
         <header class="workspace-topbar">
           <div><span class="workspace-kicker">DESTEK OPERASYON PLATFORMU</span><strong>Kontrol paneli</strong></div>
-          <div class="workspace-actions"><span class="secure-chip">● Herkese açık demo</span><%= link_to "+ Yeni talep", new_ticket_path, class: "button small" %></div>
+          <div class="workspace-actions"><span class="secure-chip">● Sistem çevrimiçi</span><%= link_to "+ Yeni talep", new_ticket_path, class: "button small" %></div>
         </header>
         <main class="container">
-          <div class="public-demo-notice"><strong>Herkese Açık Eğitim Demosu</strong><span>Herkes demo kayıtlarını değiştirebilir. Gerçek ad, e-posta, telefon, kart veya müşteri verisi girmeyin.</span></div>
+          <div class="public-demo-notice"><strong>Gizlilik korumalı çalışma alanı</strong><span>Kişisel veya finansal bilgi girmeyin; hassas veri biçimleri kayıt öncesinde maskelenir.</span></div>
           <% flash.each do |type, message| %><div class="flash <%= type %>"><%= message %></div><% end %>
           <%= yield %>
         </main>

@@ -86,7 +86,7 @@ class TicketsController < ApplicationController
     permitted.merge(
       subject: Privacy::Redactor.call(permitted[:subject]),
       description: Privacy::Redactor.call(permitted[:description]),
-      requester_name: "Anonim Demo Ziyaretçisi",
+      requester_name: "Anonim Ziyaretçi",
       requester_email: "demo-#{SecureRandom.uuid}@example.com"
     )
   end

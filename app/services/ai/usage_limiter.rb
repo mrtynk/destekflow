@@ -22,7 +22,7 @@ module Ai
       budget.with_lock do
         reset_windows(budget, now)
         raise LimitExceeded, "Gemini dakika kullanım sınırına ulaşıldı; kısa süre sonra yeniden deneyin." if budget.minute_count >= @per_minute
-        raise LimitExceeded, "Gemini günlük demo kullanım sınırına ulaşıldı; yarın yeniden deneyin." if budget.day_count >= @per_day
+        raise LimitExceeded, "Gemini günlük kullanım sınırına ulaşıldı; yarın yeniden deneyin." if budget.day_count >= @per_day
 
         budget.update!(minute_count: budget.minute_count + 1, day_count: budget.day_count + 1)
       end

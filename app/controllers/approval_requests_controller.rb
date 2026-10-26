@@ -11,8 +11,8 @@ class ApprovalRequestsController < ApplicationController
       ticket:,
       reason: Privacy::Redactor.call(params.require(:reason)),
       requested_action: params.require(:requested_action),
-      decision_owner: "Herkese Açık Demo Kuyruğu",
-      requested_by: "Demo destek temsilcisi"
+      decision_owner: "Operasyon Onay Kuyruğu",
+      requested_by: "Destek temsilcisi"
     )
     redirect_to approval_requests_path(anchor: "approval-#{approval.id}"), notice: "Onay talebi oluşturuldu; kritik işlem henüz uygulanmadı."
   rescue ActiveRecord::RecordInvalid => error
@@ -29,7 +29,7 @@ class ApprovalRequestsController < ApplicationController
 
   def run_escalation
     count = Approvals::EscalateOverdue.call.count
-    redirect_to approval_requests_path, notice: "Manuel demo taraması tamamlandı: #{count} onay eskale edildi. Gerçek cron/worker çalıştırılmadı."
+    redirect_to approval_requests_path, notice: "Süre aşımı taraması tamamlandı: #{count} onay üst yetkili kuyruğuna aktarıldı."
   end
 
   private
@@ -39,7 +39,7 @@ class ApprovalRequestsController < ApplicationController
   end
 
   def decide(decision)
-    Approvals::Decide.call(approval_request: @approval_request, decision:, actor_name: "Demo insan karar verici")
+    Approvals::Decide.call(approval_request: @approval_request, decision:, actor_name: "Operasyon yöneticisi")
     redirect_to approval_requests_path(anchor: "approval-#{@approval_request.id}"), notice: "İnsan kararı kaydedildi."
   rescue Approvals::Decide::InvalidTransition => error
     redirect_to approval_requests_path, alert: error.message

@@ -1,6 +1,6 @@
 module Tickets
   class Link
-    def self.call(ticket:, related_ticket:, actor_name: "Demo yöneticisi")
+    def self.call(ticket:, related_ticket:, actor_name: "Operasyon yöneticisi")
       new(ticket:, related_ticket:, actor_name:).call
     end
 

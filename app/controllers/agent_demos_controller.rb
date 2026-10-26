@@ -8,12 +8,12 @@ class AgentDemosController < ApplicationController
     session[:agent_demo_reference] = result.ticket.agent_external_reference
     redirect_to result.ticket, notice: result_message(result)
   rescue Ai::GeminiClient::Error, ArgumentError => error
-    redirect_to agent_demo_path, alert: "Agent demosu çalıştırılamadı: #{error.message}"
+    redirect_to agent_demo_path, alert: "Agent işlemi çalıştırılamadı: #{error.message}"
   end
 
   def repeat
     reference = session[:agent_demo_reference].to_s
-    raise ArgumentError, "Önce bir demo senaryosu çalıştırın." if reference.blank?
+    raise ArgumentError, "Önce bir agent senaryosu çalıştırın." if reference.blank?
 
     scenario = reference[/\AWEB-DEMO-([A-Z]+)-/, 1]&.downcase
     result = AgentWorkflow::Demo.call(scenario:, reference:)

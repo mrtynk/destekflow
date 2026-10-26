@@ -12,11 +12,11 @@ module AgentWorkflow
           reason:,
           requested_action:,
           decision_owner:,
-          requested_by: "Kural tabanlı demo agent"
+          requested_by: "DestekFlow AI Agent"
         )
         approval.approval_events.create!(
           event_type: "agent_evaluated",
-          actor_name: "Kural tabanlı demo agent",
+          actor_name: "DestekFlow AI Agent",
           details: "Agent yalnızca onay istedi; kritik işlem otomatik uygulanmadı. LLM çağrısı yapılmadı."
         )
         approval

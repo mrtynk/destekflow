@@ -16,7 +16,7 @@ class DemoSiteAuthenticationTest < ActionDispatch::IntegrationTest
   test "anonim ziyaretçi talep oluşturur atar yanıtlar ve durum değiştirir" do
     get tickets_path
     assert_response :success
-    assert_select ".public-demo-notice", /Herkese Açık Eğitim Demosu/
+    assert_select ".public-demo-notice", /Gizlilik korumalı çalışma alanı/
 
     assert_difference("Ticket.count", 1) do
       post tickets_path, params: { ticket: {
@@ -26,7 +26,7 @@ class DemoSiteAuthenticationTest < ActionDispatch::IntegrationTest
     end
     ticket = Ticket.order(:id).last
     assert_redirected_to ticket_path(ticket)
-    assert_equal "Anonim Demo Ziyaretçisi", ticket.requester_name
+    assert_equal "Anonim Ziyaretçi", ticket.requester_name
     assert_match(/@example\.com\z/, ticket.requester_email)
 
     post assign_ticket_path(ticket), params: { agent_id: @agent.id }

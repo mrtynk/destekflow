@@ -11,7 +11,7 @@ module AgentWorkflow
       reference ||= "WEB-DEMO-#{scenario.upcase}-#{SecureRandom.hex(8)}"
       Intake.call(attributes.merge(external_reference: reference, requester_reference: "sahte-musteri-#{scenario}"), client:)
     rescue KeyError
-      raise ArgumentError, "Bilinmeyen agent demo senaryosu."
+      raise ArgumentError, "Bilinmeyen agent senaryosu."
     end
   end
 end

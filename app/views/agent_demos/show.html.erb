@@ -1,11 +1,11 @@
-<% content_for :title, "Agent Demo Merkezi | DestekFlow" %>
+<% content_for :title, "AI Agent Merkezi | DestekFlow" %>
 <div class="agent-demo-hero">
-  <div><span class="hero-chip">AGENT-FIRST · GÜVENLİ CANLI DEMO</span><h1>Agent talebi açar.<br><em>Kod son sözü söyler.</em></h1><p>Yalnız sabit sahte veriler kullanılır. Gemini öncelik ve insan ihtiyacını değerlendirir; kişisel veri önce maskelenir, kritik yanıtlar Ruby güvenlik kapısında durdurulur.</p></div>
+  <div><span class="hero-chip">AGENT-FIRST · GÜVENLİ OTOMASYON</span><h1>Agent talebi açar.<br><em>Kod son sözü söyler.</em></h1><p>Gemini öncelik ve insan ihtiyacını değerlendirir; kişisel veri önce maskelenir, kritik yanıtlar Ruby güvenlik kapısında durdurulur.</p></div>
   <div class="guardrail-visual"><span>LLM</span><strong>→</strong><span class="guard">KOD<br>GÜVENLİK<br>KAPISI</span><strong>→</strong><span>YANIT<br>VEYA<br>İNSAN</span></div>
 </div>
 <div class="demo-scenario-grid">
   <section class="card demo-scenario safe"><span class="scenario-icon">01</span><span class="eyebrow">OTOMATİK ÇÖZÜM</span><h2>Güvenli teknik talep</h2><p>Şifre sıfırlama sorusu Gemini tarafından sınıflandırılır. Yalnız KB-01 kanıtına dayanırsa yanıt yayınlanabilir.</p><%= button_to "Senaryoyu çalıştır", run_agent_demo_path(scenario: "safe"), class: "button" %></section>
-  <section class="card demo-scenario privacy"><span class="scenario-icon">02</span><span class="eyebrow">PRIVACY BY DESIGN</span><h2>Kişisel veri maskeleme</h2><p>Sahte e-posta, telefon ve kart benzeri sayı LLM çağrısından ve kayıt işleminden önce maskelenir.</p><%= button_to "Maskelemeyi doğrula", run_agent_demo_path(scenario: "privacy"), class: "button" %></section>
+  <section class="card demo-scenario privacy"><span class="scenario-icon">02</span><span class="eyebrow">PRIVACY BY DESIGN</span><h2>Kişisel veri maskeleme</h2><p>E-posta, telefon ve kart benzeri sayı LLM çağrısından ve kayıt işleminden önce maskelenir.</p><%= button_to "Maskelemeyi doğrula", run_agent_demo_path(scenario: "privacy"), class: "button" %></section>
   <section class="card demo-scenario critical"><span class="scenario-icon">03</span><span class="eyebrow">KOD SEVİYESİNDE KORUMA</span><h2>Kritik finansal talep</h2><p>Çift tahsilat ve hukuki itiraz insana devredilir. Model yanıt üretse bile billing kategorisi yayını engeller.</p><%= button_to "Güvenlik kapısını test et", run_agent_demo_path(scenario: "critical"), class: "button danger-button" %></section>
 </div>
 <section class="card demo-evidence">
@@ -13,6 +13,6 @@
   <p class="lead">Tekrar düğmesi yeni kayıt oluşturmadan mevcut talebi döndürür. Bu, agent çağrısının idempotent olduğunu gösterir.</p>
   <div class="agent-run-list">
     <% @agent_tickets.each do |ticket| %><% run = ticket.agent_runs.max_by(&:created_at) %><%= link_to ticket_path(ticket), class: "agent-run-row" do %><span class="decision-light <%= run&.decision %>"></span><div><strong>#<%= ticket.id %> · <%= ticket.subject %></strong><small><%= ticket.requester_reference %> · <%= l ticket.created_at, format: :short %></small></div><span class="decision-label"><%= run&.reply_published? ? "Yanıt yayınlandı" : "İnsana devredildi" %></span><% end %><% end %>
-    <p class="meta"><%= "Henüz canlı agent demo kaydı yok." if @agent_tickets.empty? %></p>
+    <p class="meta"><%= "Henüz agent işlemi bulunmuyor." if @agent_tickets.empty? %></p>
   </div>
 </section>

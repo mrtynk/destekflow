@@ -1,6 +1,6 @@
 module Tickets
   class Unlink
-    def self.call(ticket:, link:, actor_name: "Demo yöneticisi")
+    def self.call(ticket:, link:, actor_name: "Operasyon yöneticisi")
       new(ticket:, link:, actor_name:).call
     end
 
