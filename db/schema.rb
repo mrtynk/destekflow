@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_25_190000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_26_073000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -35,6 +35,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_25_190000) do
     t.datetime "updated_at", null: false
     t.index ["ticket_id", "created_at"], name: "index_ai_analyses_on_ticket_id_and_created_at"
     t.index ["ticket_id"], name: "index_ai_analyses_on_ticket_id"
+  end
+
+  create_table "ai_usage_budgets", force: :cascade do |t|
+    t.string "provider", null: false
+    t.datetime "minute_started_at", null: false
+    t.integer "minute_count", default: 0, null: false
+    t.date "day_started_on", null: false
+    t.integer "day_count", default: 0, null: false
+    t.integer "lock_version", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["provider"], name: "index_ai_usage_budgets_on_provider", unique: true
   end
 
   create_table "agent_runs", force: :cascade do |t|
